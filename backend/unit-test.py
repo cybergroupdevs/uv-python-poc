@@ -3,7 +3,7 @@ import unittest
 import requests
 class apiTests(unittest.TestCase):
     
-	# def test_get_helloworld(self):
+	# def test_get_customer(self):
 	# 	obj=customerTest()
 	# 	print("-------sdad-")
 	# 	data=[
@@ -20,7 +20,13 @@ class apiTests(unittest.TestCase):
     #		}
 	# 	]
 	#	self.assertEqual(obj.customer(),data)
-	def test_get_consultant3(self):
+	def test_get_consultant5(self):
+		#Noconsultant is there
+		obj=pocTest()
+		print("-srcAssoc-")
+		data=[{"operator": "RON SIMS (SION)", "SALECNS": "No consultant"}]
+		self.assertEqual(obj.consultant(),data)
+	def test_get_consultant4(self):
 		#firstNameLastName(operator)
 		obj=pocTest()
 		print("-srcAssoc-")
