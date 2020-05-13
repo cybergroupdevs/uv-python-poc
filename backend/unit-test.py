@@ -1,11 +1,11 @@
 import u2py
 import unittest
 import requests
-class customerTests():
+class customerTests(unittest.TestCase):
 	def test_get_customer(self):
 		obj=pocTest()
-	 	print("-------customerhistory--")
-	 	data=[
+		print("-------customer---")
+		data=[
      		{
          	"phoneNo": "988012-21",
          	"firstName": "DERRICK",
@@ -19,11 +19,11 @@ class customerTests():
     		}
 	 	]
 		self.assertEqual(obj.customer(),data)
-class customerHistoryTests():
+class customerHistoryTests(unittest.TestCase):
 	def test_get_customerHistory1(self):
 		obj=pocTest()
-	 	print("--customerHistory-")
-	 	data=[
+		print("--customerHistory-")
+		data=[
      		{
          	"firstName": "DERRICK",
          	"lastName": "ROSE",
@@ -33,10 +33,10 @@ class customerHistoryTests():
     		}
 	 	]
 		self.assertEqual(obj.customerHistory(),data)
-	def test_get_customerHistory1(self):
+	def test_get_customerHistory2(self):
 		obj=pocTest()
-	 	print("--customerHistory--")
-	 	data=[
+		print("--customerHistory--")
+		data=[
      		{
          	"firstName": "DERRICK",
          	"lastName": "ROSE",
