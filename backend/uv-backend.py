@@ -25,12 +25,23 @@ def checkExistingRecord(filename, recordID):
         return True
     except u2py.U2Error as e:
         return False
+def mappingCustomer(firstName,lastName,address,city,pfid):
+	details={}
+	details["firstName"]=firstName
+	details["lastName"]=lastName
+	details["address"]=address
+	details["city"]=city
+	if pfid!="":
+		details["pf"]="pf"
+	else:
+		details["pf"]=""
+	return details
 ########################
 #### CUSTOMER API   ####
 ########################
 @app.route('/api/customer', methods=['GET'])
 def customerDetails():
-	customerId="0001"
+	customerId="0001"#int(request.args.get('customerId'))
 	customerFile=orderFile = u2py.File("CUSTOMERS")
 	#cmd=u2py.Command("LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA CUSTOMERS TOJSON").run(capture=True)
 	#cmd = cmd[1:-1]
@@ -47,16 +58,16 @@ def customerDetails():
 	customerDetails['pfid']=list(customerFile.readv(customerId,33))[0][0]
 	data.append(customerDetails)
 	return Response(
-	json.dumps(data),
-	status=200,
-	mimetype='application/json')
+		json.dumps(data),
+		status=200,
+		mimetype='application/json')
 ########################
 #### CONSULTANT API ####
 ########################
 @app.route('/api/consultant',methods=['GET'])
 def consultantDetials():
 	#pdb.set_trace()
-	transactionId="999888"
+	transactionId="999888"#int(request.args.get('transactionId'))
 	transactionFile=u2py.File("TRANSACTION")
 	transNo=list(transactionFile.readv(transactionId,1))[0][0]
 	phoneNo=list(transactionFile.readv(transactionId,2))[0][0]
@@ -103,7 +114,7 @@ def consultantDetials():
 	else:
 		fitterName=fitterId
 	if(fitterId!=""):
-	####only adds if there is a fitterId(doubt why they set its value null)
+	####only adds if there is a fitterId(doubt why they set its value null if not sending)
 		consultantDetails["SRC ASSOC"]=fitterName
 	data.append(consultantDetails)
 	return Response(
@@ -111,6 +122,43 @@ def consultantDetials():
 		status=200,
 		mimetype="application/json"
 		)
+@app.route('/api/customer/history',methods=['GET'])
+def customerHistory():
+	#pdb.set_trace()
+	savedList_name="PAGE.LIST"
+	start =1
+	phoneNo=8054544097
+	pageIndex = 0#int(request.args.get('pageIndex'))
+	pageSize = 5#int(request.args.get('pageSize'))
+	start = pageIndex * pageSize + 1
+	end = (pageIndex + 1) * pageSize
+	commandLine = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phoneNo)
+	u2py.run(commandLine, capture=True)
+	u2py.run('SAVE.LIST {}'.format(savedList_name))
+	dataFile=u2py.File("CUSTOMERS")
+	myList=u2py.List(0, savedList_name)
+	t_id = myList.readlist()
+	totalCount = t_id.dcount(u2py.FM)
+	data=[]
+	if(totalCount==0):
+		data.append("No customer History available")
+	else:
+		for x in range(start, end + 1):
+			if x > totalCount:
+				break
+			ids=t_id.extract(x)
+			firstName=list(dataFile.readv(ids, 2))[0][0]
+			lastName=list(dataFile.readv(ids, 3))[0][0]
+			address=list(dataFile.readv(ids, 4))[0][0]
+			city=list(dataFile.readv(ids, 5))[0][0]
+			pfid=list(dataFile.readv(ids, 33))[0][0]
+			customerHistory=mappingCustomer(firstName,lastName,address,city,pfid)
+			data.append(customerHistory)
+	return Response(
+		json.dumps(data),
+		status=200,
+		mimetype='application/json')
+
 if __name__ == '__main__':
     app.run()
 
