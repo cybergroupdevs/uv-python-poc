@@ -31,6 +31,9 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
 
+#############################################################
+###################### Order API ############################
+#############################################################
 
 @app.route('/api/order/<transactionId>', methods=['GET'])
 def orderGet(transactionId):
@@ -102,6 +105,10 @@ def orderGet(transactionId):
             status=404,
             mimetype='application/json'
         )
+
+#############################################################
+###################### Discount API #########################
+#############################################################
         
 @app.route('/api/transaction/discount/<transactionId>', methods=['GET'])
 def discount(transactionId):
@@ -232,7 +239,11 @@ def discount(transactionId):
             status=404,
             mimetype='application/json'
         )
-            
+
+#############################################################
+###################### Helper Methods #######################
+#############################################################
+
 def checkExistingRecord(filename, recordID):
     fileObject = u2py.File(filename)
     try:
