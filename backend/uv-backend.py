@@ -4,13 +4,8 @@ from flask import request,jsonify,Response
 from flask import make_response
 from functools import wraps
 import u2py
-import xmltodict
-import pprint
 import json
-import random
-import jwt
 from datetime import datetime
-from collections import OrderedDict
 from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisthesercretkey'
@@ -41,10 +36,8 @@ def mappingCustomer(firstName,lastName,address,city,pfid):
 ########################
 @app.route('/api/customer', methods=['GET'])
 def customerDetails():
-	customerId="0001"#int(request.args.get('customerId'))
+	customerId=int(request.args.get('customerId'))
 	customerFile=orderFile = u2py.File("CUSTOMERS")
-	#cmd=u2py.Command("LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA CUSTOMERS TOJSON").run(capture=True)
-	#cmd = cmd[1:-1]
 	data=[]
 	customerDetails={}
 	customerDetails['phoneNo']=list(customerFile.readv(customerId,1))[0][0]
@@ -66,8 +59,7 @@ def customerDetails():
 ########################
 @app.route('/api/consultant',methods=['GET'])
 def consultantDetials():
-	#pdb.set_trace()
-	transactionId="999888"#int(request.args.get('transactionId'))
+	transactionId=int(request.args.get('transactionId'))
 	transactionFile=u2py.File("TRANSACTION")
 	transNo=list(transactionFile.readv(transactionId,1))[0][0]
 	phoneNo=list(transactionFile.readv(transactionId,2))[0][0]
@@ -124,12 +116,11 @@ def consultantDetials():
 		)
 @app.route('/api/customer/history',methods=['GET'])
 def customerHistory():
-	#pdb.set_trace()
 	savedList_name="PAGE.LIST"
 	start =1
-	phoneNo=8054544097
-	pageIndex = 0#int(request.args.get('pageIndex'))
-	pageSize = 5#int(request.args.get('pageSize'))
+	phoneNo=int(request.args.get('phoneNo'))
+	pageIndex =int(request.args.get('pageIndex'))
+	pageSize =int(request.args.get('pageSize'))
 	start = pageIndex * pageSize + 1
 	end = (pageIndex + 1) * pageSize
 	commandLine = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phoneNo)

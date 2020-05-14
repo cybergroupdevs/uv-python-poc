@@ -46,6 +46,26 @@ class customerHistoryTests(unittest.TestCase):
     		}
 	 	]
 		self.assertEqual(obj.customerHistory(),data)
+	def test_get_customerHistory2(self):
+		obj=pocTest()
+		print("--customerHistoryMultiple--")
+		data=[
+    	{
+        "firstName": "RICK",
+        "lastName": "SANCHEZ",
+        "address": "PLANET EARTH",
+        "city": "SEATTLE",
+        "pf": ""
+    	},
+    	{
+        "firstName": "DERRICK",
+        "lastName": "ROSE",
+        "address": "S9 FULLER ROAD",
+        "city": "SAN HOSE",
+        "pf": "pf"
+    	}
+		]
+		self.assertEqual(obj.customerHistory(),data)
 class consultantTests(unittest.TestCase):
     
 	def test_get_consultant5(self):
@@ -80,13 +100,13 @@ class consultantTests(unittest.TestCase):
 		self.assertEqual(obj.consultant(),data)
 class pocTest():
 	def customer(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer')
+		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
 		return data.json()
 	def consultant(self):
-		data=requests.get('http://127.0.0.1:5000/api/consultant')
+		data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
 		return data.json()
 	def customerHistory(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer/history')
+		data=requests.get('http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
 		return data.json()
 if __name__ == '__main__':
     unittest.main()
