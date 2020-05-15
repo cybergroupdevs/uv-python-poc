@@ -241,6 +241,54 @@ def discount(transactionId):
         )
 
 #############################################################
+####################### Refund API ##########################
+#############################################################
+
+@app.route('/api/transaction/refund/<transactionId>', methods=['GET'])
+def refund(transactionId):
+    status = checkExistingRecord('TRANSACTION',transactionId )
+    if(status):
+        dataFile = u2py.File("TRANSACTION")
+        refundMgrId=(list(dataFile.readv(transactionId,137))[0][0])
+        if(refundMgrId <> ''):
+            emFile = u2py.File("EM")
+            emRec = (list(emFile.readv(refundMgrId))[0][0])
+        else:
+            emRec = ''
+        if((list(emRec.readv(refundMgrId,27))[0][0])):
+            refundMgrName = (list(emRec.readv(refundMgrId,27))[0][0])
+        else:
+            refundMgrName = (list(emRec.readv(refundMgrId,2))[0][0])
+        refundMgrName = refundMgrName + ' '+(list(emRec.readv(refundMgrId,1))[0][0])+' ('+(list(emRec.readv(refundMgrId,17))[0][0])+')'
+        refundData={}
+        refundData['refundMgrName']='MGR OVERRIDING SUGGESTED REFUND TYPE: '+ refundMgrName
+        ticketNumber = (list(emRec.readv(refundMgrId,64))[0][0])
+        if(ticketNumber):
+            refundData['ticketNumber'] = 'HANDWRITTEN TICKET NUMBER: '+(list(emRec.readv(refundMgrId,64))[0][0])
+        response={
+            "discountDetails": discountDetails
+                }
+        return Response(
+            json.dumps(response),
+            status=200,
+            mimetype='application/json  
+    else:
+        msg ='Transaction file not found'
+        data={
+             'msg':msg
+             }
+        return Response(
+            json.dumps(data),
+            status=404,
+            mimetype='application/json'
+        )
+        
+#############################################################
+###################### Transaction API ######################
+#############################################################
+
+
+#############################################################
 ###################### Helper Methods #######################
 #############################################################
 
