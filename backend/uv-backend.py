@@ -56,6 +56,7 @@ def customer_details():
 ########################
 @app.route('/api/consultant',methods=['GET'])
 def consultant_details():
+	pdb.set_trace()
 	transaction_id=request.args.get('transactionId')
 	transaction_file=u2py.File("TRANSACTION")
 	trans_no=list(transaction_file.readv(transaction_id,1))[0][0]
@@ -63,10 +64,13 @@ def consultant_details():
 	em_file=u2py.File("EM")
 	consultant_details={}
 	data=[]
-	business_name=list(em_file.readv(phone_no,27))[0][0]
-	first_name=list(em_file.readv(phone_no,2))[0][0]
-	last_name=list(em_file.readv(phone_no,1))[0][0]	
-	short_name=list(em_file.readv(phone_no,17))[0][0]
+	consultant_cmd="LIST FNAME LNAME SHORTNAME NICKNAME DATA {} EM TOJSON".format(phone_no)
+	details=u2py.Command(consultant_cmd).run(capture=True)
+	details=json.loads(details)
+	business_name=details['EM'][0]["NICKNAME"]
+	first_name=details['EM'][0]["FNAME"]
+	last_name=details['EM'][0]["LNAME"]
+	short_name=details['EM'][0]["SHORTNAME"]
         ####checks the businessName if present it replaces the firstname
 	if(business_name!=''):
 		operator=str(business_name)
@@ -85,20 +89,26 @@ def consultant_details():
 		temp_type=temp_type.split("*")
 		temp_type=str(temp_type[2])
 	employee_id=list(transaction_file.readv(transaction_id,244))[0][0]
-	if(check_existing_record("EM",employeeId)==True):
+	if(check_existing_record("EM",employee_id)==True):
 	####sets name to Noconsultant if record not found
-		em_first_name=list(em_file.readv(employee_id,2))[0][0]
-		em_last_name=list(em_file.readv(employee_id,1))[0][0]
-		em_short_name=list(em_file.readv(employee_id,17))[0][0]
+		em_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(employee_id)
+		em_details=u2py.Command(em_cmd).run(capture=True)
+		em_details=json.loads(em_details)
+		em_first_name=em_details['EM'][0]["FNAME"]
+		em_last_name=em_details['EM'][0]["LNAME"]
+		em_short_name=em_details['EM'][0]["SHORTNAME"]
 		consultant_details[temp_type]=str(em_first_name)+" "+str(em_last_name)+" ("+str(em_short_name)+")"
 	else:
 		consultant_details[tempType]="No consultant"
 	fitter_id=list(transaction_file.readv(transaction_id,248))[0][0]
         ####add name from em file where recordId is we get from record<248> of transaction
 	if(fitter_id!=""):
-		fitter_first_name=list(em_file.readv(fitter_id,2))[0][0]
-		fitter_last_name=list(em_file.readv(fitter_id,1))[0][0]
-		fitter_short_name=list(em_file.readv(fitter_id,17))[0][0]
+		fitter_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(fitter_id)
+		fitter_details=u2py.Command(fitter_cmd).run(capture=True)
+		fitter_details=json.loads(fitter_details)
+		fitter_first_name=fitter_details['EM'][0]["FNAME"]
+		fitter_last_name=fitter_details['EM'][0]["LNAME"]
+		fitter_short_name=fitter_details['EM'][0]["SHORTNAME"]
 		fitter_name=str(fitter_first_name)+" "+str(fitter_last_name)+" ("+str(fitter_short_name)+")"
 	else:
 		fitter_name=fitter_id
