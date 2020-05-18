@@ -4,7 +4,7 @@ import requests
 
 class CommissionData():
     def __init__(self):
-        self.commissionsDetails = {
+        self.commission_details = {
             'class': '5K69',
             'sku': '85523',
             'retail': '109.50',
@@ -20,33 +20,33 @@ class CommissionData():
         }
 
     def commissionDetailsList(self):
-        return self.commissionsDetails
+        return self.commission_details
 
-    def commissionDetailError(self):
+    def commission_detail_error(self):
         return "No commission information for this transaction Id"
 
-    def consultName(self):
+    def consult_name(self):
         return "NO CONSULTANT"
 
 
 class TestCases(unittest.TestCase):
-    def testCommissionList(self):
+    def test_commission_list(self):
         obj = CommissionData()
         response = requests.get("http://localhost:5000/commission/1234*12*4321")
         data = response.json()['commissionList']
         self.assertEqual(data[0],obj.commissionDetailsList())
 
-    def testCommissionData(self):
+    def test_commission_data(self):
         obj = CommissionData()
         response = requests.get("http://localhost:5000/commission/9876*00*1234")
         data = response.json()['error']
-        self.assertEqual(data,obj.commissionDetailError())
+        self.assertEqual(data,obj.commission_detail_error())
 
-    def testConsultantName(self):
+    def test_consultant_name(self):
         obj = CommissionData()
         response = requests.get("http://localhost:5000/commission/8101*3460468")
         data = response.json()['consultantName']
-        self.assertEqual(data,obj.consultName())
+        self.assertEqual(data,obj.consult_name())
 
 
 if __name__ == '__main__':
