@@ -13,17 +13,17 @@ CORS(app)
 ########################
 #### HELPER METHODS ####
 ########################
-def checkExistingRecord(filename, recordID):
-    fileObject = u2py.File(filename)
+def check_existing_record(file_name, record_id):
+    file_object = u2py.File(file_name)
     try:
-        recordObject = fileObject.read(recordID)
+        record_object = file_object.read(record_id)
         return True
     except u2py.U2Error as e:
         return False
-def mappingCustomer(firstName,lastName,address,city,pfid):
+def mapping_customer(first_name,last_name,address,city,pfid):
 	details={}
-	details["firstName"]=firstName
-	details["lastName"]=lastName
+	details["firstName"]=first_name
+	details["lastName"]=last_name
 	details["address"]=address
 	details["city"]=city
 	if pfid!="":
@@ -35,21 +35,18 @@ def mappingCustomer(firstName,lastName,address,city,pfid):
 #### CUSTOMER API   ####
 ########################
 @app.route('/api/customer', methods=['GET'])
-def customerDetails():
-	customerId=int(request.args.get('customerId'))
-	customerFile=orderFile = u2py.File("CUSTOMERS")
+def customer_details():
+	customer_id=request.args.get('customerId')
+	customer_file= u2py.File("CUSTOMERS")
 	data=[]
-	customerDetails={}
-	customerDetails['phoneNo']=list(customerFile.readv(customerId,1))[0][0]
-	customerDetails['firstName']=list(customerFile.readv(customerId,2))[0][0]
-	customerDetails['lastName']=list(customerFile.readv(customerId,3))[0][0]
-	customerDetails['address']=list(customerFile.readv(customerId,4))[0][0]
-	customerDetails['city']=list(customerFile.readv(customerId,5))[0][0]
-	customerDetails['state']=list(customerFile.readv(customerId,6))[0][0]
-	customerDetails['zip']=list(customerFile.readv(customerId,7))[0][0]
-	customerDetails['altPhoneNo']=list(customerFile.readv(customerId,12))[0][0]
-	customerDetails['pfid']=list(customerFile.readv(customerId,33))[0][0]
-	data.append(customerDetails)
+	cmd="LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {} CUSTOMERS TOJSON".format(customer_id)
+	details=u2py.Command(cmd).run(capture=True)
+	details=json.loads(details)
+	del details['CUSTOMERS'][0]["_ID"]
+	values=details['CUSTOMERS'][0].values()
+	keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
+	customer_dict={key: value for key, value in zip(keys, values)}
+	data.append(customer_dict)
 	return Response(
 		json.dumps(data),
 		status=200,
@@ -58,98 +55,101 @@ def customerDetails():
 #### CONSULTANT API ####
 ########################
 @app.route('/api/consultant',methods=['GET'])
-def consultantDetials():
-	transactionId=int(request.args.get('transactionId'))
-	transactionFile=u2py.File("TRANSACTION")
-	transNo=list(transactionFile.readv(transactionId,1))[0][0]
-	phoneNo=list(transactionFile.readv(transactionId,2))[0][0]
-	emFile=u2py.File("EM")
-	consultantDetails={}
+def consultant_details():
+	transaction_id=request.args.get('transactionId')
+	transaction_file=u2py.File("TRANSACTION")
+	trans_no=list(transaction_file.readv(transaction_id,1))[0][0]
+	phone_no=list(transaction_file.readv(transaction_id,2))[0][0]
+	em_file=u2py.File("EM")
+	consultant_details={}
 	data=[]
-	businessName=list(emFile.readv(phoneNo,27))[0][0]
-	firstName=list(emFile.readv(phoneNo,2))[0][0]
-	lastName=list(emFile.readv(phoneNo,1))[0][0]	
-	shortName=list(emFile.readv(phoneNo,17))[0][0]
+	business_name=list(em_file.readv(phone_no,27))[0][0]
+	first_name=list(em_file.readv(phone_no,2))[0][0]
+	last_name=list(em_file.readv(phone_no,1))[0][0]	
+	short_name=list(em_file.readv(phone_no,17))[0][0]
         ####checks the businessName if present it replaces the firstname
-	if(businessName!=''):
-		operator=str(businessName)
+	if(business_name!=''):
+		operator=str(business_name)
 	else:
-		operator=str(firstName)
-	operator=operator+" "+str(lastName)
-	if(len(operator)+len(shortName)<23):
-		operator=operator+" ("+str(shortName)+")"
-	consultantDetails["operator"]=operator
+		operator=str(first_name)
+	operator=operator+" "+str(last_name)
+	if(len(operator)+len(short_name)<23):
+		operator=operator+" ("+str(short_name)+")"
+	consultant_details["operator"]=operator
 	####they only want length till 23(used for extra precaution)
 	operator=str(operator[0:23])
-	tempType=list(transactionFile.readv(transactionId,246))[0][0]
-	if tempType =='':
-		tempType="SLS CONSULT"
+	temp_type=list(transaction_file.readv(transaction_id,246))[0][0]
+	if temp_type =='':
+		temp_type="SLS CONSULT"
 	else:
-		tempType=tempType.split("*")
-		tempType=str(tempType[2])
-	employeeId=list(transactionFile.readv(transactionId,244))[0][0]
-	if(checkExistingRecord("EM",employeeId)==True):
+		temp_type=temp_type.split("*")
+		temp_type=str(temp_type[2])
+	employee_id=list(transaction_file.readv(transaction_id,244))[0][0]
+	if(check_existing_record("EM",employeeId)==True):
 	####sets name to Noconsultant if record not found
-		emFirstName=list(emFile.readv(employeeId,2))[0][0]
-		emLastName=list(emFile.readv(employeeId,1))[0][0]
-		emShortName=list(emFile.readv(employeeId,17))[0][0]
-		consultantDetails[tempType]=str(emFirstName)+" "+str(emLastName)+" ("+str(emShortName)+")"
+		em_first_name=list(em_file.readv(employee_id,2))[0][0]
+		em_last_name=list(em_file.readv(employee_id,1))[0][0]
+		em_short_name=list(em_file.readv(employee_id,17))[0][0]
+		consultant_details[temp_type]=str(em_first_name)+" "+str(em_last_name)+" ("+str(em_short_name)+")"
 	else:
-		consultantDetails[tempType]="No consultant"
-	fitterId=list(transactionFile.readv(transactionId,248))[0][0]
+		consultant_details[tempType]="No consultant"
+	fitter_id=list(transaction_file.readv(transaction_id,248))[0][0]
         ####add name from em file where recordId is we get from record<248> of transaction
-	if(fitterId!=""):
-		fitterFirstName=list(emFile.readv(fitterId,2))[0][0]
-		fitterLastName=list(emFile.readv(fitterId,1))[0][0]
-		fitterShortName=list(emFile.readv(fitterId,17))[0][0]
-		fitterName=str(fitterFirstName)+" "+str(fitterLastName)+" ("+str(fitterShortName)+")"
+	if(fitter_id!=""):
+		fitter_first_name=list(em_file.readv(fitter_id,2))[0][0]
+		fitter_last_name=list(em_file.readv(fitter_id,1))[0][0]
+		fitter_short_name=list(em_file.readv(fitter_id,17))[0][0]
+		fitter_name=str(fitter_first_name)+" "+str(fitter_last_name)+" ("+str(fitter_short_name)+")"
 	else:
-		fitterName=fitterId
-	if(fitterId!=""):
+		fitter_name=fitter_id
+	if(fitter_id!=""):
 	####only adds if there is a fitterId(doubt why they set its value null if not sending)
-		consultantDetails["SRC ASSOC"]=fitterName
-	data.append(consultantDetails)
+		consultant_details["SRC ASSOC"]=fitter_name
+	data.append(consultant_details)
 	return Response(
 		json.dumps(data),
 		status=200,
 		mimetype="application/json"
 		)
 @app.route('/api/customer/history',methods=['GET'])
-def customerHistory():
-	savedList_name="PAGE.LIST"
+def customer_history():
+	saved_list_name="PAGE.LIST"
 	start =1
-	phoneNo=int(request.args.get('phoneNo'))
-	pageIndex =int(request.args.get('pageIndex'))
-	pageSize =int(request.args.get('pageSize'))
-	start = pageIndex * pageSize + 1
-	end = (pageIndex + 1) * pageSize
-	commandLine = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phoneNo)
+	phone_no=int(request.args.get('phoneNo'))
+	page_index =int(request.args.get('pageIndex'))
+	page_size =int(request.args.get('pageSize'))
+	start = page_index * page_size + 1
+	end = (page_index + 1) * page_size
+	commandLine = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phone_no)
 	u2py.run(commandLine, capture=True)
-	u2py.run('SAVE.LIST {}'.format(savedList_name))
-	dataFile=u2py.File("CUSTOMERS")
-	myList=u2py.List(0, savedList_name)
-	t_id = myList.readlist()
-	totalCount = t_id.dcount(u2py.FM)
+	u2py.run('SAVE.LIST {}'.format(saved_list_name))
+	data_file=u2py.File("CUSTOMERS")
+	my_list=u2py.List(0, saved_list_name)
+	t_id = my_list.readlist()
+	total_count = t_id.dcount(u2py.FM)
 	data=[]
-	if(totalCount==0):
+	if(total_count==0):
 		data.append("No customer History available")
 	else:
 		for x in range(start, end + 1):
-			if x > totalCount:
+			if x > total_count:
 				break
 			ids=t_id.extract(x)
-			firstName=list(dataFile.readv(ids, 2))[0][0]
-			lastName=list(dataFile.readv(ids, 3))[0][0]
-			address=list(dataFile.readv(ids, 4))[0][0]
-			city=list(dataFile.readv(ids, 5))[0][0]
-			pfid=list(dataFile.readv(ids, 33))[0][0]
-			customerHistory=mappingCustomer(firstName,lastName,address,city,pfid)
-			data.append(customerHistory)
+			cmd="LIST F.NAME L.NAME ADDRESS CITY PFID DATA {} CUSTOMERS TOJSON".format(ids)
+			customer_details=u2py.Command(cmd).run(capture=True)
+			customer_details=json.loads(customer_details)
+			first_name=customer_details['CUSTOMERS'][0]['F.NAME']
+			last_name=customer_details['CUSTOMERS'][0]['L.NAME']
+			address=customer_details['CUSTOMERS'][0]['ADDRESS']
+			city=customer_details['CUSTOMERS'][0]['CITY']
+			if("PFID" in customer_details['CUSTOMERS'][0] and customer_details['CUSTOMERS'][0]['PFID']!=""):
+				pfid=customer_details['CUSTOMERS'][0]['PFID']
+			else:
+				pfid=""
+			customer_history=mapping_customer(first_name,last_name,address,city,pfid)
+			data.append(customer_history)
+			
 	return Response(
 		json.dumps(data),
 		status=200,
 		mimetype='application/json')
-
-if __name__ == '__main__':
-    app.run()
-
