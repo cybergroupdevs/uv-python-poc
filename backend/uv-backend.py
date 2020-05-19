@@ -56,7 +56,6 @@ def customer_details():
 ########################
 @app.route('/api/consultant',methods=['GET'])
 def consultant_details():
-	pdb.set_trace()
 	transaction_id=request.args.get('transactionId')
 	transaction_file=u2py.File("TRANSACTION")
 	transaction_cmd="LIST TRANS.NO PHONE CommEmplId CommEmplType FITTER DATA {} TRANSACTION TOJSON".format(transaction_id)
