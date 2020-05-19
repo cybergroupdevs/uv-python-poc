@@ -20,17 +20,17 @@ def check_existing_record(file_name, record_id):
         return True
     except u2py.U2Error as e:
         return False
-def mapping_customer(first_name,last_name,address,city,pfid):
-	details={}
-	details["firstName"]=first_name
-	details["lastName"]=last_name
-	details["address"]=address
-	details["city"]=city
+def map_customer_history(first_name,last_name,address,city,pfid):
+	customer={}
+	customer["firstName"]=first_name
+	cutomer["lastName"]=last_name
+	customer["address"]=address
+	customer["city"]=city
 	if pfid!="":
-		details["pf"]="pf"
+		customer["pf"]="pf"
 	else:
-		details["pf"]=""
-	return details
+		customer["pf"]=""
+	return customer
 ########################
 #### CUSTOMER API   ####
 ########################
@@ -96,7 +96,7 @@ def consultant_details():
 	####sets name to Noconsultant if record not found
 		employee_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(employee_id)
 		employee_details=u2py.Command(employee_cmd).run(capture=True)
-		employee_details=json.loads(em_details)
+		employee_details=json.loads(employee_details)
 		employee_first_name=employee_details['EM'][0]["FNAME"]
 		employee_last_name=employee_details['EM'][0]["LNAME"]
 		employee_short_name=employee_details['EM'][0]["SHORTNAME"]
@@ -159,7 +159,7 @@ def customer_history():
 				pfid=customer_details['CUSTOMERS'][0]['PFID']
 			else:
 				pfid=""
-			customer_history=mapping_customer(first_name,last_name,address,city,pfid)
+			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
 			
 	return Response(
