@@ -3,7 +3,7 @@ import unittest
 import requests
 class customerTests(unittest.TestCase):
 	def test_get_customer(self):
-		obj=pocTest()
+		obj=PocTest()
 		print("-------customer---")
 		data=[
      		{
@@ -21,7 +21,7 @@ class customerTests(unittest.TestCase):
 		self.assertEqual(obj.customer(),data)
 class customerHistoryTests(unittest.TestCase):
 	def test_get_customerHistory1(self):
-		obj=pocTest()
+		obj=PocTest()
 		print("--customerHistory-")
 		data=[
      		{
@@ -32,9 +32,9 @@ class customerHistoryTests(unittest.TestCase):
         	"pf": "pf"
     		}
 	 	]
-		self.assertEqual(obj.customerHistory(),data)
+		self.assertEqual(obj.customer_history(),data)
 	def test_get_customerHistory2(self):
-		obj=pocTest()
+		obj=PocTest()
 		print("--customerHistory--")
 		data=[
      		{
@@ -45,9 +45,9 @@ class customerHistoryTests(unittest.TestCase):
         	"pf": ""
     		}
 	 	]
-		self.assertEqual(obj.customerHistory(),data)
+		self.assertEqual(obj.customer_history(),data)
 	def test_get_customerHistory2(self):
-		obj=pocTest()
+		obj=PocTest()
 		print("--customerHistoryMultiple--")
 		data=[
     	{
@@ -65,47 +65,47 @@ class customerHistoryTests(unittest.TestCase):
         "pf": "pf"
     	}
 		]
-		self.assertEqual(obj.customerHistory(),data)
+		self.assertEqual(obj.customer_history(),data)
 class consultantTests(unittest.TestCase):
     
 	def test_get_consultant5(self):
 		#Noconsultant is there
-		obj=pocTest()
+		obj=PocTest()
 		print("-No consultant-")
 		data=[{"operator": "RON SIMS (SION)", "SALECNS": "No consultant"}]
 		self.assertEqual(obj.consultant(),data)
 	def test_get_consultant4(self):
 		#firstNameLastName(operator)
-		obj=pocTest()
+		obj=PocTest()
 		print("-operator-FirstName-")
 		data=[{"operator": "RON SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
 		self.assertEqual(obj.consultant(),data)
 	def test_get_consultant3(self):
 		#srcAssoc
-		obj=pocTest()
+		obj=PocTest()
 		print("-srcAssoc-")
 		data=[{"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)", "SRC ASSOC": "LEBRON JAMES (LBJ)"}]
 		self.assertEqual(obj.consultant(),data)
 	def test_get_consultant2(self):
 		#salesCns
-		obj=pocTest()
+		obj=PocTest()
 		print("-------salesCns-----")
 		data=[{"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
 		self.assertEqual(obj.consultant(),data)
 	def test_get_consultant1(self):
 		#businessName
-		obj=pocTest()
+		obj=PocTest()
 		print("-------businessName----")
 		data=[{"operator": "SHOUT INC SIMS (SION)", "SLS CONSULT": "RON SIMS (SION)"}]
 		self.assertEqual(obj.consultant(),data)
-class pocTest():
+class PocTest():
 	def customer(self):
 		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
 		return data.json()
 	def consultant(self):
 		data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
 		return data.json()
-	def customerHistory(self):
+	def customer_history(self):
 		data=requests.get('http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
 		return data.json()
 if __name__ == '__main__':

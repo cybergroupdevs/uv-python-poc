@@ -59,18 +59,21 @@ def consultant_details():
 	pdb.set_trace()
 	transaction_id=request.args.get('transactionId')
 	transaction_file=u2py.File("TRANSACTION")
-	trans_no=list(transaction_file.readv(transaction_id,1))[0][0]
-	phone_no=list(transaction_file.readv(transaction_id,2))[0][0]
+	transaction_cmd="LIST TRANS.NO PHONE CommEmplId CommEmplType FITTER DATA {} TRANSACTION TOJSON".format(transaction_id)
+	transaction_details=u2py.Command(transaction_cmd).run(capture=True)
+	transaction_details=json.loads(transaction_details)
+	trans_no=transaction_details['TRANSACTION'][0]["TRANS.NO"]
+	phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
 	em_file=u2py.File("EM")
-	consultant_details={}
+	details={}
 	data=[]
 	consultant_cmd="LIST FNAME LNAME SHORTNAME NICKNAME DATA {} EM TOJSON".format(phone_no)
-	details=u2py.Command(consultant_cmd).run(capture=True)
-	details=json.loads(details)
-	business_name=details['EM'][0]["NICKNAME"]
-	first_name=details['EM'][0]["FNAME"]
-	last_name=details['EM'][0]["LNAME"]
-	short_name=details['EM'][0]["SHORTNAME"]
+	consultant_details=u2py.Command(consultant_cmd).run(capture=True)
+	consultant_details=json.loads(consultant_details)
+	business_name=consultant_details['EM'][0]["NICKNAME"]
+	first_name=consultant_details['EM'][0]["FNAME"]
+	last_name=consultant_details['EM'][0]["LNAME"]
+	short_name=consultant_details['EM'][0]["SHORTNAME"]
         ####checks the businessName if present it replaces the firstname
 	if(business_name!=''):
 		operator=str(business_name)
@@ -79,28 +82,28 @@ def consultant_details():
 	operator=operator+" "+str(last_name)
 	if(len(operator)+len(short_name)<23):
 		operator=operator+" ("+str(short_name)+")"
-	consultant_details["operator"]=operator
+	details["operator"]=operator
 	####they only want length till 23(used for extra precaution)
 	operator=str(operator[0:23])
-	temp_type=list(transaction_file.readv(transaction_id,246))[0][0]
-	if temp_type =='':
-		temp_type="SLS CONSULT"
+	employee_type=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplType']
+	if employee_type =='':
+		employee_type="SLS CONSULT"
 	else:
-		temp_type=temp_type.split("*")
-		temp_type=str(temp_type[2])
-	employee_id=list(transaction_file.readv(transaction_id,244))[0][0]
+		employee_type=employee_type.split("*")
+		employee_type=str(employee_type[2])
+	employee_id=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplId']
 	if(check_existing_record("EM",employee_id)==True):
 	####sets name to Noconsultant if record not found
-		em_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(employee_id)
-		em_details=u2py.Command(em_cmd).run(capture=True)
-		em_details=json.loads(em_details)
-		em_first_name=em_details['EM'][0]["FNAME"]
-		em_last_name=em_details['EM'][0]["LNAME"]
-		em_short_name=em_details['EM'][0]["SHORTNAME"]
-		consultant_details[temp_type]=str(em_first_name)+" "+str(em_last_name)+" ("+str(em_short_name)+")"
+		employee_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(employee_id)
+		employee_details=u2py.Command(employee_cmd).run(capture=True)
+		employee_details=json.loads(em_details)
+		employee_first_name=employee_details['EM'][0]["FNAME"]
+		employee_last_name=employee_details['EM'][0]["LNAME"]
+		employee_short_name=employee_details['EM'][0]["SHORTNAME"]
+		details[employee_type]=str(employee_first_name)+" "+str(employee_last_name)+" ("+str(employee_short_name)+")"
 	else:
-		consultant_details[tempType]="No consultant"
-	fitter_id=list(transaction_file.readv(transaction_id,248))[0][0]
+		details[tempType]="No consultant"
+	fitter_id=transaction_details['TRANSACTION'][0]["FITTER"]
         ####add name from em file where recordId is we get from record<248> of transaction
 	if(fitter_id!=""):
 		fitter_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(fitter_id)
@@ -114,8 +117,8 @@ def consultant_details():
 		fitter_name=fitter_id
 	if(fitter_id!=""):
 	####only adds if there is a fitterId(doubt why they set its value null if not sending)
-		consultant_details["SRC ASSOC"]=fitter_name
-	data.append(consultant_details)
+		details["SRC ASSOC"]=fitter_name
+	data.append(details)
 	return Response(
 		json.dumps(data),
 		status=200,
@@ -130,8 +133,8 @@ def customer_history():
 	page_size =int(request.args.get('pageSize'))
 	start = page_index * page_size + 1
 	end = (page_index + 1) * page_size
-	commandLine = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phone_no)
-	u2py.run(commandLine, capture=True)
+	command_line = 'SELECT {} WITH PHONE.LONG = {}'.format('CUSTOMERS',phone_no)
+	u2py.run(command_line, capture=True)
 	u2py.run('SAVE.LIST {}'.format(saved_list_name))
 	data_file=u2py.File("CUSTOMERS")
 	my_list=u2py.List(0, saved_list_name)
@@ -163,3 +166,5 @@ def customer_history():
 		json.dumps(data),
 		status=200,
 		mimetype='application/json')
+if __name__ == '__main__':
+    app.run()
