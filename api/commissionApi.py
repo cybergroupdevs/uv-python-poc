@@ -27,11 +27,12 @@ def check_existing_record(file_object, record_ID):
         return False
 
 
-def calculate_xmul(trans_data):
-    transaction_type = trans_data['TRAN.TYPE']
-    trans_sub_type = trans_data['TRAN.SUB.TYPE']
+def transaction_xmul_value(transaction_data):
+    # xmul is temporary local variable
+    transaction_type = transaction_data['TRAN.TYPE']
+    transaction_sub_type = transaction_data['TRAN.SUB.TYPE']
     if transaction_type == 'VSAL':
-        if trans_sub_type == 'CF.CANCEL':
+        if transaction_sub_type == 'CF.CANCEL':
             xmul = 1
         else:
             xmul = -1
@@ -40,13 +41,13 @@ def calculate_xmul(trans_data):
     return xmul
 
 
-def calculate_amount(trans_data):
+def calculate_amount(transaction_data):
     amount_list = []
-    comm_sale_amount = [float(key['CommSaleAmt']) for key in trans_data['ITEM_MV']]
-    quantity_list = [int(key['MKUP.STORE.QTY']) for key in trans_data['MKUP.STORE.QTY_MV']]
-    xmul = calculate_xmul(trans_data)
-    for i in range(len(comm_sale_amount)):
-        amount = comm_sale_amount[i]
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    xmul = transaction_xmul_value(transaction_data)
+    for i in range(len(commission_sale_amount)):
+        amount = commission_sale_amount[i]
         if amount != 0:
             quantity = quantity_list[i] * xmul
             amount = convert_field_formats(amount * quantity * 100, 'MD2', 'external')
@@ -56,123 +57,122 @@ def calculate_amount(trans_data):
     return amount_list
 
 
-def calculate_commission_amount(trans_data):
-    xmul = calculate_xmul(trans_data)
+def calculate_commission_amount(transaction_data):
+    xmul = transaction_xmul_value(transaction_data)
     commission_amount = 0
-    empId = [key['CommEmplId'] for key in trans_data['ITEM_MV']]
-    comm_sale_amount = [float(key['CommSaleAmt']) for key in trans_data['ITEM_MV']]
-    quantity_list = [int(key['MKUP.STORE.QTY']) for key in trans_data['MKUP.STORE.QTY_MV']]
-    for i in range(len(empId)):
+    employeeId = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    for i in range(len(employeeId)):
         quantity = xmul * quantity_list[i]
-        commission_amount = commission_amount + comm_sale_amount[i] * quantity
+        commission_amount = commission_amount + commission_sale_amount[i] * quantity
     return commission_amount
 
 
-def set_empsn_values(trans_data, em_file):
+def set_empsn_values(transaction_data, employee_file):
     empsn_list = []
-    comm_emp_id = [key['CommEmplId'] for key in trans_data['ITEM_MV']]
-    for i in range(len(comm_emp_id)):
-        empId = comm_emp_id[i]
-        if check_existing_record(em_file, empId):
-            empsn = list(em_file.readv(empId, 17))[0][0]
+    commission_employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
+    for i in range(len(commission_employee_id)):
+        employeeId = commission_employee_id[i]
+        if check_existing_record(employee_file, employeeId):
+            empsn = list(employee_file.readv(employeeId, 17))[0][0]
         else:
-            empsn = empId
+            empsn = employeeId
         empsn_list.append(empsn)
 
     return empsn_list
 
 
-def set_emp_total(trans_data, transactionFile):
-    rentalId = trans_data['RECEIVED.ASN']
-    comm_sale_amount = [float(key['CommSaleAmt']) for key in trans_data['ITEM_MV']]
-    trans_sale_total = 0
-    comm_sales_total = 0
-    disc_conv_to_mkdn = ''
-    unconverted_dis_amt = 0
-    if rentalId != '':
-        discountType = [int(key['DISCOUNT.TYPE']) for key in trans_data['DISCOUNT.TYPE_MV']]
-        if len(discountType) != 1 and discountType[0] != '':
-            discountLine = transactionFile.readv(trans_data['_ID'], 45)
-            discount = [float(x[0]) for x in discountLine]
-            discountSum = sum(discount)
-            if discountSum != 0:
-                searchCount = discountLine.dcount(u2py.SM) + 1
-                for i in range(searchCount):
-                    discountLine = list(discountLine)
-                    if float(discountLine[i][0]) > 0:
-                        disc_conv_to_mkdn = list(transactionFile.readv(trans_data['_ID'], 167))
+def set_employee_total(transaction_data, transaction_file, desc_length):
+    rental_id_list = [key['RESERVATIONS'] for key in transaction_data['ITEM_MV']]
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    transaction_sale_total = 0
+    commission_sales_total = 0
+    discount_conversion = ''
+    unconverted_discount_amount = 0
+    discount_amount_list = transaction_file.readv(transaction_data['_ID'], 45).to_list()[0]
+    discount_conversion_list = transaction_file.readv(transaction_data['_ID'], 167).to_list()
+    if len(discount_conversion_list) != 0:
+        discount_conversion_list = discount_conversion_list[0]
+    xmul = transaction_xmul_value(transaction_data)
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    retail_list = [float(key['RETAIL']) for key in transaction_data['ITEM_MV']]
+    mkdn_list = [float(key['MRKDN']) for key in transaction_data['ITEM_MV']]
+    for i in range(desc_length):
+        if rental_id_list[i] != '':
+            discount_type = [int(key['DISCOUNT.TYPE']) for key in transaction_data['DISCOUNT.TYPE_MV']]
+            discount_amount = [float(value) for value in discount_amount_list[i]]
+            discount_sum = sum(discount_amount)
+            if discount_sum != 0:
+                for j in range(len(discount_amount)):
+                    if discount_amount[j] > 0:
+                        discount_conversion = discount_conversion_list[j]
                         break
-                if disc_conv_to_mkdn[0][0] != '':
-                    unconverted_dis_amt = 0
+                if discount_conversion != '':
+                    unconverted_discount_amount = 0
                 else:
-                    unconverted_dis_amt = discountSum
-    else:
-        unconverted_dis_amt = 0
-
-    xmul = calculate_xmul(trans_data)
-    quantity_list = [int(key['MKUP.STORE.QTY']) for key in trans_data['MKUP.STORE.QTY_MV']]
-    retail_list = [float(key['RETAIL']) for key in trans_data['ITEM_MV']]
-    mkdnList = [float(key['MRKDN']) for key in trans_data['ITEM_MV']]
-    for i in range(len(retail_list)):
+                    unconverted_discount_amount = discount_sum
+        else:
+            unconverted_discount_amount = 0
         qty = quantity_list[i]
-        total = (retail_list[i] - mkdnList[i]) * qty
-        total = total - unconverted_dis_amt
-        trans_sale_total = trans_sale_total + total
+        total = (retail_list[i] - mkdn_list[i]) * qty
+        total = total - unconverted_discount_amount
+        transaction_sale_total = transaction_sale_total + total
         qty = qty * xmul
-        comm_sales_total = comm_sales_total + (comm_sale_amount[i] * qty)
+        commission_sales_total = commission_sales_total + (commission_sale_amount[i] * qty)
+    return commission_sales_total
 
-    return comm_sales_total
 
-
-def calculate_sale_percentage(comm_emp_id, em_file):
-    empId = comm_emp_id[0]
+def calculate_sale_percentage(commission_employee_id, employee_file):
+    employee_id = commission_employee_id[0]
     try:
-        em_record = list(em_file.readv(empId, 17))
+        employee_record = list(employee_file.readv(employee_id, 17))
     except u2py.U2Error:
-        em_record = empId
-    return em_record
+        employee_record = employee_id
+    return employee_record
 
 
-def calculate_comm_emp_type(emp_type):
-    emp_type = emp_type.split("*")[2]
-    return emp_type
+def calculate_commission_employee_type(employee_type):
+    employee_type = employee_type.split("*")[2]
+    return employee_type
 
 
 @app.route('/commission/<transId>', methods=['GET'])
 def commission_list(transId):
-    commission_data = []
-    trans_file_name = 'TRANSACTION'
-    em_file_name = 'EM'
-    transFile = u2py.File(trans_file_name)
-    em_file = u2py.File(em_file_name)
-    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(transId)
-    trans_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
-    description = [key['DESC'] for key in trans_data['ITEM_MV']]
-    if trans_data['ITEM_MV'][0]['CommEmplId'] != '':
-        amount_list = calculate_amount(trans_data)
-        empsn_list = set_empsn_values(trans_data, em_file)
-        emp_total = set_emp_total(trans_data, transFile)
-        commission_amount = calculate_commission_amount(trans_data)
-        commRate = [key['CommRate'] for key in trans_data['ITEM_MV']]
-        commEmpType = [key['CommEmplType'] for key in trans_data['ITEM_MV']]
+    commission_data_list = []
+    transaction_file_name = 'TRANSACTION'
+    employee_file_name = 'EM'
+    transFile = u2py.File(transaction_file_name)
+    employee_file = u2py.File(employee_file_name)
+    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(
+        transId)
+    transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
+    description = [key['DESC'] for key in transaction_data['ITEM_MV']]
+    if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
+        amount_list = calculate_amount(transaction_data)
+        empsn_list = set_empsn_values(transaction_data, employee_file)
+        employee_total = set_employee_total(transaction_data, transFile, len(description))
+        commission_amount = calculate_commission_amount(transaction_data)
+        commissionRate = [key['CommRate'] for key in transaction_data['ITEM_MV']]
+        commissionEmpType = [key['CommEmplType'] for key in transaction_data['ITEM_MV']]
         for i in range(len(description)):
-            comm_data = {}
-            comm_data['class'] = trans_data['ITEM_MV'][i]['ITEM.NO'][0:4]
-            comm_data['sku'] = trans_data['ITEM_MV'][i]['ITEM.NO'][4:9]
-            comm_data['retail'] = trans_data['ITEM_MV'][i]['RETAIL']
-            comm_data['mkdn'] = trans_data['ITEM_MV'][i]['MRKDN']
-            comm_data['quantity'] = trans_data['MKUP.STORE.QTY_MV'][i]['MKUP.STORE.QTY']
-            comm_data['desc'] = description[i]
-            comm_data['commissionType'] = trans_data['ITEM_MV'][i]['COMMISSION.TYPE']
-            comm_data['amount'] = amount_list[i]
-            comm_data['empPercentage'] = convert_field_formats(commRate[i], 'MD2', 'internal')
-            comm_data['salePercentage'] = trans_data['ITEM_MV'][i]['CommEmplPercentUsed']
-            comm_data['commEmpId'] = empsn_list[i]
-            comm_data['empCommissionType'] = calculate_comm_emp_type(commEmpType[i])
-            commission_data.append(comm_data)
+            commission_data = {}
+            commission_data['class'] = transaction_data['ITEM_MV'][i]['ITEM.NO'][0:4]
+            commission_data['sku'] = transaction_data['ITEM_MV'][i]['ITEM.NO'][4:9]
+            commission_data['retail'] = transaction_data['ITEM_MV'][i]['RETAIL']
+            commission_data['mkdn'] = transaction_data['ITEM_MV'][i]['MRKDN']
+            commission_data['quantity'] = transaction_data['MKUP.STORE.QTY_MV'][i]['MKUP.STORE.QTY']
+            commission_data['desc'] = description[i]
+            commission_data['commissionType'] = transaction_data['ITEM_MV'][i]['COMMISSION.TYPE']
+            commission_data['amount'] = amount_list[i]
+            commission_data['employeePercentage'] = convert_field_formats(commissionRate[i], 'MD2', 'internal')
+            commission_data['salePercentage'] = transaction_data['ITEM_MV'][i]['CommEmplPercentUsed']
+            commission_data['commEmpId'] = empsn_list[i]
+            commission_data['employeeCommissionType'] = calculate_commission_employee_type(commissionEmpType[i])
+            commission_data_list.append(commission_data)
         response = {
-            'commissionList': commission_data,
-            'retailAmount': emp_total,
+            'commissionList': commission_data_list,
+            'retailAmount': employee_total,
             'commissionAmount': commission_amount
         }
     else:
@@ -182,4 +182,3 @@ def commission_list(transId):
 
 if __name__ == '__main__':
     app.run()
-

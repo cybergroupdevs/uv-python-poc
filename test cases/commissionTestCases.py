@@ -11,15 +11,15 @@ class CommissionData():
             'mkdn': '60.98',
             'quantity': '1',
             'desc': 'CK BT INFINITE',
-            'commissionType': 'MTR1',
+            'commission_type': 'MTR1',
             'amount': '48.52',
-            'empPercentage': '5',
-            'salePercentage': '100',
-            'commEmpId': 'MCT10',
-            'empCommissionType': 'SALECNS'
+            'employee_percentage': '5',
+            'sale_percentage': '100',
+            'commission_emp_id': 'MCT10',
+            'employee_commission_type': 'SALECNS'
         }
 
-    def commissionDetailsList(self):
+    def commission_details_list(self):
         return self.commission_details
 
     def commission_detail_error(self):
@@ -34,7 +34,7 @@ class TestCases(unittest.TestCase):
         obj = CommissionData()
         response = requests.get("http://localhost:5000/commission/1234*12*4321")
         data = response.json()['commissionList']
-        self.assertEqual(data[0],obj.commissionDetailsList())
+        self.assertEqual(data[0],obj.commission_details_list())
 
     def test_commission_data(self):
         obj = CommissionData()
@@ -46,6 +46,7 @@ class TestCases(unittest.TestCase):
         obj = CommissionData()
         response = requests.get("http://localhost:5000/commission/8101*3460468")
         data = response.json()['consultantName']
+        self.assertEqual(data,obj.consult_name())
         self.assertEqual(data,obj.consult_name())
 
 
