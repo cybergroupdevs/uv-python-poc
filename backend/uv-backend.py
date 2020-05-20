@@ -13,6 +13,11 @@ CORS(app)
 ########################
 #### HELPER METHODS ####
 ########################
+def check_key(detail,data):
+	if(detail in data.keys()):
+		return True
+	else:
+		return False
 def check_existing_record(file_name, record_id):
     file_object = u2py.File(file_name)
     try:
@@ -20,17 +25,17 @@ def check_existing_record(file_name, record_id):
         return True
     except u2py.U2Error as e:
         return False
-def map_customer_history(first_name,last_name,address,city,pfid):
-	customer={}
-	customer["firstName"]=first_name
-	cutomer["lastName"]=last_name
-	customer["address"]=address
-	customer["city"]=city
+def mapping_customer(first_name,last_name,address,city,pfid):
+	details={}
+	details["firstName"]=first_name
+	details["lastName"]=last_name
+	details["address"]=address
+	details["city"]=city
 	if pfid!="":
-		customer["pf"]="pf"
+		details["pf"]="pf"
 	else:
-		customer["pf"]=""
-	return customer
+		details["pf"]=""
+	return details
 ########################
 #### CUSTOMER API   ####
 ########################
@@ -69,7 +74,10 @@ def consultant_details():
 	consultant_cmd="LIST FNAME LNAME SHORTNAME NICKNAME DATA {} EM TOJSON".format(phone_no)
 	consultant_details=u2py.Command(consultant_cmd).run(capture=True)
 	consultant_details=json.loads(consultant_details)
-	business_name=consultant_details['EM'][0]["NICKNAME"]
+	if(check_key("NICKNAME",consultant_details['EM'][0])==True):
+		business_name=consultant_details['EM'][0]["NICKNAME"]
+	else:
+		business_name=""
 	first_name=consultant_details['EM'][0]["FNAME"]
 	last_name=consultant_details['EM'][0]["LNAME"]
 	short_name=consultant_details['EM'][0]["SHORTNAME"]
@@ -84,13 +92,19 @@ def consultant_details():
 	details["operator"]=operator
 	####they only want length till 23(used for extra precaution)
 	operator=str(operator[0:23])
-	employee_type=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplType']
+	if(check_key('CommEmplType',transaction_details['TRANSACTION'][0]["ITEM_MV"][0])==True):
+		employee_type=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplType']
+	else:
+		employee_type=''
 	if employee_type =='':
 		employee_type="SLS CONSULT"
 	else:
 		employee_type=employee_type.split("*")
 		employee_type=str(employee_type[2])
-	employee_id=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplId']
+	if(check_key('CommEmplId',transaction_details['TRANSACTION'][0]["ITEM_MV"][0])):
+		employee_id=transaction_details['TRANSACTION'][0]["ITEM_MV"][0]['CommEmplId']
+	else:
+		employee_id=""
 	if(check_existing_record("EM",employee_id)==True):
 	####sets name to Noconsultant if record not found
 		employee_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(employee_id)
@@ -101,26 +115,27 @@ def consultant_details():
 		employee_short_name=employee_details['EM'][0]["SHORTNAME"]
 		details[employee_type]=str(employee_first_name)+" "+str(employee_last_name)+" ("+str(employee_short_name)+")"
 	else:
-		details[tempType]="No consultant"
-	fitter_id=transaction_details['TRANSACTION'][0]["FITTER"]
+		details[employee_type]="No consultant"
         ####add name from em file where recordId is we get from record<248> of transaction
-	if(fitter_id!=""):
-		fitter_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(fitter_id)
-		fitter_details=u2py.Command(fitter_cmd).run(capture=True)
-		fitter_details=json.loads(fitter_details)
-		fitter_first_name=fitter_details['EM'][0]["FNAME"]
-		fitter_last_name=fitter_details['EM'][0]["LNAME"]
-		fitter_short_name=fitter_details['EM'][0]["SHORTNAME"]
-		fitter_name=str(fitter_first_name)+" "+str(fitter_last_name)+" ("+str(fitter_short_name)+")"
-	else:
-		fitter_name=fitter_id
-	if(fitter_id!=""):
+	if(check_key("FITTER",transaction_details['TRANSACTION'][0])==True):
+		fitter_id=transaction_details['TRANSACTION'][0]["FITTER"]
+		if(fitter_id!=""):
+			fitter_cmd="LIST FNAME LNAME SHORTNAME DATA {} EM TOJSON".format(fitter_id)
+			fitter_details=u2py.Command(fitter_cmd).run(capture=True)
+			fitter_details=json.loads(fitter_details)
+			fitter_first_name=fitter_details['EM'][0]["FNAME"]
+			fitter_last_name=fitter_details['EM'][0]["LNAME"]
+			fitter_short_name=fitter_details['EM'][0]["SHORTNAME"]
+			fitter_name=str(fitter_first_name)+" "+str(fitter_last_name)+" ("+str(fitter_short_name)+")"
+		else:
+			fitter_name=fitter_id
+	if(check_key("FITTER",transaction_details['TRANSACTION'][0]) and fitter_id!=""):
 	####only adds if there is a fitterId(doubt why they set its value null if not sending)
 		details["SRC ASSOC"]=fitter_name
 	data.append(details)
 	return Response(
 		json.dumps(data),
-		status=200,
+		status=200,	
 		mimetype="application/json"
 		)
 @app.route('/api/customer/history',methods=['GET'])
@@ -158,7 +173,7 @@ def customer_history():
 				pfid=customer_details['CUSTOMERS'][0]['PFID']
 			else:
 				pfid=""
-			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
+			customer_history=mapping_customer(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
 			
 	return Response(
