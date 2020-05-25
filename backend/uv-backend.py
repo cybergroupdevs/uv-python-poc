@@ -220,7 +220,7 @@ def discount(transactionId):
                 else:
                     pct='NO'
                 sale_total=sale_total-discount
-                data=pct+' discount of '+(scr_discount*100) #OCONV missing
+                data=pct+' discount of '+(scr_discount*100) 
                 if (disc_conv_to_mkdn):
                     data=data+' converted to markdown.'
                 else:
@@ -344,15 +344,13 @@ def transactionGet(transactionId):
                         mkdn_flag = ' '
                     
                     if(legend_desciption != ''):
-                        #line 631
-                        transaction_mkdn= mkdn_flag #OCONV function
+                        transaction_mkdn= mkdn_flag
                 else:
                     mkdn_flag=''
                 detail_loop=1
                 if((display_comm_flag != old_display_comm_flag) or (backup_flag)):
                     old_display_comm_flag = display_comm_flag
                     backup_flag=0
-                #line 650 (print)
             else:
                 item_ship_group= details['TRANSACTION'][0]['ITEMS_MV'][x]['ITEM.SHIP.GROUP']
                 if(item_ship_group!=curr_ship_group):
@@ -362,19 +360,19 @@ def transactionGet(transactionId):
                         sale_total=sale_total+line_total
                         total_accumulated_line= total_accumulated_line+1
                     continue
-                transaction_sku=(details['TRANSACTION'][0]['ITEMS_MV'][x]['ITEM.NO']) #
+                transaction_sku=(details['TRANSACTION'][0]['ITEMS_MV'][x]['ITEM.NO']) 
                 transaction_details['sku']=transaction_sku
             description_output=[]
             extCommOut=''
             desc= dcount(list(details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])
             if(desc>1):
-                if((details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])!='SJFILE'): #
-                    description_output.append(details) #
+                if((details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])!='SJFILE'): 
+                    description_output.append(details) 
                 description_output.append(details['TRANSACTION'][0]['ITEMS_MV'][x][2]['DESC'])
-                sub_item_count=dcount(details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])    #
+                sub_item_count=dcount(details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])    
                 for y in range(3,sub_item_count):
                     transaction_desc=details['TRANSACTION'][0]['ITEMS_MV'][x][y]['ITEM.SHIP.GROUP']
-                    if(transaction_desc!=''):     #???
+                    if(transaction_desc!=''):   
                         EM_file=u2py.File("EM")
                         s_name=listdetails['TRANSACTION'][0]['ITEMS_MV'][0]['EXP.DATE']
                         if(s_name):
@@ -383,7 +381,7 @@ def transactionGet(transactionId):
                             description_output.append(transaction_desc)
                     else:
                         description_output.append(transaction_desc)
-                if(len(details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])>20 and (details['TRANSACTION'][0]['ITEMS_MV'][x][1][10]['DESC'])=='GIFT CARD-'): #
+                if(len(details['TRANSACTION'][0]['ITEMS_MV'][x]['DESC'])>20 and (details['TRANSACTION'][0]['ITEMS_MV'][x][1][10]['DESC'])=='GIFT CARD-'): 
                     description_output.append(details['TRANSACTION'][0]['ITEMS_MV'][x][1][10]['DESC'])
                     description_output.append(details['TRANSACTION'][0]['ITEMS_MV'][x][11][99]['DESC'])
                 else:
@@ -398,42 +396,36 @@ def transactionGet(transactionId):
                         if((details['TRANSACTION'][0]['ITEMS_MV'][1][x][1]['CommSaleAmt'])+0 != 0):
                             item_quantity= (details['TRANSACTION'][0]['ITEMS_MV'][1][x]['VALUE.IS'])
                             quantity_XMUL = item_quantity*xmul
-                            description_output=description_output+()   #OCONV remaining line 758
+                            description_output=description_output+()  
                         else:
                             description_output=description_output+' '
                         temp_rate=(details['TRANSACTION'][0]['ITEMS_MV'][1][x][1]['CommRate'])+0
-                        description_output=description_output+temp_rate  #format
-                        #commission percentage for this item
+                        description_output=description_output+temp_rate
                         temp_rate=(details['TRANSACTION'][0]['ITEMS_MV'][1][x][1]['CommRate'])
-                        description_output=description_output+temp_rate   #OCONV
-                        #commissionable sales percentage 
+                        description_output=description_output+temp_rate  
                         temp_rate=(details['TRANSACTION'][0]['ITEMS_MV'][1][x][1]['CommEmplPercentUsed'])
-                        description_output=description_output+temp_rate  #format
+                        description_output=description_output+temp_rate  
                         emp_id=details['TRANSACTION'][0]['ITEMS_MV'][1][x][1]['CommEmplId']
                         empsn=list(EM_file.readv(emp_id,17))[0][0]
                         if(empsn):
                             empsn=emp_id
-                        description_output=description_output+empsn #format
-                        commission_count=dcount(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['COMMISSION.TYPE']) #dcount
-                        # if(commission_count>1):
-                        #     for z in range(2,commission_count):
-                        #         #nothing
+                        description_output=description_output+empsn 
+                        commission_count=dcount(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['COMMISSION.TYPE']) 
                         if(display_comm_flag==false):
                             description_output=description_output+(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['QUANTITY'])
                             if(ship_group_count>0 or ship_status_count>0):
                                 description_output=description_output+(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['LIST.ITEM.STATUS'])
                         if((details['TRANSACTION'][0]['ITEMS_MV'][0]['TRAN.TYPE'])=='VSAL' or (details['TRANSACTION'][0]['ITEMS_MV'][0]['TRAN.TYPE'])=='XCHG'):
                                 description_output=description_output+(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['IGNORE.PROMOS'])
-                #line 829
                 for i in range(1,description_count):
                     transaction_details['descr']=description_output[i]
                 rental_id=(details['TRANSACTION'][0]['ITEMS_MV'][1][x]['RESERVATIONS'])
                 if(rental_id != ''):
                     rental=' (Rental '+rental_id+' for'+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.RENTAL.AMT'])*100)+', '+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.INSURANCE.AMT'])*100)+' ins, '+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.RUSH.AMT'])*100)+' rush'
-                    rental=rental+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.INSURANCE.AMT'])*100) #OCONV
-                    rental=rental+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.RUSH.AMT'])*100) #OCONV
+                    rental=rental+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.INSURANCE.AMT'])*100)
+                    rental=rental+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.RUSH.AMT'])*100) 
                     if (details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.MARKDOWN.AMT'] != ''):
-                        rental=rental+', '+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.MARKDOWN.AMT'])*100)+' mkdn'  #OCONV
+                        rental=rental+', '+((details['TRANSACTION'][0]['ITEMS_MV'][1][x]['TUX.MARKDOWN.AMT'])*100)+' mkdn' 
                     rental=rental+')'
                 else:
                     unconverted_dist_total=0
