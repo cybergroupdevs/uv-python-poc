@@ -149,6 +149,56 @@ def calculate_sale_percentage(commission_employee_id, employee_file):
 def calculate_commission_employee_type(employee_type):
     employee_type = employee_type.split("*")[2]
     return employee_type
+
+def transaction_credit_details(transaction_data, pmt_val):
+    credit_details = {}
+    pmt_val = int(pmt_val) - 1
+    times_out = [key['TIME.OUT'] for key in transaction_data['PAY_MV']][pmt_val]
+    times_in = [key['TIME.IN'] for key in transaction_data['PAY_MV']][pmt_val]
+    times_done = [key['TIME.DONE'] for key in transaction_data['PAY_MV']][pmt_val]
+    attempt_types = [key['ATTEMPT.TYPE'] for key in transaction_data['PAY_MV']][pmt_val]
+    acc_methods = [key['ACCT.METHOD'] for key in transaction_data['PAY_MV']][pmt_val]
+    auth_methods = [key['AUTH.METHOD'] for key in transaction_data['PAY_MV']][pmt_val]
+    credit_details['sent'] = times_out
+    credit_details['rcvd'] = times_in
+    credit_details['done'] = times_done
+    credit_details['type'] = attempt_types
+    entry_mode = acc_methods[0]
+
+    approval_time = [key['APPROVAL.TIME'] for key in transaction_data['PAY_MV']][pmt_val]
+    transaction_date_int = transaction_data['TRAN.DATE']
+    if approval_time != '':
+        entry_mode = 'RENTR'
+    elif entry_mode == '90':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '91' and transaction_date_int == '18629':
+        entry_mode = 'CLESS'
+    elif entry_mode == '91':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '02':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '00':
+        entry_mode = 'HAND'
+    elif entry_mode == '01':
+        entry_mode = 'HAND'
+    elif entry_mode == 'MANUALLY [48]':
+        entry_mode = 'HAND'
+    elif entry_mode == 'SWIPED [49]':
+        entry_mode = 'SWIPE'
+    else:
+        entry_mode = "????"
+    credit_details['entry'] = entry_mode
+
+    if auth_methods == 'D':
+        auth_methods = 'CALL CENTER'
+    elif auth_methods == 'E':
+        auth_methods = 'TIMEOUT'
+    else:
+        auth_methods = 'AUTO APPROVED'
+    credit_details['auth'] = auth_methods
+
+    return credit_details
+
 ########################
 #### CUSTOMER API   ####
 ########################
@@ -328,6 +378,38 @@ def commission_list(transId):
         }
     else:
         response = {"error": "No commission information for this transaction Id"}
+    return Response(json.dumps(response), status=200, mimetype='application/json')
+
+#########################
+#### CREDIT CARD API ####
+#########################
+@app.route('/transaction/<transactionId>/creditCard/authentication')
+def credit_card_details(transactionId):
+    card_details = []
+    transaction_file = u2py.File('TRANSACTION')
+    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(
+        transactionId)
+    transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
+    try_pointer = [int(key['TRY.POINTER']) for key in transaction_data['PAY_MV']]
+    attempts_to_print = [key['TIME.DONE'] for key in transaction_data['PAY_MV']]
+    transaction_type = transaction_file.readv(transactionId, 15)
+    type_count = transaction_type.dcount(u2py.VM)
+    for i in range(1, type_count + 1):
+        pmt_val = try_pointer[i - 1]
+        if pmt_val != '':
+            attempts_to_print[i - 1] = '*'
+            data = transaction_credit_details(transaction_data, pmt_val)
+            card_details.append(data)
+    pmt_count = transaction_file.readv(transactionId, 68).dcount(u2py.VM)
+    for i in range(pmt_count):
+        attempts = attempts_to_print[i - 1]
+        if attempts != '*':
+            pmt_val = i
+            data = transaction_credit_details(transaction_data, pmt_val)
+            card_details.append(data)
+    response = {
+        'cardDetails': card_details
+    }
     return Response(json.dumps(response), status=200, mimetype='application/json')
 
 
