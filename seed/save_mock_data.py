@@ -93,6 +93,10 @@ def save_mock_data():
         employeeId = (data_dict['employeeId'][i])
         kg_em_last_name = (data_dict['emLastName'][i])
         kg_em_first_name = (data_dict['emFirstName'][i])
+        advertCode = str(data_dict['advertCode'][i])
+        corpAcctNo = str(data_dict['corpAcctNo'][i])
+        authTerminalId = str(data_dict['authTerminalId'][i])
+        handTktNo = str(data_dict['handTktNo'][i])
         
         transaction_file.writev(transactionId, 2, phone)
 
@@ -145,6 +149,8 @@ def save_mock_data():
         transaction_file.writev(transactionId, 45, data)
 
         transaction_file.writev(transactionId, 46, shipMethod)
+        
+        transaction_file.writev(transactionId, 48, authTerminalId)
 
         transaction_file.writev(transactionId, 49, shipComment)
 
@@ -163,6 +169,8 @@ def save_mock_data():
         transaction_file.writev(transactionId, 57, shipDate)
 
         transaction_file.writev(transactionId, 58, mbaOrderId)
+        
+        transaction_file.writev(transactionId, 64, handTktNo)
 
         data = bytes('1', "utf-8") + u2py.VM + bytes('2', "utf-8") + u2py.VM + bytes('3', "utf-8")
         transaction_file.writev(transactionId, 65, data)
@@ -188,6 +196,9 @@ def save_mock_data():
         data1 = bytes('1', "utf-8") + u2py.VM + bytes('1', "utf-8") + u2py.VM + bytes('1', "utf-8")
         transaction_file.writev(transactionId, 72, data1)
 
+        data = bytes(str(random.randint(10000, 30000)), "utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)),"utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)), "utf-8")
+        transaction_file.writev(transactionId, 77, data)
+
         transaction_file.writev(transactionId, 82, maskedAcctNo)
 
         data = bytes(str(rentalId), "utf-8") + u2py.VM + bytes(str(rentalId), "utf-8") + u2py.VM + bytes(str(rentalId), "utf-8")
@@ -198,6 +209,18 @@ def save_mock_data():
 
         data = bytes(shipTrackNo1, "utf-8") + u2py.VM + bytes(shipTrackNo2, "utf-8") + u2py.VM + bytes(shipTrackNo3,"utf-8")
         transaction_file.writev(transactionId, 105, data)
+
+        data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
+        transaction_file.writev(transactionId, 111, data)
+        
+        data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
+        transaction_file.writev(transactionId, 112, data)
+
+        data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
+        transaction_file.writev(transactionId, 113, data)
+
+        data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
+        transaction_file.writev(transactionId, 115, data)
 
         data = bytes(couponCode1, "utf-8") + u2py.VM + bytes(couponCode2, "utf-8") + u2py.VM + bytes(couponCode3,"utf-8")
         transaction_file.writev(transactionId, 128, data)
@@ -234,9 +257,26 @@ def save_mock_data():
         data = bytes(str(discountConversion), "utf-8") + u2py.VM + bytes(str(discountConversion), "utf-8") + u2py.VM + bytes(str(discountConversion), "utf-8")
         transaction_file.writev(transactionId, 167, data)
 
+        if advertCode != 'nan':
+            transaction_file.writev(transactionId, 168, advertCode)
+
+        if corpAcctNo != 'nan':
+            transaction_file.writev(transactionId, 169, corpAcctNo)
+        
+        data = bytes(str(random.randint(100000, 300000)), "utf-8") + u2py.VM + bytes(str(random.randint(100000, 300000)),"utf-8") + u2py.VM + bytes(str(random.randint(100000, 300000)), "utf-8")
+        transaction_file.writev(transactionId, 198, data)
+
+        data = bytes(str(random.randint(10000, 30000)), "utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)),"utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)), "utf-8")
+        transaction_file.writev(transactionId, 199, data)
+
+
         transaction_file.writev(transactionId, 214, '676987')
 
         transaction_file.writev(transactionId, 219, ercptEmail)
+        
+        data = bytes(str(random.randint(10000, 30000)), "utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)),"utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)), "utf-8")
+        transaction_file.writev(transactionId, 223, data)
+
 
         data = bytes(str(commSaleAmount1), "utf-8") + u2py.VM + bytes(str(commSaleAmount2),"utf-8") + u2py.VM + bytes(str(commSaleAmount3), "utf-8")
         transaction_file.writev(transactionId, 241, data)
