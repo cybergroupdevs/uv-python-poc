@@ -309,16 +309,44 @@ def transactionGet(transactionId):
     if status:
         data_file = u2py.File("TRANSACTION")
         EM_file = u2py.File("EM")
-        order_detail={}
         transaction_details={}
         display_comm_flag= False
-        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL MRKDN QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
+        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL PHONE TRAN.DATE MRKDN QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
         details=u2py.Command(cmd).run(capture=True)
         details=json.loads(details)
         unconverted_disc_amount=0
         total_accumulated_line=0
         presale_detail = 'Y'
-        print(details)
+        transaction_details['transactionId'] = transaction_id
+        transaction_details['phoneNo'] = details['TRANSACTION'][0]['PHONE']
+        transaction_details['date'] = details['TRANSACTION'][0]['TRAN.DATE']
+        transaction_details['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
+        comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
+        em_cmd="LIST EM WITH @ID = {} NICKNAME FNAME LNAME TOJSON".format(comm_empl_id)
+        em_details=u2py.Command(em_cmd).run(capture=True)
+        em_details=json.loads(em_details)
+        if('NICKNAME' in em_details['EM'][0].keys()):
+            operator = em_details['EM'][0]['NICKNAME']
+        else:
+            operator = em_details['EM'][0]['FNAME']
+        operator = operator + ' '+ em_details['EM'][0]['LNAME']
+        transaction_details['operator'] = operator
+        if('NICKNAME' in em_details['EM'][0].keys()):
+            tux_consult = em_details['EM'][0]['NICKNAME']
+        else:
+            tux_consult = em_details['EM'][0]['FNAME']
+        tux_consult = tux_consult + ' '+ em_details['EM'][0]['LNAME']
+        if(len(tux_consult)<5):
+            tux_consult = 'UNKNOWN'
+        transaction_details['tuxConsult'] = tux_consult
+        #RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
+        customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format( )
+        customer_details=u2py.Command(customer_cmd).run(capture=True)
+        customer_details=json.loads(customer_details)
+        transaction_details['phone'] = customer_details['CUSTOMERS'][0]['PHONE.NO']
+        transaction_details['name'] = customer_details['CUSTOMERS'][0]['FNAME'] +' '+ customer_details['CUSTOMERS'][0]['LNAME']
+        transaction_details['pfid'] = customer_details['CUSTOMERS'][0]['PFID']
+        tux_consult = em_details['EM'][0][]
         n_lines = len(details['TRANSACTION'][0]['ITEM_MV'])
         for x in range(0,n_lines):
             old_display_comm_flag=display_comm_flag
@@ -362,7 +390,6 @@ def transactionGet(transactionId):
                 if((display_comm_flag != old_display_comm_flag) or (backup_flag)):
                     old_display_comm_flag = display_comm_flag
                     backup_flag=0
-                #line 650 (print)
             else:
                 item_ship_group= details['TRANSACTION'][0]['ITEM_MV'][x]['ITEM.SHIP.GROUP']
                 
@@ -395,8 +422,6 @@ def transactionGet(transactionId):
                             description_output=description_output+(details['TRANSACTION'][0]['ITEM_MV'][1][x]['LIST.ITEM.STATUS'])
                     if((details['TRANSACTION'][0]['TRAN.TYPE'])=='VSAL' or (details['TRANSACTION'][0]['TRAN.TYPE'])=='XCHG'):
                             description_output=description_output+(details['TRANSACTION'][0]['ITEM_MV'][1][x]['IGNORE.PROMOS'])
-                #line 829
-                
                 description_count = n_lines
                 rental_id=details['TRANSACTION'][0]['ITEM_MV'][x]['RESERVATIONS']
                 if(rental_id != ''):
@@ -414,7 +439,7 @@ def transactionGet(transactionId):
                     sale_total=sale_total+line_total
                     total_accumulated_line=total_accumulated_line+1
         response={
-        "orderDetail": order_detail,
+        "transactionDetails": transaction_details,
         }
         return Response(
             json.dumps(response),
