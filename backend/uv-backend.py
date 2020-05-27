@@ -726,16 +726,47 @@ def refund(transactionId):
 @app.route('/api/transaction/<transactionId>', methods=['GET'])
 def transactionGet(transactionId):
     transaction_id = transactionId
+    transaction_details_list = []
     status = check_existing_record('TRANSACTION', transaction_id)
     if status:
-        data_file = u2py.File("TRANSACTION")
-        EM_file = u2py.File("EM")
-        transaction_details_list = []
-        display_comm_flag = False
-        cmd = "LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL MRKDN QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(
-            transaction_id)
-        details = u2py.Command(cmd).run(capture=True)
-        details = json.loads(details)
+        transaction={}
+        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
+        details=u2py.Command(cmd).run(capture=True)
+        details=json.loads(details)
+        transaction['transactionId'] = transaction_id
+        transaction['phoneNo'] = details['TRANSACTION'][0]['PHONE']
+        transaction['date'] = details['TRANSACTION'][0]['TRAN.DATE']
+        transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
+        transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
+        comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
+        em_cmd="LIST EM WITH @ID = {} NICKNAME FNAME LNAME TOJSON".format(comm_empl_id)
+        em_details=u2py.Command(em_cmd).run(capture=True)
+        em_details=json.loads(em_details)
+
+        if 'NICKNAME' in em_details['EM'][0].keys():
+            operator = em_details['EM'][0]['NICKNAME']
+        else:
+            operator = em_details['EM'][0]['FNAME']
+        operator = operator + ' '+ em_details['EM'][0]['LNAME']
+        transaction['operator'] = operator
+        if 'NICKNAME' in em_details['EM'][0].keys():
+            tux_consult = em_details['EM'][0]['NICKNAME']
+        else:
+            tux_consult = em_details['EM'][0]['FNAME']
+        tux_consult = tux_consult + ' '+ em_details['EM'][0]['LNAME']
+        if len(tux_consult)<5:
+            tux_consult = 'UNKNOWN'
+        transaction['tuxConsult'] = tux_consult
+
+        #RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
+        customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format( )
+        customer_details=u2py.Command(customer_cmd).run(capture=True)
+        customer_details=json.loads(customer_details)
+        transaction['phone'] = customer_details['CUSTOMERS'][0]['PHONE.NO']
+        transaction['name'] = customer_details['CUSTOMERS'][0]['FNAME'] +' '+ customer_details['CUSTOMERS'][0]['LNAME']
+        transaction['pfid'] = customer_details['CUSTOMERS'][0]['PFID']
+        tux_consult = em_details['EM'][0]
+
         n_lines = len(details['TRANSACTION'][0]['ITEM_MV'])
         for x in range(0, n_lines):
             transaction_details = {}
@@ -777,28 +808,26 @@ def transactionGet(transactionId):
             transaction_details['desc'] = details['TRANSACTION'][0]['ITEM_MV'][x]['DESC']
             rental_id = details['TRANSACTION'][0]['ITEM_MV'][x]['RESERVATIONS']
             if rental_id != '':
-                rental = ' (Rental ' + rental_id + ' for' + (
-                            (details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RENTAL.AMT']) * 100) + ', ' + ((details[
-                    'TRANSACTION'][0]['ITEM_MV'][x]['TUX.INSURANCE.AMT']) * 100) + ' ins, ' + (
-                                     (details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RUSH.AMT']) * 100) + ' rush'
-                rental = rental + ((details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.INSURANCE.AMT']) * 100)
-                rental = rental + ((details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RUSH.AMT']) * 100)
-                if details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.MARKDOWN.AMT'] != '':
-                    rental = rental + ', ' + (
-                                (details['TRANSACTION'][0]['ITEMS_MV'][x]['TUX.MARKDOWN.AMT']) * 100) + ' mkdn'
-                rental = rental + ')'
+                tux_rental_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RENTAL.AMT']
+                tux_insurance_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.INSURANCE.AMT']
+                tux_rush_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RUSH.AMT']
+                tux_markdown_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.MARKDOWN.AMT']
+                rental = '(Rental {} for {},{} ins,{} rush'.format(rental_id,tux_rental_amount,tux_insurance_amount,tux_rush_amount)
+
+                if tux_markdown_amount != '':
+                    rental = rental + ', {} mkdn)'.format(tux_markdown_amount)
             else:
                 rental = ''
             transaction_details['rental'] = rental
             transaction_details_list.append(transaction_details)
         response = {
-            "transactionDetail": transaction_details_list,
+            "transactionDetails": transaction_details_list,
+            "transactionHeader": transaction
         }
         return Response(
             json.dumps(response),
             status=200,
             mimetype='application/json'
-
         )        
 
 if __name__ == '__main__':
