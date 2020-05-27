@@ -114,7 +114,6 @@ def set_employee_total(transaction_data, transaction_file, desc_length):
     mkdn_list = [float(key['MRKDN']) for key in transaction_data['ITEM_MV']]
     for i in range(desc_length):
         if rental_id_list[i] != '':
-            # discount_type = [int(key['DISCOUNT.TYPE']) for key in transaction_data['DISCOUNT.TYPE_MV']]
             discount_amount = [float(value) for value in discount_amount_list[i]]
             discount_sum = sum(discount_amount)
             if discount_sum != 0:
