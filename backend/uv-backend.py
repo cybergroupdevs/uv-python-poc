@@ -311,7 +311,7 @@ def transactionGet(transactionId):
         EM_file = u2py.File("EM")
         transaction_details={}
         display_comm_flag= False
-        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL PHONE TRAN.DATE MRKDN QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
+        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
         details=u2py.Command(cmd).run(capture=True)
         details=json.loads(details)
         unconverted_disc_amount=0
@@ -321,6 +321,7 @@ def transactionGet(transactionId):
         transaction_details['phoneNo'] = details['TRANSACTION'][0]['PHONE']
         transaction_details['date'] = details['TRANSACTION'][0]['TRAN.DATE']
         transaction_details['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
+        transaction_details['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
         comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
         em_cmd="LIST EM WITH @ID = {} NICKNAME FNAME LNAME TOJSON".format(comm_empl_id)
         em_details=u2py.Command(em_cmd).run(capture=True)

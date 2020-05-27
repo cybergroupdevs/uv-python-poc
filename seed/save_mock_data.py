@@ -140,6 +140,8 @@ def save_mock_data():
 
         transaction_file.writev(transaction_id, 35, ccName)
 
+        transaction_file.writev(transaction_id, 38, random.randint(100000, 300000))
+
         transaction_file.writev(transaction_id, 43, reserNo)
 
         data = bytes(str(lineDiscount), "utf-8") + u2py.SM + bytes(str(lineDiscount), "utf-8") + u2py.VM + bytes(
