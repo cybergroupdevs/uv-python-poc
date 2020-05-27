@@ -25,7 +25,7 @@ def check_existing_record(file_name, record_id):
         return True
     except u2py.U2Error as e:
         return False
-def mapping_customer(first_name,last_name,address,city,pfid):
+def map_customer_history(first_name,last_name,address,city,pfid):
 	details={}
 	details["firstName"]=first_name
 	details["lastName"]=last_name
@@ -173,7 +173,7 @@ def customer_history():
 				pfid=customer_details['CUSTOMERS'][0]['PFID']
 			else:
 				pfid=""
-			customer_history=mapping_customer(first_name,last_name,address,city,pfid)
+			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
 			
 	return Response(
