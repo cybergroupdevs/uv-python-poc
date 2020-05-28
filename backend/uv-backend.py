@@ -218,25 +218,6 @@ def transaction_credit_details(transaction_data, pmt_val):
 
     return credit_details
 
-def check_existing_record(filename, recordID):
-    fileObject = u2py.File(filename)
-    try:
-        recordObject = fileObject.read(recordID)
-        return True
-    except u2py.U2Error as e:
-        return False
-
-
-def convertDateFormat(orderDate,format):
-    date = u2py.DynArray()
-    date.insert(1, 0, 0, orderDate)
-    if format == 'internal':
-        formattedDate = date.extract(1).iconv('D-')
-    else:
-        formattedDate = str(date.extract(1).oconv('D-'))
-    return formattedDate
-
-
 #############################################################
 ###################### Customer API #########################
 #############################################################
