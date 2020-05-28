@@ -44,7 +44,11 @@ class customerHistoryTests(unittest.TestCase):
         ]
         self.assertEqual(obj.customer_history(), data)
 
-
+    def test_get_customerHistory_noHistory(self):
+        obj = PocTest()
+        print("--No history--")
+        data = ["No customer History available"]
+        self.assertEqual(obj.customer_history_noHistory(), data)
 class consultantTests(unittest.TestCase):
 
     def test_get_consultant_empty(self):
@@ -115,7 +119,9 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
         return data.json()
-
-
+    def customer_history_noHistory(self):
+        data = requests.get(
+            'http://127.0.0.1:5000/api/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
+        return data.json()
 if __name__ == '__main__':
     unittest.main()
