@@ -87,7 +87,6 @@ class consultantTests(unittest.TestCase):
 
 
 class PocTest():
-<<<<<<< HEAD
     def customer(self):
         data = requests.get(
             'http://127.0.0.1:5000/api/customer?customerId=0001')
@@ -117,7 +116,6 @@ class PocTest():
             'http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
         return data.json()
 
-=======
 	def customer(self):
 		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
 		return data.json()
@@ -184,7 +182,6 @@ class CommissionTestCases(unittest.TestCase):
         data = response.json()['cardDetails'][0]
         print(data)
         self.assertEqual(data,obj.credit_card_details)
->>>>>>> upstream/develop
 
 if __name__ == '__main__':
     unittest.main()
