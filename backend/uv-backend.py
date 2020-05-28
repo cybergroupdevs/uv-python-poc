@@ -454,7 +454,7 @@ def credit_card_details(transactionId):
 #############################################################
 
 
-@app.route('/api/order/<transactionId>', methods=['GET'])
+@app.route('/order/<transactionId>', methods=['GET'])
 def order_get(transactionId):
     transaction_id = transactionId
     pdb.set_trace()
@@ -538,7 +538,7 @@ def order_get(transactionId):
 #############################################################
 ###################### Discount API #########################
 #############################################################
-@app.route('/api/transaction/discount/<transactionId>', methods=['GET'])
+@app.route('/transaction/discount/<transactionId>', methods=['GET'])
 def discount(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
@@ -692,7 +692,7 @@ def discount(transactionId):
 #############################################################
 
 
-@app.route('/api/transaction/refund/<transactionId>', methods=['GET'])
+@app.route('/transaction/refund/<transactionId>', methods=['GET'])
 def refund(transactionId):
     pdb.set_trace()
     transaction_id = transactionId
@@ -745,132 +745,6 @@ def refund(transactionId):
 @app.route('/transaction/<transactionId>', methods=['GET'])
 def transactionGet(transactionId):
     transaction_id = transactionId
-    status = check_existing_record('TRANSACTION', transaction_id)
-    if status:
-        data_file = u2py.File("TRANSACTION")
-        EM_file = u2py.File("EM")
-        order_detail = {}
-        transaction_details = {}
-        display_comm_flag = False
-        cmd = "LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL MRKDN QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(
-            transaction_id)
-        details = u2py.Command(cmd).run(capture=True)
-        details = json.loads(details)
-        unconverted_disc_amount = 0
-        total_accumulated_line = 0
-        presale_detail = 'Y'
-        print(details)
-        n_lines = len(details['TRANSACTION'][0]['ITEM_MV'])
-        for x in range(0, n_lines):
-            old_display_comm_flag = display_comm_flag
-            backup_flag = 0
-            if( presale_detail != 'Y'):
-                item_no = details['TRANSACTION'][0]['ITEM_MV'][x]['ITEM.NO']
-                transaction_class = item_no[0:4]
-                transaction_ssku = item_no[4:8]
-                transaction_mkdn = details['TRANSACTION'][0]['ITEM_MV'][x]['LONG.MRKDN']
-                if(transaction_mkdn != 0 or transaction_mkdn != ''):
-                    legend_desciption = ''
-                    mkdn_flag = details['TRANSACTION'][0]['ITEM_MV'][0]['MKDN.AUDIT']
-                    if(mkdn_flag == 'M'):
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Manual markdown'
-                    elif(mkdn_flag == 1):
-                        mkdn_flag = 'M'
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Manual markdown'
-                    elif(mkdn_flag == 'D'):
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Damaged markdown'
-                    elif(mkdn_flag == 'P'):
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Price Adjustment markdown '
-                    elif(mkdn_flag == 'A'):
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Alteration Adjustment markdown'
-                    elif(mkdn_flag == 'C'):
-                        print_mkdn_legend = 1
-                        legend_desciption = 'Customer Service markdown'
-                    else:
-                        mkdn_flag = ' '
-
-                    if(legend_desciption != ''):
-                        # line 631
-                        transaction_mkdn = mkdn_flag
-                else:
-                    mkdn_flag = ''
-                detail_loop = 1
-                if((display_comm_flag != old_display_comm_flag) or (backup_flag)):
-                    old_display_comm_flag = display_comm_flag
-                    backup_flag = 0
-                # line 650 (print)
-            else:
-                item_ship_group = details['TRANSACTION'][0]['ITEM_MV'][x]['ITEM.SHIP.GROUP']
-
-                curr_ship_group = details['TRANSACTION'][0]['SHIPGROUP_MV'][0]['SHIP.GROUP']
-                if(item_ship_group == curr_ship_group):
-                    sale_total = 0
-                    line_total = (float(details['TRANSACTION'][0]['ITEM_MV'][x]['RETAIL'])-float(
-                        details['TRANSACTION'][0]['ITEM_MV'][x]['LONG.MRKDN']))*int(details['TRANSACTION'][0]['ITEM_MV'][x]['QUANTITY'])
-                    line_total = line_total - unconverted_disc_amount
-                    if(x > total_accumulated_line):
-                        sale_total = sale_total+line_total
-                        total_accumulated_line = total_accumulated_line+1
-                transaction_sku = details['TRANSACTION'][0]['ITEM_MV'][x]['ITEM.NO'][1:9]
-                transaction_details['sku'] = transaction_sku
-            description_output = []
-            extCommOut = ''
-            desc = data_file.readv(
-                details['TRANSACTION'][0]['_ID'], 14).dcount(u2py.SM)
-            if(desc == 1):
-                if(presale_detail == 'Y'):
-                    emp_id = int(
-                        float(details['TRANSACTION'][0]['ITEM_MV'][x]['CommEmplId']))
-
-                    try:
-                        empsn = list(EM_file.readv(str(emp_id), 17))[0][0]
-                        empsn = emp_id
-                    except:
-                        pass
-                    if(display_comm_flag == False):
-                        return_quantity = details['TRANSACTION'][0]['ITEM_MV'][x]['QUANTITY']
-                        ship_group_count = ship_status_count = 0
-                        if(ship_group_count > 0 or ship_status_count > 0):
-                            description_output = description_output + \
-                                (details['TRANSACTION'][0]['ITEM_MV']
-                                 [1][x]['LIST.ITEM.STATUS'])
-                    if((details['TRANSACTION'][0]['TRAN.TYPE']) == 'VSAL' or (details['TRANSACTION'][0]['TRAN.TYPE']) == 'XCHG'):
-                        description_output = description_output + \
-                            (details['TRANSACTION'][0]
-                             ['ITEM_MV'][1][x]['IGNORE.PROMOS'])
-                # line 829
-
-                description_count = n_lines
-                rental_id = details['TRANSACTION'][0]['ITEM_MV'][x]['RESERVATIONS']
-                if(rental_id != ''):
-                    rental = ' (Rental '+rental_id+' for'+((details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RENTAL.AMT'])*100)+', '+(
-                        (details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.INSURANCE.AMT'])*100)+' ins, '+((details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RUSH.AMT'])*100)+' rush'
-                    rental = rental + \
-                        ((details['TRANSACTION'][0]['ITEM_MV']
-                          [x]['TUX.INSURANCE.AMT'])*100)
-                    rental = rental + \
-                        ((details['TRANSACTION'][0]
-                          ['ITEM_MV'][x]['TUX.RUSH.AMT'])*100)
-                    if (details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.MARKDOWN.AMT'] != ''):
-                        rental = rental+', ' + \
-                            ((details['TRANSACTION'][0]['ITEMS_MV']
-                              [x]['TUX.MARKDOWN.AMT'])*100)+' mkdn'
-                    rental = rental+')'
-                else:
-                    unconverted_dist_total = 0
-                line_total = (float(details['TRANSACTION'][0]['ITEM_MV'][x]['RETAIL'])-(float(
-                    details['TRANSACTION'][0]['ITEM_MV'][x]['MRKDN'])))*(int(details['TRANSACTION'][0]['ITEM_MV'][x]['QUANTITY']))
-                line_total = line_total-unconverted_disc_amount
-                if(x > total_accumulated_line):
-                    sale_total = sale_total+line_total
-                    total_accumulated_line = total_accumulated_line+1
-        response = {
-            "orderDetail": order_detail,
     transaction_details_list = []
     status = check_existing_record('TRANSACTION', transaction_id)
     if status:
@@ -974,7 +848,13 @@ def transactionGet(transactionId):
             json.dumps(response),
             status=200,
             mimetype='application/json'
-
+        )
+    else:
+        response = { 'error': 'No transaction existed'}
+        return Response(
+            json.dumps(response),
+            status=404,
+            mimetype='application/json'
         )
 
 
