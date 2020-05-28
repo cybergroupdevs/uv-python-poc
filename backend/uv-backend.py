@@ -28,9 +28,11 @@ logger.addHandler(console_handler)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisthesercretkey'
 CORS(app)
-########################
-#### HELPER METHODS ####
-########################
+
+#############################################################
+###################### Helper Methods #######################
+#############################################################
+
 def check_existing_record(file_name, record_id):
     file_object = u2py.File(file_name)
     try:
@@ -235,9 +237,10 @@ def convertDateFormat(orderDate,format):
     return formattedDate
 
 
-########################
-#### CUSTOMER API   ####
-########################
+#############################################################
+###################### Customer API #########################
+#############################################################
+
 @app.route('/api/customer', methods=['GET'])
 def customer_details():
 	customer_id=request.args.get('customerId')
@@ -255,9 +258,11 @@ def customer_details():
 		json.dumps(data),
 		status=200,
 		mimetype='application/json')
-########################
-#### CONSULTANT API ####
-########################
+ 
+#############################################################
+###################### Consultant API #######################
+#############################################################
+
 @app.route('/api/consultant',methods=['GET'])
 def consultant_details():
 	transaction_id=request.args.get('transactionId')
@@ -364,15 +369,15 @@ def customer_history():
 				pfid=""
 			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
-			
 	return Response(
 		json.dumps(data),
 		status=200,
 		mimetype='application/json')
 
-########################
-#### COMMISSION API ####
-########################
+#############################################################
+#################### Commission API #########################
+#############################################################
+
 @app.route('/commission/<transId>', methods=['GET'])
 def commission_list(transId):
     commission_data_list = []
@@ -380,8 +385,7 @@ def commission_list(transId):
     employee_file_name = 'EM'
     transaction_file = u2py.File(transaction_file_name)
     employee_file = u2py.File(employee_file_name)
-    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(
-        transId)
+    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(transId)
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
 
     if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
@@ -416,15 +420,15 @@ def commission_list(transId):
         response = {"error": "No commission information for this transaction Id"}
     return Response(json.dumps(response), status=200, mimetype='application/json')
 
-#########################
-#### CREDIT CARD API ####
-#########################
+#############################################################
+################### Credit Card API #########################
+#############################################################
+
 @app.route('/transaction/<transactionId>/creditCard/authentication')
 def credit_card_details(transactionId):
     card_details = []
     transaction_file = u2py.File('TRANSACTION')
-    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(
-        transactionId)
+    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(transactionId)
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
     try_pointer = [int(key['TRY.POINTER']) for key in transaction_data['PAY_MV']]
     attempts_to_print = [key['TIME.DONE'] for key in transaction_data['PAY_MV']]
@@ -448,22 +452,18 @@ def credit_card_details(transactionId):
     }
     return Response(json.dumps(response), status=200, mimetype='application/json')
 
-
 #############################################################
 ###################### Order API ############################
 #############################################################
 
-
 @app.route('/order/<transactionId>', methods=['GET'])
 def order_get(transactionId):
     transaction_id = transactionId
-    pdb.set_trace()
     status = check_existing_record('TRANSACTION', transaction_id)
     if (status):
         transaction_file = u2py.File("TRANSACTION")
         order_detail = {}
-        cmd = "LIST ECOM.ORDER.ID SHIP.DATE SHIP.FNAME SHIP.LNAME SHIP.METHOD SHIP.ADDR SHIP.CARRIER SHIP.CITY SHIP.BOLNUMBER SHIP.TRACK.NO AUDIT.FLAG GEN.COUPON.ID RETURN.TRANS ERCPT.EMAIL DATA {} TRANSACTION TOJSON".format(
-            transaction_id)
+        cmd = "LIST ECOM.ORDER.ID SHIP.DATE SHIP.FNAME SHIP.LNAME SHIP.METHOD SHIP.ADDR SHIP.CARRIER SHIP.CITY SHIP.BOLNUMBER SHIP.TRACK.NO AUDIT.FLAG GEN.COUPON.ID RETURN.TRANS ERCPT.EMAIL DATA {} TRANSACTION TOJSON".format(transaction_id)
         details = u2py.Command(cmd).run(capture=True)
         details = json.loads(details)
         order_id = details['TRANSACTION'][0]['ECOM.ORDER.ID']
@@ -535,9 +535,11 @@ def order_get(transactionId):
             status=404,
             mimetype='application/json'
         )
+        
 #############################################################
 ###################### Discount API #########################
 #############################################################
+
 @app.route('/transaction/discount/<transactionId>', methods=['GET'])
 def discount(transactionId):
     transaction_id = transactionId
@@ -575,8 +577,7 @@ def discount(transactionId):
                 scr_discount = scr_discount+(int(details['TRANSACTION'][0]['ITEM_MV'][y]['RESERVATIONS'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT']))
                 discount = discount+float(details['TRANSACTION'][y]['ITEM_MV'][0]['QUANTITY'])*float(
                     details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT'])
-            employee_cmd = "LIST DATA SHORTNAME {} EM TOJSON".format(
-                emp_id)
+            employee_cmd = "LIST DATA SHORTNAME {} EM TOJSON".format(emp_id)
             employee_details = u2py.Command(cmd).run(capture=True)
             employee_details = json.loads(employee_details)
             if(disc_type == 1):
@@ -617,8 +618,7 @@ def discount(transactionId):
                 pct = pct+' (ID '+corp_id+')'
             elif(disc_type == 9):
                 pct = 'Affiliate employee'
-                kgm_cmd = "LIST DATA LNAME FNAME COMPANY.CODE {} KG.EM ToJSON".format(
-                    emp_id)
+                kgm_cmd = "LIST DATA LNAME FNAME COMPANY.CODE {} KG.EM ToJSON".format(emp_id)
                 kgm_details = u2py.Command(kgm_cmd).run(capture=True)
                 kgm_details = json.loads(kgm_details)
                 pct = kgm_details["KG.EM"]["0"]["COMPANY.CODE"]+' employee'
@@ -651,7 +651,7 @@ def discount(transactionId):
             else:
                 pct = 'NO'
             sale_total = discount
-            data = str(pct)+' discount of '+str(scr_discount*100)  # OCONV missing
+            data = str(pct)+' discount of '+str(scr_discount*100)
             if (disc_conv_to_mkdn):
                 data = data+' converted to markdown.'
             else:
@@ -664,8 +664,6 @@ def discount(transactionId):
                  quantity=int(details['TRANSACTION'][0]['ITEM_MV'][count]['QUANTITY'])
                  sale_total=sale_total+(retail-mrkdn)*quantity
             sale_total=sale_total+float(details['TRANSACTION'][0]["TAX.AMT"])
-            #if(details['TRANSACTION'][0]['DISCOUNT.TYPE_MV'][0]['DISCOUNT.TYPE'] != 0):
-               # sub_total = convert(sale_total, external)
             sale_total=sale_total-discount
             discount_details['pct'] = pct
             discount_details['subTotal'] = sale_total
@@ -691,16 +689,13 @@ def discount(transactionId):
 ####################### Refund API ##########################
 #############################################################
 
-
 @app.route('/transaction/refund/<transactionId>', methods=['GET'])
 def refund(transactionId):
-    pdb.set_trace()
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
     if(status):
         data_file = u2py.File("TRANSACTION")
-        cmd = "LIST DATA LIKE.TENDER.OVERRIDE.MGR.ID HAND.TKT.NO {} TRANSACTION TOJSON".format(
-            transaction_id)
+        cmd = "LIST DATA LIKE.TENDER.OVERRIDE.MGR.ID HAND.TKT.NO {} TRANSACTION TOJSON".format(transaction_id)
         details = u2py.Command(cmd).run(capture=True)
         details = json.loads(details)
         refund_mgr_id = details['TRANSACTION'][0]['LIKE.TENDER.OVERRIDE.MGR.ID']
@@ -762,7 +757,6 @@ def transactionGet(transactionId):
         em_cmd="LIST EM WITH @ID = {} NICKNAME FNAME LNAME TOJSON".format(comm_empl_id)
         em_details=u2py.Command(em_cmd).run(capture=True)
         em_details=json.loads(em_details)
-
         if 'NICKNAME' in em_details['EM'][0].keys():
             operator = em_details['EM'][0]['NICKNAME']
         else:
@@ -777,8 +771,7 @@ def transactionGet(transactionId):
         if len(tux_consult)<5:
             tux_consult = 'UNKNOWN'
         transaction['tuxConsult'] = tux_consult
-
-        #RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
+        # alt_phone_number is the RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
         alt_phone_number = details['TRANSACTION'][0]['ALT.PHONE']
         customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format(alt_phone_number)
         customer_details=u2py.Command(customer_cmd).run(capture=True)
@@ -787,7 +780,6 @@ def transactionGet(transactionId):
         transaction['name'] = customer_details['CUSTOMERS'][0]['FNAME'] +' '+ customer_details['CUSTOMERS'][0]['LNAME']
         transaction['pfid'] = customer_details['CUSTOMERS'][0]['PFID']
         tux_consult = em_details['EM'][0]
-
         n_lines = len(details['TRANSACTION'][0]['ITEM_MV'])
         for x in range(0, n_lines):
             transaction_details = {}
@@ -819,7 +811,6 @@ def transactionGet(transactionId):
                     legend_description = 'Customer Service markdown'
                 else:
                     mkdn_flag = ' '
-
                 if legend_description != '':
                     transaction_mkdn = mkdn_flag
                 transaction_details['mkdn'] = transaction_mkdn
@@ -833,7 +824,6 @@ def transactionGet(transactionId):
                 tux_rush_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.RUSH.AMT']
                 tux_markdown_amount = details['TRANSACTION'][0]['ITEM_MV'][x]['TUX.MARKDOWN.AMT']
                 rental = '(Rental {} for {},{} ins,{} rush'.format(rental_id,tux_rental_amount,tux_insurance_amount,tux_rush_amount)
-
                 if tux_markdown_amount != '':
                     rental = rental + ', {} mkdn)'.format(tux_markdown_amount)
             else:
@@ -857,33 +847,6 @@ def transactionGet(transactionId):
             mimetype='application/json'
         )
 
-
-#############################################################
-###################### Helper Methods #######################
-#############################################################
-
-def check_existing_record(filename, recordID):
-    fileObject = u2py.File(filename)
-    try:
-        recordObject = fileObject.read(recordID)
-        return True
-    except u2py.U2Error as e:
-        return False
-
-
-def convertDateFormat(orderDate, format):
-    date = u2py.DynArray()
-    date.insert(1, 0, 0, orderDate)
-    if format == 'internal':
-        formattedDate = date.extract(1).iconv('D-')
-        )
-    else:
-        response = { 'error': 'No transaction existed'}
-        return Response(
-            json.dumps(response),
-            status=404,
-            mimetype='application/json'
-        )
 if __name__ == '__main__':
     app.run()
 
