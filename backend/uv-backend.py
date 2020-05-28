@@ -1,29 +1,12 @@
 from flask import Flask
+import pdb
 from flask import request,jsonify,Response
 from flask import make_response
 from functools import wraps
 import u2py
-import pdb
 import json
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-
-import logging
-
-logger = logging.getLogger()
-formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
-
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-console_handler.setFormatter(formatter)
-
-file_handler = logging.FileHandler('./logs/api.log')
-file_handler.setFormatter(formatter)
-
-logger.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
-logger.addHandler(console_handler)
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisthesercretkey'
 CORS(app)
@@ -431,6 +414,3 @@ def credit_card_details(transactionId):
 
 if __name__ == '__main__':
     app.run()
-
-
-
