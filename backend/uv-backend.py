@@ -34,8 +34,175 @@ def map_customer_history(first_name,last_name,address,city,pfid):
 	if pfid!="":
 		details["pf"]="pf"
 	else:
-		details["pf"]=""
-	return details
+		customer["pf"]=""
+	return customer
+
+def convert_field_formats(field_data, field_format, format):
+    data = u2py.DynArray()
+    data.insert(1, 0, 0, field_data)
+    if format == 'external':
+        formatted_data = str(data.extract(1).oconv(field_format))
+    else:
+        formatted_data = str(data.extract(1).iconv(field_format))
+    return formatted_data
+
+def transaction_xmul_value(transaction_data):
+    # xmul is temporary local variable
+    transaction_type = transaction_data['TRAN.TYPE']
+    transaction_sub_type = transaction_data['TRAN.SUB.TYPE']
+    if transaction_type == 'VSAL':
+        if transaction_sub_type == 'CF.CANCEL':
+            xmul = 1
+        else:
+            xmul = -1
+    else:
+        xmul = 1
+    return xmul
+
+
+def calculate_amount(transaction_data):
+    amount_list = []
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    xmul = transaction_xmul_value(transaction_data)
+    for i in range(len(commission_sale_amount)):
+        amount = commission_sale_amount[i]
+        if amount != 0:
+            quantity = quantity_list[i] * xmul
+            amount = convert_field_formats(amount * quantity * 100, 'MD2', 'external')
+            amount_list.append(amount)
+        else:
+            amount_list.append(' ')
+    return amount_list
+
+
+def calculate_commission_amount(transaction_data):
+    xmul = transaction_xmul_value(transaction_data)
+    commission_amount = 0
+    employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    for i in range(len(employee_id)):
+        quantity = xmul * quantity_list[i]
+        commission_amount = commission_amount + commission_sale_amount[i] * quantity
+    return commission_amount
+
+
+def set_empsn_values(transaction_data, employee_file):
+    empsn_list = []
+    commission_employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
+    for i in range(len(commission_employee_id)):
+        employee_id = commission_employee_id[i]
+        if check_existing_record(employee_file, employee_id):
+            empsn = list(employee_file.readv(employee_id, 17))[0][0]
+        else:
+            empsn = employee_id
+        empsn_list.append(empsn)
+
+    return empsn_list
+
+
+def set_employee_total(transaction_data, transaction_file, desc_length):
+    rental_id_list = [key['RESERVATIONS'] for key in transaction_data['ITEM_MV']]
+    commission_sale_amount = [float(key['CommSaleAmt']) for key in transaction_data['ITEM_MV']]
+    transaction_sale_total = 0
+    commission_sales_total = 0
+    discount_conversion = ''
+    unconverted_discount_amount = 0
+    discount_amount_list = transaction_file.readv(transaction_data['_ID'], 45).to_list()[0]
+    discount_conversion_list = transaction_file.readv(transaction_data['_ID'], 167).to_list()
+    if len(discount_conversion_list) != 0:
+        discount_conversion_list = discount_conversion_list[0]
+    xmul = transaction_xmul_value(transaction_data)
+    quantity_list = [int(key['MKUP.STORE.QTY']) for key in transaction_data['MKUP.STORE.QTY_MV']]
+    retail_list = [float(key['RETAIL']) for key in transaction_data['ITEM_MV']]
+    mkdn_list = [float(key['MRKDN']) for key in transaction_data['ITEM_MV']]
+    for i in range(desc_length):
+        if rental_id_list[i] != '':
+            discount_amount = [float(value) for value in discount_amount_list[i]]
+            discount_sum = sum(discount_amount)
+            if discount_sum != 0:
+                for j in range(len(discount_amount)):
+                    if discount_amount[j] > 0:
+                        discount_conversion = discount_conversion_list[j]
+                        break
+                if discount_conversion != '':
+                    unconverted_discount_amount = 0
+                else:
+                    unconverted_discount_amount = discount_sum
+        else:
+            unconverted_discount_amount = 0
+        qty = quantity_list[i]
+        total = (retail_list[i] - mkdn_list[i]) * qty
+        total = total - unconverted_discount_amount
+        transaction_sale_total = transaction_sale_total + total
+        qty = qty * xmul
+        commission_sales_total = commission_sales_total + (commission_sale_amount[i] * qty)
+    return commission_sales_total
+
+
+def calculate_sale_percentage(commission_employee_id, employee_file):
+    employee_id = commission_employee_id[0]
+    try:
+        employee_record = list(employee_file.readv(employee_id, 17))
+    except u2py.U2Error:
+        employee_record = employee_id
+    return employee_record
+
+
+def calculate_commission_employee_type(employee_type):
+    employee_type = employee_type.split("*")[2]
+    return employee_type
+
+def transaction_credit_details(transaction_data, pmt_val):
+    credit_details = {}
+    pmt_val = int(pmt_val) - 1
+    times_out = [key['TIME.OUT'] for key in transaction_data['PAY_MV']][pmt_val]
+    times_in = [key['TIME.IN'] for key in transaction_data['PAY_MV']][pmt_val]
+    times_done = [key['TIME.DONE'] for key in transaction_data['PAY_MV']][pmt_val]
+    attempt_types = [key['ATTEMPT.TYPE'] for key in transaction_data['PAY_MV']][pmt_val]
+    acc_methods = [key['ACCT.METHOD'] for key in transaction_data['PAY_MV']][pmt_val]
+    auth_methods = [key['AUTH.METHOD'] for key in transaction_data['PAY_MV']][pmt_val]
+    credit_details['sent'] = times_out
+    credit_details['rcvd'] = times_in
+    credit_details['done'] = times_done
+    credit_details['type'] = attempt_types
+    entry_mode = acc_methods[0]
+
+    approval_time = [key['APPROVAL.TIME'] for key in transaction_data['PAY_MV']][pmt_val]
+    transaction_date_int = transaction_data['TRAN.DATE']
+    if approval_time != '':
+        entry_mode = 'RENTR'
+    elif entry_mode == '90':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '91' and transaction_date_int == '18629':
+        entry_mode = 'CLESS'
+    elif entry_mode == '91':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '02':
+        entry_mode = 'SWIPE'
+    elif entry_mode == '00':
+        entry_mode = 'HAND'
+    elif entry_mode == '01':
+        entry_mode = 'HAND'
+    elif entry_mode == 'MANUALLY [48]':
+        entry_mode = 'HAND'
+    elif entry_mode == 'SWIPED [49]':
+        entry_mode = 'SWIPE'
+    else:
+        entry_mode = "????"
+    credit_details['entry'] = entry_mode
+
+    if auth_methods == 'D':
+        auth_methods = 'CALL CENTER'
+    elif auth_methods == 'E':
+        auth_methods = 'TIMEOUT'
+    else:
+        auth_methods = 'AUTO APPROVED'
+    credit_details['auth'] = auth_methods
+
+    return credit_details
+
 ########################
 #### CUSTOMER API   ####
 ########################
@@ -45,13 +212,16 @@ def customer_details():
 	customer_file= u2py.File("CUSTOMERS")
 	data=[]
 	cmd="LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {} CUSTOMERS TOJSON".format(customer_id)
-	details=u2py.Command(cmd).run(capture=True)
-	details=json.loads(details)
-	del details['CUSTOMERS'][0]["_ID"]
-	values=details['CUSTOMERS'][0].values()
-	keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
-	customer_dict={key: value for key, value in zip(keys, values)}
-	data.append(customer_dict)
+	if "not found."in details:
+		data.append(customer_id+" Not found")
+	else:
+		details=u2py.Command(cmd).run(capture=True)
+		details=json.loads(details)
+		del details['CUSTOMERS'][0]["_ID"]
+		values=details['CUSTOMERS'][0].values()
+		keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
+		customer_dict={key: value for key, value in zip(keys, values)}
+		data.append(customer_dict)
 	return Response(
 		json.dumps(data),
 		status=200,
@@ -180,5 +350,85 @@ def customer_history():
 		json.dumps(data),
 		status=200,
 		mimetype='application/json')
+
+########################
+#### COMMISSION API ####
+########################
+@app.route('/commission/<transId>', methods=['GET'])
+def commission_list(transId):
+    commission_data_list = []
+    transaction_file_name = 'TRANSACTION'
+    employee_file_name = 'EM'
+    transaction_file = u2py.File(transaction_file_name)
+    employee_file = u2py.File(employee_file_name)
+    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(
+        transId)
+    transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
+
+    if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
+        amount_list = calculate_amount(transaction_data)
+        empsn_list = set_empsn_values(transaction_data, employee_file)
+        description = [key['DESC'] for key in transaction_data['ITEM_MV']]
+        employee_total = set_employee_total(transaction_data, transaction_file, len(description))
+        commission_amount = calculate_commission_amount(transaction_data)
+        commission_rate = [key['CommRate'] for key in transaction_data['ITEM_MV']]
+        commission_employee_type = [key['CommEmplType'] for key in transaction_data['ITEM_MV']]
+        for i in range(len(description)):
+            commission_data = {}
+            commission_data['class'] = transaction_data['ITEM_MV'][i]['ITEM.NO'][0:4]
+            commission_data['sku'] = transaction_data['ITEM_MV'][i]['ITEM.NO'][4:9]
+            commission_data['retail'] = transaction_data['ITEM_MV'][i]['RETAIL']
+            commission_data['mkdn'] = transaction_data['ITEM_MV'][i]['MRKDN']
+            commission_data['quantity'] = transaction_data['MKUP.STORE.QTY_MV'][i]['MKUP.STORE.QTY']
+            commission_data['desc'] = description[i]
+            commission_data['commissionType'] = transaction_data['ITEM_MV'][i]['COMMISSION.TYPE']
+            commission_data['amount'] = amount_list[i]
+            commission_data['employeePercentage'] = convert_field_formats(commission_rate[i], 'MD2', 'internal')
+            commission_data['salePercentage'] = transaction_data['ITEM_MV'][i]['CommEmplPercentUsed']
+            commission_data['commEmpId'] = empsn_list[i]
+            commission_data['employeeCommissionType'] = calculate_commission_employee_type(commission_employee_type[i])
+            commission_data_list.append(commission_data)
+        response = {
+            'commissionList': commission_data_list,
+            'retailAmount': employee_total,
+            'commissionAmount': commission_amount
+        }
+    else:
+        response = {"error": "No commission information for this transaction Id"}
+    return Response(json.dumps(response), status=200, mimetype='application/json')
+
+#########################
+#### CREDIT CARD API ####
+#########################
+@app.route('/transaction/<transactionId>/creditCard/authentication')
+def credit_card_details(transactionId):
+    card_details = []
+    transaction_file = u2py.File('TRANSACTION')
+    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(
+        transactionId)
+    transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
+    try_pointer = [int(key['TRY.POINTER']) for key in transaction_data['PAY_MV']]
+    attempts_to_print = [key['TIME.DONE'] for key in transaction_data['PAY_MV']]
+    transaction_type = transaction_file.readv(transactionId, 15)
+    type_count = transaction_type.dcount(u2py.VM)
+    for i in range(1, type_count + 1):
+        pmt_val = try_pointer[i - 1]
+        if pmt_val != '':
+            attempts_to_print[i - 1] = '*'
+            data = transaction_credit_details(transaction_data, pmt_val)
+            card_details.append(data)
+    pmt_count = transaction_file.readv(transactionId, 68).dcount(u2py.VM)
+    for i in range(pmt_count):
+        attempts = attempts_to_print[i - 1]
+        if attempts != '*':
+            pmt_val = i
+            data = transaction_credit_details(transaction_data, pmt_val)
+            card_details.append(data)
+    response = {
+        'cardDetails': card_details
+    }
+    return Response(json.dumps(response), status=200, mimetype='application/json')
+
+
 if __name__ == '__main__':
     app.run()
