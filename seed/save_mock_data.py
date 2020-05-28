@@ -7,6 +7,7 @@ import math
 def save_mock_data():
     transaction_file = u2py.File('TRANSACTION')
     employee_file = u2py.File('EM')
+    customer_file = u2py.File('CUSTOMERS')
     kg_employee_file = u2py.File('KG.EM')
     data = pd.read_csv('/usr/uv/PY/UPDATED_TRANSACTION.csv')
     data_dict = data.to_dict()
@@ -31,92 +32,111 @@ def save_mock_data():
         comm_empl_type = data_dict['CommEmplType'][i]
         item_no = data_dict['itemNo'][i]
         commission_type = data_dict['commissionType'][i]
-        commEmplPercentUsed = data_dict['commEmplPercentUsed'][i]
-        discountType = str(data_dict['discountType'][i])
-        listPrice = data_dict['listPrice'][i]
-        lineDiscount = data_dict['lineDiscount'][i]
-        firstName = data_dict['firstName'][i]
-        lastName = data_dict['lastName'][i]
+        comm_empl_percent_used = data_dict['commEmplPercentUsed'][i]
+        discount_type = str(data_dict['discountType'][i])
+        list_price = data_dict['listPrice'][i]
+        line_discount = data_dict['lineDiscount'][i]
+        first_name = data_dict['firstName'][i]
+        last_name = data_dict['lastName'][i]
         phone = data_dict['phone'][i]
-        operatorId = data_dict['operatorId'][i]
-        tranDate = str(data_dict['tranDate'][i])
-        tranAmount = str(data_dict['tranDate'][i])
-        svChanged1 = str(data_dict['svChanged1'][i])
-        svChanged2 = str(data_dict['svChanged2'][i])
-        svChanged3 = str(data_dict['svChanged3'][i])
-        transactionType = str(data_dict['type'][i])
-        auditFlag = str(data_dict['auditFlag'][i])
-        certNo = str(data_dict['certNo'][i])
-        returnTrans = str(data_dict['returnTrans'][i])
-        ccName = str(data_dict['ccName'][i])
-        reserNo = str(data_dict['r2rReserNo'][i])
-        shipMethod = str(data_dict['shipMethod'][i])
-        shipComment = str(data_dict['shipComment'][i])
-        shipFName = str(data_dict['shipFName'][i])
-        shipLName = str(data_dict['shipLName'][i])
-        shipAddr = str(data_dict['shipAddr'][i])
-        shipCity = str(data_dict['shipCity'][i])
-        shipState = str(data_dict['shipState'][i])
-        shipZip = str(data_dict['shipZip'][i])
-        shipDate = str(data_dict['shipDate'][i])
-        mbaOrderId = str(data_dict['mbaOrderId'][i])
-        maskedAcctNo = str(data_dict['maskedAcctNo'][i])
-        shipCarrier1 = str(data_dict['shipCarrier1'][i])
-        shipCarrier2 = str(data_dict['shipCarrier2'][i])
-        shipCarrier3 = str(data_dict['shipCarrier3'][i])
-        shipTrackNo1 = str(data_dict['shipTrackNo1'][i])
-        shipTrackNo2 = str(data_dict['shipTrackNo2'][i])
-        shipTrackNo3 = str(data_dict['shipTrackNo3'][i])
-        signMethod = str(data_dict['signMethod'][i])
-        pfPoints = str(data_dict['pfPoints'][i])
-        couponCode1 = str(data_dict['couponCode1'][i])
-        couponCode2 = str(data_dict['couponCode2'][i])
-        couponCode3 = str(data_dict['couponCode3'][i])
-        discountPodType1 = str(data_dict['discountPodType1'][i])
-        discountPodType2 = str(data_dict['discountPodType2'][i])
-        discountPodType3 = str(data_dict['discountPodType3'][i])
-        discountPodAmt1 = str(data_dict['discountPodAmt1'][i])
-        discountPodAmt2 = str(data_dict['discountPodAmt2'][i])
-        discountPodAmt3 = str(data_dict['discountPodAmt3'][i])
-        discountReasonCode1 = str(data_dict['discountReasonCode1'][i])
-        discountReasonCode2 = str(data_dict['discountReasonCode2'][i])
-        discountReasonCode3 = str(data_dict['discountReasonCode3'][i])
-        promosId1 = str(data_dict['promosId1'][i])
-        promosId2 = str(data_dict['promosId2'][i])
-        promosId3 = str(data_dict['promosId3'][i])
-        inAddMrkdn1 = str(data_dict['inAdditionToMrkdn1'][i])
-        inAddMrkdn2 = str(data_dict['inAdditionToMrkdn2'][i])
-        inAddMrkdn3 = str(data_dict['inAdditionToMrkdn3'][i])
-        likeTenderOverrideMgrId = str(data_dict['likeTenderOverrideMgrId'][i])
-        discountEmployeeId = str(data_dict['discountEmployeeId'][i])
-        ercptEmail = (data_dict['ercptEmail'][i])
-        employeeId = (data_dict['employeeId'][i])
+        operator_id = data_dict['operatorId'][i]
+        tran_date = str(data_dict['tranDate'][i])
+        tran_amount = str(data_dict['tranAmount'][i])
+        sv_changed_1 = str(data_dict['svChanged1'][i])
+        sv_changed_2 = str(data_dict['svChanged2'][i])
+        sv_changed_3 = str(data_dict['svChanged3'][i])
+        transaction_type = str(data_dict['type'][i])
+        audit_flag = str(data_dict['auditFlag'][i])
+        cert_no = str(data_dict['certNo'][i])
+        return_trans = str(data_dict['returnTrans'][i])
+        credit_card_name = str(data_dict['ccName'][i])
+        reser_no = str(data_dict['r2rReserNo'][i])
+        ship_method = str(data_dict['shipMethod'][i])
+        ship_comment = str(data_dict['shipComment'][i])
+        ship_first_name = str(data_dict['shipFName'][i])
+        ship_last_name = str(data_dict['shipLName'][i])
+        ship_address = str(data_dict['shipAddr'][i])
+        ship_city = str(data_dict['shipCity'][i])
+        ship_state = str(data_dict['shipState'][i])
+        ship_zip = str(data_dict['shipZip'][i])
+        ship_date = str(data_dict['shipDate'][i])
+        mba_order_id = str(data_dict['mbaOrderId'][i])
+        masked_acct_no = str(data_dict['maskedAcctNo'][i])
+        ship_carrier_1 = str(data_dict['shipCarrier1'][i])
+        ship_carrier_2 = str(data_dict['shipCarrier2'][i])
+        ship_carrier_3 = str(data_dict['shipCarrier3'][i])
+        ship_track_no_1 = str(data_dict['shipTrackNo1'][i])
+        ship_track_no_2 = str(data_dict['shipTrackNo2'][i])
+        ship_track_no_3 = str(data_dict['shipTrackNo3'][i])
+        sign_method = str(data_dict['signMethod'][i])
+        pf_points = str(data_dict['pfPoints'][i])
+        coupon_code_1 = str(data_dict['couponCode1'][i])
+        coupon_code_2 = str(data_dict['couponCode2'][i])
+        coupon_code_3 = str(data_dict['couponCode3'][i])
+        discount_pod_type_1 = str(data_dict['discountPodType1'][i])
+        discount_pod_type_2 = str(data_dict['discountPodType2'][i])
+        discount_pod_type_3 = str(data_dict['discountPodType3'][i])
+        discount_pod_amount_1 = str(data_dict['discountPodAmt1'][i])
+        discount_pod_amount_2 = str(data_dict['discountPodAmt2'][i])
+        discount_pod_amount_3 = str(data_dict['discountPodAmt3'][i])
+        discount_reason_code_1 = str(data_dict['discountReasonCode1'][i])
+        discount_reason_code_2 = str(data_dict['discountReasonCode2'][i])
+        discount_reason_code_3 = str(data_dict['discountReasonCode3'][i])
+        promos_id_1 = str(data_dict['promosId1'][i])
+        promos_id_2 = str(data_dict['promosId2'][i])
+        promos_id_3 = str(data_dict['promosId3'][i])
+        in_add_mrkdn_1 = str(data_dict['inAdditionToMrkdn1'][i])
+        in_add_mrkdn_2 = str(data_dict['inAdditionToMrkdn2'][i])
+        in_add_mrkdn_3 = str(data_dict['inAdditionToMrkdn3'][i])
+        like_tender_override_mgr_id = str(data_dict['likeTenderOverrideMgrId'][i])
+        discount_employee_id = str(data_dict['discountEmployeeId'][i])
+        ercpt_email = (data_dict['ercptEmail'][i])
+        employee_id = (data_dict['employeeId'][i])
         kg_em_last_name = (data_dict['emLastName'][i])
         kg_em_first_name = (data_dict['emFirstName'][i])
-        advertCode = str(data_dict['advertCode'][i])
-        corpAcctNo = str(data_dict['corpAcctNo'][i])
-        authTerminalId = str(data_dict['authTerminalId'][i])
-        handTktNo = str(data_dict['handTktNo'][i])
-        alternatePhoneNo = str(data_dict['altPhoneNumber'][i])
-        
+        advert_code = str(data_dict['advertCode'][i])
+        corp_acct_no = str(data_dict['corpAcctNo'][i])
+        auth_terminal_id = str(data_dict['authTerminalId'][i])
+        hand_tkt_no = str(data_dict['handTktNo'][i])
+        alternate_phone_no = str(data_dict['altPhoneNo'][i])
+        alternate_phone_no = "".join(alternate_phone_no.split())
+
+        customer_first_name = data_dict['CUFirstName'][i]
+        customer_last_name = data_dict['CULastName'][i]
+        customer_zip_code = data_dict['zipCode'][i]
+        customer_phone = data_dict['phone'][i]
+        customer_alternate_phone = data_dict['altPhoneNo'][i]
+        customer_state = data_dict['state'][i]
+        customer_city = data_dict['city'][i]
+        customer_address = data_dict['address'][i]
+
+        customer_file.writev(alternate_phone_no, 1, customer_phone)
+        customer_file.writev(alternate_phone_no,2,customer_first_name)
+        customer_file.writev(alternate_phone_no, 3, customer_last_name)
+        customer_file.writev(alternate_phone_no, 4, customer_address)
+        customer_file.writev(alternate_phone_no, 5, customer_city)
+        customer_file.writev(alternate_phone_no, 6, customer_state)
+        customer_file.writev(alternate_phone_no, 7, customer_zip_code)
+        customer_file.writev(alternate_phone_no, 8, customer_alternate_phone)
+        customer_file.writev(alternate_phone_no,33,str(random.randint(0000,9999)))
+  
         transaction_file.writev(transaction_id, 2, phone)
 
-        # # data = bytes(str(random.randint(50000, 70000)), "utf-8") + u2py.VM + bytes(str(random.randint(50000, 70000)),"utf-8") + u2py.VM + bytes(str(random.randint(50000, 70000)), "utf-8")
-        transaction_file.writev(transaction_id, 3, tranDate)
+        transaction_file.writev(transaction_id, 3, tran_date)
 
-        transaction_file.writev(transaction_id, 4, operatorId)
+        transaction_file.writev(transaction_id, 4, operator_id)
 
         data = bytes(str(commission_type), "utf-8") + u2py.VM + bytes(str(commission_type), "utf-8") + u2py.VM + bytes(str(commission_type), "utf-8")
         transaction_file.writev(transaction_id,6,data)
 
-        transaction_file.writev(transaction_id, 7, transactionType)
+        transaction_file.writev(transaction_id, 7, transaction_type)
 
-        transaction_file.writev(transaction_id, 8, tranAmount)
+        transaction_file.writev(transaction_id, 8, tran_amount)
 
         data = bytes(str(item_no+random.randint(5000,40000)),"utf-8")+ u2py.VM + bytes(str(item_no+random.randint(5000,40000)),"utf-8")+ u2py.VM + bytes(str(item_no+random.randint(5000,40000)),"utf-8")
         transaction_file.writev(transaction_id,9,data)
 
-        data = bytes(svChanged1,"utf-8") + u2py.VM + bytes(svChanged2,"utf-8") + u2py.VM + bytes(svChanged3,"utf-8")
+        data = bytes(sv_changed_1,"utf-8") + u2py.VM + bytes(sv_changed_2,"utf-8") + u2py.VM + bytes(sv_changed_3,"utf-8")
         transaction_file.writev(transaction_id,11,data)
 
         data1 = bytes(str(markdown_1), "utf-8") + u2py.VM + bytes(str(markdown_2), "utf-8") + u2py.VM + bytes(str(markdown_3), "utf-8")
@@ -131,51 +151,48 @@ def save_mock_data():
         data = bytes(str('CASH'), "utf-8") + u2py.VM + bytes(str('CASH'), "utf-8") + u2py.VM + bytes(str('CASH'),"utf-8")
         transaction_file.writev(transaction_id, 15, data)
 
-        transaction_file.writev(transaction_id, 21, auditFlag)
+        transaction_file.writev(transaction_id, 21, audit_flag)
 
         transaction_file.writev(transaction_id, 25, 'VOID VALUE')
         
-        transaction_file.writev(transaction_id, 29, alternatePhoneNo)
+        transaction_file.writev(transaction_id, 29, alternate_phone_no)
 
-        transaction_file.writev(transaction_id, 30, certNo)
+        transaction_file.writev(transaction_id, 30, cert_no)
 
-        transaction_file.writev(transaction_id, 33, returnTrans)
+        transaction_file.writev(transaction_id, 33, return_trans)
 
-        transaction_file.writev(transaction_id, 35, ccName)
+        transaction_file.writev(transaction_id, 35, credit_card_name)
 
         transaction_file.writev(transaction_id, 38, random.randint(100000, 300000))
 
-        transaction_file.writev(transaction_id, 43, reserNo)
+        transaction_file.writev(transaction_id, 43, reser_no)
 
-        data = bytes(str(lineDiscount), "utf-8") + u2py.SM + bytes(str(lineDiscount), "utf-8") + u2py.VM + bytes(
-            str(lineDiscount), "utf-8") + u2py.SM + bytes(
-            str(lineDiscount), "utf-8") + u2py.VM + bytes(str(lineDiscount), "utf-8") + u2py.SM + bytes(
-            str(lineDiscount), "utf-8")
+        data = bytes(str(line_discount), "utf-8") + u2py.SM + bytes(str(line_discount), "utf-8") + u2py.VM + bytes(str(line_discount), "utf-8") + u2py.SM + bytes(str(line_discount), "utf-8") + u2py.VM + bytes(str(line_discount), "utf-8") + u2py.SM + bytes(str(line_discount), "utf-8")
         transaction_file.writev(transaction_id, 45, data)
 
-        transaction_file.writev(transaction_id, 46, shipMethod)
+        transaction_file.writev(transaction_id, 46, ship_method)
         
-        transaction_file.writev(transaction_id, 48, authTerminalId)
+        transaction_file.writev(transaction_id, 48, auth_terminal_id)
 
-        transaction_file.writev(transaction_id, 49, shipComment)
+        transaction_file.writev(transaction_id, 49, ship_comment)
 
-        transaction_file.writev(transaction_id, 51, shipFName)
+        transaction_file.writev(transaction_id, 51, ship_first_name)
 
-        transaction_file.writev(transaction_id, 52, shipLName)
+        transaction_file.writev(transaction_id, 52, ship_last_name)
 
-        transaction_file.writev(transaction_id, 53, shipAddr)
+        transaction_file.writev(transaction_id, 53, ship_address)
 
-        transaction_file.writev(transaction_id, 54, shipCity)
+        transaction_file.writev(transaction_id, 54, ship_city)
 
-        transaction_file.writev(transaction_id, 55, shipState)
+        transaction_file.writev(transaction_id, 55, ship_state)
 
-        transaction_file.writev(transaction_id, 56, shipZip)
+        transaction_file.writev(transaction_id, 56, ship_zip)
 
-        transaction_file.writev(transaction_id, 57, shipDate)
+        transaction_file.writev(transaction_id, 57, ship_date)
 
-        transaction_file.writev(transaction_id, 58, mbaOrderId)
+        transaction_file.writev(transaction_id, 58, mba_order_id)
         
-        transaction_file.writev(transaction_id, 64, handTktNo)
+        transaction_file.writev(transaction_id, 64, hand_tkt_no)
 
         data = bytes('1', "utf-8") + u2py.VM + bytes('2', "utf-8") + u2py.VM + bytes('3', "utf-8")
         transaction_file.writev(transaction_id, 65, data)
@@ -204,15 +221,15 @@ def save_mock_data():
         data = bytes(str(random.randint(10000, 30000)), "utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)),"utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)), "utf-8")
         transaction_file.writev(transaction_id, 77, data)
 
-        transaction_file.writev(transaction_id, 82, maskedAcctNo)
+        transaction_file.writev(transaction_id, 82, masked_acct_no)
 
         data = bytes(str(rental_id), "utf-8") + u2py.VM + bytes(str(rental_id), "utf-8") + u2py.VM + bytes(str(rental_id), "utf-8")
         transaction_file.writev(transaction_id, 90, data)
 
-        data = bytes(shipCarrier1, "utf-8") + u2py.VM + bytes(shipCarrier2, "utf-8") + u2py.VM + bytes(shipCarrier3,"utf-8")
+        data = bytes(ship_carrier_1, "utf-8") + u2py.VM + bytes(ship_carrier_2, "utf-8") + u2py.VM + bytes(ship_carrier_3,"utf-8")
         transaction_file.writev(transaction_id, 104, data)
 
-        data = bytes(shipTrackNo1, "utf-8") + u2py.VM + bytes(shipTrackNo2, "utf-8") + u2py.VM + bytes(shipTrackNo3,"utf-8")
+        data = bytes(ship_track_no_1, "utf-8") + u2py.VM + bytes(ship_track_no_2, "utf-8") + u2py.VM + bytes(ship_track_no_3,"utf-8")
         transaction_file.writev(transaction_id, 105, data)
 
         data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
@@ -227,46 +244,46 @@ def save_mock_data():
         data = bytes(str(random.randint(10, 300)), "utf-8") + u2py.VM + bytes(str(random.randint(10, 300)),"utf-8") + u2py.VM + bytes(str(random.randint(100, 300)), "utf-8")
         transaction_file.writev(transaction_id, 115, data)
 
-        data = bytes(couponCode1, "utf-8") + u2py.VM + bytes(couponCode2, "utf-8") + u2py.VM + bytes(couponCode3,"utf-8")
+        data = bytes(coupon_code_1, "utf-8") + u2py.VM + bytes(coupon_code_2, "utf-8") + u2py.VM + bytes(coupon_code_3,"utf-8")
         transaction_file.writev(transaction_id, 128, data)
 
-        transaction_file.writev(transaction_id, 129, signMethod)
+        transaction_file.writev(transaction_id, 129, sign_method)
 
-        transaction_file.writev(transaction_id, 135, pfPoints)
+        transaction_file.writev(transaction_id, 135, pf_points)
 
-        transaction_file.writev(transaction_id, 137, likeTenderOverrideMgrId)
+        transaction_file.writev(transaction_id, 137, like_tender_override_mgr_id)
 
         transaction_file.writev(transaction_id, 141, transaction_sub_type)
 
-        if discountType != 'nan':
-            data = bytes(str(discountType), "utf-8") + u2py.VM + bytes(str(discountType), "utf-8") + u2py.VM + bytes(str(discountType), "utf-8")
+        if discount_type != 'nan':
+            data = bytes(str(discount_type), "utf-8") + u2py.VM + bytes(str(discount_type), "utf-8") + u2py.VM + bytes(str(discount_type), "utf-8")
             transaction_file.writev(transaction_id, 159, data)
 
-        data = bytes(discountPodType1, "utf-8") + u2py.VM + bytes(discountPodType2, "utf-8") + u2py.VM + bytes(discountPodType3, "utf-8")
+        data = bytes(discount_pod_type_1, "utf-8") + u2py.VM + bytes(discount_pod_type_2, "utf-8") + u2py.VM + bytes(discount_pod_type_3, "utf-8")
         transaction_file.writev(transaction_id, 160, data)
 
-        data = bytes(discountPodAmt1, "utf-8") + u2py.VM + bytes(discountPodAmt2, "utf-8") + u2py.VM + bytes(discountPodAmt3, "utf-8")
+        data = bytes(discount_pod_amount_1, "utf-8") + u2py.VM + bytes(discount_pod_amount_2, "utf-8") + u2py.VM + bytes(discount_pod_amount_3, "utf-8")
         transaction_file.writev(transaction_id, 161, data)
 
-        transaction_file.writev(transaction_id, 162, discountEmployeeId)
+        transaction_file.writev(transaction_id, 162, discount_employee_id)
 
-        data = bytes(discountReasonCode1, "utf-8") + u2py.VM + bytes(discountReasonCode2, "utf-8") + u2py.VM + bytes(discountReasonCode3, "utf-8")
+        data = bytes(discount_reason_code_1, "utf-8") + u2py.VM + bytes(discount_reason_code_2, "utf-8") + u2py.VM + bytes(discount_reason_code_3, "utf-8")
         transaction_file.writev(transaction_id, 163, data)
 
-        data = bytes(promosId1, "utf-8") + u2py.VM + bytes(promosId2, "utf-8") + u2py.VM + bytes(promosId3, "utf-8")
+        data = bytes(promos_id_1, "utf-8") + u2py.VM + bytes(promos_id_2, "utf-8") + u2py.VM + bytes(promos_id_3, "utf-8")
         transaction_file.writev(transaction_id, 165, data)
 
-        data = bytes(inAddMrkdn1, "utf-8") + u2py.VM + bytes(inAddMrkdn2, "utf-8") + u2py.VM + bytes(inAddMrkdn3, "utf-8")
+        data = bytes(in_add_mrkdn_1, "utf-8") + u2py.VM + bytes(in_add_mrkdn_2, "utf-8") + u2py.VM + bytes(in_add_mrkdn_3, "utf-8")
         transaction_file.writev(transaction_id, 166, data)
 
         data = bytes(str(discount_conversion), "utf-8") + u2py.VM + bytes(str(discount_conversion), "utf-8") + u2py.VM + bytes(str(discount_conversion), "utf-8")
         transaction_file.writev(transaction_id, 167, data)
 
-        if advertCode != 'nan':
-            transaction_file.writev(transaction_id, 168, advertCode)
+        if advert_code != 'nan':
+            transaction_file.writev(transaction_id, 168, advert_code)
 
-        if corpAcctNo != 'nan':
-            transaction_file.writev(transaction_id, 169, corpAcctNo)
+        if corp_acct_no != 'nan':
+            transaction_file.writev(transaction_id, 169, corp_acct_no)
         
         data = bytes(str(random.randint(100000, 300000)), "utf-8") + u2py.VM + bytes(str(random.randint(100000, 300000)),"utf-8") + u2py.VM + bytes(str(random.randint(100000, 300000)), "utf-8")
         transaction_file.writev(transaction_id, 198, data)
@@ -277,7 +294,7 @@ def save_mock_data():
 
         transaction_file.writev(transaction_id, 214, '676987')
 
-        transaction_file.writev(transaction_id, 219, ercptEmail)
+        transaction_file.writev(transaction_id, 219, ercpt_email)
         
         data = bytes(str(random.randint(10000, 30000)), "utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)),"utf-8") + u2py.VM + bytes(str(random.randint(10000, 30000)), "utf-8")
         transaction_file.writev(transaction_id, 223, data)
@@ -293,23 +310,23 @@ def save_mock_data():
             data = bytes(comm_empl_id, "utf-8") + u2py.VM + bytes(comm_empl_id, "utf-8") + u2py.VM + bytes(comm_empl_id, "utf-8")
             transaction_file.writev(transaction_id, 244, data)
 
-        data = bytes(str(commEmplPercentUsed), "utf-8") + u2py.VM + bytes(str(commEmplPercentUsed), "utf-8") + u2py.VM + bytes(str(commEmplPercentUsed), "utf-8")
+        data = bytes(str(comm_empl_percent_used), "utf-8") + u2py.VM + bytes(str(comm_empl_percent_used), "utf-8") + u2py.VM + bytes(str(comm_empl_percent_used), "utf-8")
         transaction_file.writev(transaction_id, 245, data)
 
         data = bytes(str(comm_empl_type), "utf-8") + u2py.VM + bytes(str(comm_empl_type),"utf-8") + u2py.VM + bytes(str(comm_empl_type), "utf-8")
         transaction_file.writev(transaction_id, 246, data)
 
-        employee_file.writev(comm_empl_id,1,firstName)
+        employee_file.writev(comm_empl_id,1,first_name)
 
-        employee_file.writev(comm_empl_id, 2,lastName)
+        employee_file.writev(comm_empl_id, 2,last_name)
 
-        employee_file.writev(comm_empl_id,17,firstName[0:3].upper()+str(random.randint(10,100)))
+        employee_file.writev(comm_empl_id,17,first_name[0:3].upper()+str(random.randint(10,100)))
 
-        employee_file.writev(comm_empl_id,27,firstName)
+        employee_file.writev(comm_empl_id,27,first_name)
 
-        kg_employee_file.writev(employeeId,1,kg_em_first_name)
+        kg_employee_file.writev(employee_id,1,kg_em_first_name)
         
-        kg_employee_file.writev(employeeId,2,kg_em_last_name)
+        kg_employee_file.writev(employee_id,2,kg_em_last_name)
         
         print('{} created {}'.format(transaction_id,i))
 
