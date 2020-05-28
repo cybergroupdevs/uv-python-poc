@@ -730,10 +730,9 @@ def transactionGet(transactionId):
     status = check_existing_record('TRANSACTION', transaction_id)
     if status:
         transaction={}
-        cmd="LIST TRANSACTION WITH @ID = {} DESC ALT.PHONE ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
+        cmd="LIST TRANSACTION WITH @ID = {} DESC ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
         details=u2py.Command(cmd).run(capture=True)
         details=json.loads(details)
-
         transaction['transactionId'] = transaction_id
         transaction['phoneNo'] = details['TRANSACTION'][0]['PHONE']
         transaction['date'] = details['TRANSACTION'][0]['TRAN.DATE']
@@ -760,8 +759,7 @@ def transactionGet(transactionId):
         transaction['tuxConsult'] = tux_consult
 
         #RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
-        alt_phone_number = details['TRANSACTION'][0]['ALT.PHONE']
-        customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format(alt_phone_number)
+        customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format( )
         customer_details=u2py.Command(customer_cmd).run(capture=True)
         customer_details=json.loads(customer_details)
         transaction['phone'] = customer_details['CUSTOMERS'][0]['PHONE.NO']
