@@ -575,8 +575,7 @@ def discount(transactionId):
             discount = 0
             for y in range(0,1):
                 scr_discount = scr_discount+(int(details['TRANSACTION'][0]['ITEM_MV'][y]['RESERVATIONS'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT']))
-                discount = discount+float(details['TRANSACTION'][y]['ITEM_MV'][0]['QUANTITY'])*float(
-                    details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT'])
+                discount = discount+float(details['TRANSACTION'][y]['ITEM_MV'][0]['QUANTITY'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT'])
             employee_cmd = "LIST DATA SHORTNAME {} EM TOJSON".format(emp_id)
             employee_details = u2py.Command(cmd).run(capture=True)
             employee_details = json.loads(employee_details)
@@ -747,7 +746,6 @@ def transactionGet(transactionId):
         cmd="LIST TRANSACTION WITH @ID = {} DESC ALT.PHONE ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
         details=u2py.Command(cmd).run(capture=True)
         details=json.loads(details)
-
         transaction['transactionId'] = transaction_id
         transaction['phoneNo'] = details['TRANSACTION'][0]['PHONE']
         transaction['date'] = details['TRANSACTION'][0]['TRAN.DATE']
