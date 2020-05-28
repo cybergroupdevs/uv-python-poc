@@ -723,7 +723,7 @@ def refund(transactionId):
 ###################### Transaction API ######################
 #############################################################
 
-@app.route('/api/transaction/<transactionId>', methods=['GET'])
+@app.route('/transaction/<transactionId>', methods=['GET'])
 def transactionGet(transactionId):
     transaction_id = transactionId
     transaction_details_list = []
@@ -802,7 +802,6 @@ def transactionGet(transactionId):
                     mkdn_flag = ' '
 
                 if legend_description != '':
-                    # line 631
                     transaction_mkdn = mkdn_flag
                 transaction_details['mkdn'] = transaction_mkdn
             else:
@@ -817,7 +816,7 @@ def transactionGet(transactionId):
                 rental = '(Rental {} for {},{} ins,{} rush'.format(rental_id,tux_rental_amount,tux_insurance_amount,tux_rush_amount)
 
                 if tux_markdown_amount != '':
-                    rental = rental + ', {} mkdn    )'.format(tux_markdown_amount)
+                    rental = rental + ', {} mkdn)'.format(tux_markdown_amount)
             else:
                 rental = ''
             transaction_details['rental'] = rental
@@ -830,8 +829,14 @@ def transactionGet(transactionId):
             json.dumps(response),
             status=200,
             mimetype='application/json'
-        )        
-
+        )
+    else:
+        response = { 'error': 'No transaction existed'}
+        return Response(
+            json.dumps(response),
+            status=404,
+            mimetype='application/json'
+        )
 if __name__ == '__main__':
     app.run()
 
