@@ -97,6 +97,7 @@ def save_mock_data():
         corpAcctNo = str(data_dict['corpAcctNo'][i])
         authTerminalId = str(data_dict['authTerminalId'][i])
         handTktNo = str(data_dict['handTktNo'][i])
+        alternatePhoneNo = str(data_dict['altPhoneNumber'][i])
         
         transaction_file.writev(transaction_id, 2, phone)
 
@@ -133,12 +134,16 @@ def save_mock_data():
         transaction_file.writev(transaction_id, 21, auditFlag)
 
         transaction_file.writev(transaction_id, 25, 'VOID VALUE')
+        
+        transaction_file.writev(transaction_id, 29, alternatePhoneNo)
 
         transaction_file.writev(transaction_id, 30, certNo)
 
         transaction_file.writev(transaction_id, 33, returnTrans)
 
         transaction_file.writev(transaction_id, 35, ccName)
+
+        transaction_file.writev(transaction_id, 38, random.randint(100000, 300000))
 
         transaction_file.writev(transaction_id, 43, reserNo)
 
