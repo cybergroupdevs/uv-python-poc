@@ -438,7 +438,7 @@ def credit_card_details(transactionId):
 #############################################################
 
 @app.route('/order/<transactionId>', methods=['GET'])
-def order_get(transactionId):
+def order_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
     if (status):
@@ -521,7 +521,7 @@ def order_get(transactionId):
 #############################################################
 
 @app.route('/transaction/discount/<transactionId>', methods=['GET'])
-def discount(transactionId):
+def discount_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
     if(status):
@@ -667,7 +667,7 @@ def discount(transactionId):
 #############################################################
 
 @app.route('/transaction/refund/<transactionId>', methods=['GET'])
-def refund(transactionId):
+def refund_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
     if(status):
@@ -715,7 +715,7 @@ def refund(transactionId):
 #############################################################
 
 @app.route('/transaction/<transactionId>', methods=['GET'])
-def transactionGet(transactionId):
+def transaction_detail(transactionId):
     transaction_id = transactionId
     transaction_details_list = []
     status = check_existing_record('TRANSACTION', transaction_id)
