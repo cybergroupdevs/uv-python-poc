@@ -123,15 +123,9 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
         return data.json()
-    def customer(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
-		return data.json()
-	def consultant(self):
-		data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
-		return data.json()
-	def customer_history(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
-		return data.json()
+    def consultant(self):
+        data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
+        return data.json()
 
 class CommissionData():
     def __init__(self):
