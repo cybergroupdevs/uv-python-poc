@@ -385,8 +385,7 @@ def commission_list(transaction_id):
 def credit_card_details(transactionId):
     card_details = []
     transaction_file = u2py.File('TRANSACTION')
-    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(
-        transactionId)
+    command_line = f"LIST TRANSACTION WITH @ID = '{transactionId}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON"
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
     try_pointer = [int(key['TRY.POINTER']) for key in transaction_data['PAY_MV']]
     attempts_to_print = [key['TIME.DONE'] for key in transaction_data['PAY_MV']]
