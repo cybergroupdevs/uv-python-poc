@@ -44,11 +44,11 @@ class customerHistoryTests(unittest.TestCase):
         ]
         self.assertEqual(obj.customer_history(), data)
 
-    def test_get_customerHistory_noHistory(self):
+    def test_get_customerHistory_empty(self):
         obj = PocTest()
         print("--No history--")
         data = ["No customer History available"]
-        self.assertEqual(obj.customer_history_noHistory(), data)
+        self.assertEqual(obj.customer_history_empty(), data)
 class consultantTests(unittest.TestCase):
 
     def test_get_consultant_empty(self):
@@ -81,13 +81,13 @@ class consultantTests(unittest.TestCase):
             {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
         self.assertEqual(obj.consultant_sales(), data)
 
-    def test_get_consultant_businessName(self):
+    def test_get_consultant_business_name(self):
         # businessName
         obj = PocTest()
         print("-------businessName----")
         data = [
             {"operator": "RON SIMS (SION)", "SLS CONSULT": "RON SIMS (SION)"}]
-        self.assertEqual(obj.consultant_businessName(), data)
+        self.assertEqual(obj.consultant_business_name(), data)
 
 
 class PocTest():
@@ -111,7 +111,7 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/consultant?transactionId=555666')
         return data.json()
-    def consultant_businessName(self):
+    def consultant_business_name(self):
         data = requests.get(
             'http://127.0.0.1:5000/api/consultant?transactionId=444555')
         return data.json()
@@ -119,11 +119,11 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
         return data.json()
-    def customer_history_noHistory(self):
+    def customer_history_empty(self):
         data = requests.get(
             'http://127.0.0.1:5000/api/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
         return data.json()
-	def customer(self):
+    def customer(self):
 		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
 		return data.json()
 	def consultant(self):

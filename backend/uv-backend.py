@@ -302,7 +302,7 @@ def consultant_details():
             fitter_first_name=fitter_details['EM'][0]["FNAME"]
             fitter_last_name=fitter_details['EM'][0]["LNAME"]
             fitter_short_name=fitter_details['EM'][0]["SHORTNAME"]
-            fitter_name=str(fitter_first_name)+" "+str(fitter_last_name)+" ("+str(fitter_short_name)+")"
+            fitter_name=f"{fitter_first_name} {fitter_last_name} ({fitter_short_name})"
             details["SRC ASSOC"]=fitter_name
         else:
             fitter_name=fitter_id
