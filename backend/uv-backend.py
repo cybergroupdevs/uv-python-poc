@@ -444,7 +444,7 @@ def order_get(transactionId):
     if (status):
         transaction_file = u2py.File("TRANSACTION")
         order_detail = {}
-        cmd = "LIST ECOM.ORDER.ID SHIP.DATE SHIP.FNAME SHIP.LNAME SHIP.METHOD SHIP.ADDR SHIP.CARRIER SHIP.CITY SHIP.BOLNUMBER SHIP.TRACK.NO AUDIT.FLAG GEN.COUPON.ID RETURN.TRANS ERCPT.EMAIL DATA {} TRANSACTION TOJSON".format(transaction_id)
+        cmd = f"LIST TRANSACTION WITH @ID = '{transaction_id}' ECOM.ORDER.ID SHIP.DATE SHIP.FNAME SHIP.LNAME SHIP.METHOD SHIP.ADDR SHIP.CARRIER SHIP.CITY SHIP.BOLNUMBER SHIP.TRACK.NO AUDIT.FLAG GEN.COUPON.ID RETURN.TRANS ERCPT.EMAIL TOJSON"
         details = u2py.Command(cmd).run(capture=True)
         details = json.loads(details)
         order_id = details['TRANSACTION'][0]['ECOM.ORDER.ID']
@@ -494,7 +494,6 @@ def order_get(transactionId):
                 json.dumps(response),
                 status=200,
                 mimetype='application/json'
-
             )
         else:
             msg = 'Order number not found'
@@ -526,134 +525,132 @@ def discount(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
     if(status):
-        presale_detail=True
-        cmd = "LIST DATA RESERVATIONS DISCOUNT.TYPE RETAIL COUPON.CODE DISCOUNT.POD.TYPE DISCOUNT.POD.AMT DISCOUNT.EMPLOYEE.ID DISCOUNT.REASON.CODE DISCOUNT.REASON.TEXT PROMOS.ID IN.ADDITION.TO.MRKDN DISC.CNV.MRKDN ADVERT.CODE CORP.ACCT.NO LINE.DISCOUNT QUANTITY LONG.MRKDN TAX.AMT {} TRANSACTION TOJSON".format(transaction_id)
+        cmd = f"LIST TRANSACTION WITH @ID = '{transaction_id}' RESERVATIONS DISCOUNT.TYPE RETAIL COUPON.CODE DISCOUNT.POD.TYPE DISCOUNT.POD.AMT DISCOUNT.EMPLOYEE.ID DISCOUNT.REASON.CODE DISCOUNT.REASON.TEXT PROMOS.ID IN.ADDITION.TO.MRKDN DISC.CNV.MRKDN ADVERT.CODE CORP.ACCT.NO LINE.DISCOUNT QUANTITY LONG.MRKDN TAX.AMT TOJSON"
         details = u2py.Command(cmd).run(capture=True)
         details = json.loads(details)
-        if(presale_detail == True):
-            count = (len((details['TRANSACTION'][0]['DISCOUNT.TYPE_MV'][0]['DISCOUNT.TYPE'])))
-            saved_list_name = "PAGE.LIST"
-            u2py.run('SAVE.LIST {}'.format(saved_list_name))
-            my_list = u2py.List(0, saved_list_name)
-            t_id = my_list.readlist()
-            total_count = t_id.dcount(u2py.FM)
-            pct = ''
-            sub_total = ''
-            discount_details = {}
-            coupon_code = details['TRANSACTION'][0]['COUPON.CODE_MV'][0]['COUPON.CODE']
-            disc_type = int(details['TRANSACTION'][0]['DISCOUNT.TYPE_MV'][0]['DISCOUNT.TYPE'])
-            pod_type = details['TRANSACTION'][0]['DISCOUNT.POD.TYPE_MV'][0]['DISCOUNT.POD.TYPE']
-            pod_amt = details['TRANSACTION'][0]['DISCOUNT.POD.AMT_MV'][0]['DISCOUNT.POD.AMT']
-            emp_id = details['TRANSACTION'][0]['DISCOUNT.EMPLOYEE.ID_MV'][0]['DISCOUNT.EMPLOYEE.ID']
-            other_sub_type = details['TRANSACTION'][0]['DISCOUNT.REASON.CODE_MV'][0]['DISCOUNT.REASON.CODE']
-            other_comments = details['TRANSACTION'][0]['DISCOUNT.REASON.TEXT_MV'][0]['DISCOUNT.REASON.TEXT']
-            promos_id = details['TRANSACTION'][0]['PROMOS.ID_MV'][0]['PROMOS.ID']
-            in_add_to_mkdn = details['TRANSACTION'][0]['IN.ADDITION.TO.MRKDN_MV'][0]['IN.ADDITION.TO.MRKDN']
-            disc_conv_to_mkdn = details['TRANSACTION'][0]['DISC.CNV.MRKDN_MV'][0]['DISC.CNV.MRKDN']
-            advert_code = details['TRANSACTION'][0]['ADVERT.CODE_MV'][0]['ADVERT.CODE']
-            corp_id = details['TRANSACTION'][0]['CORP.ACCT.NO_MV'][0]['CORP.ACCT.NO']
-            scr_discount = 0
-            discount = 0
-            for y in range(0,1):
-                scr_discount = scr_discount+(int(details['TRANSACTION'][0]['ITEM_MV'][y]['RESERVATIONS'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT']))
-                discount = discount+float(details['TRANSACTION'][y]['ITEM_MV'][0]['QUANTITY'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT'])
-            employee_cmd = "LIST DATA SHORTNAME {} EM TOJSON".format(emp_id)
-            employee_details = u2py.Command(cmd).run(capture=True)
-            employee_details = json.loads(employee_details)
-            if(disc_type == 1):
-                pct = 'Employee'
-                EM_file = u2py.File("EM")
-                s_name = employee_details['EM'][0]['ITEMS_MV'][0]['SHORTNAME']
-                if(s_name):
-                    pct = pct+s_name
-            elif(disc_type == 2):
-                pct = 'Family'
-                s_name = employee_details['EM'][0]['ITEMS_MV'][0]['SHORTNAME']
-                if(s_name):
-                    pct = pct+'of '+s_name
-            elif(disc_type == 3):
-                pct = 'Other'
-                if(other_sub_type == 1):
-                    pct = pct+' (mall associate)'
-                elif(other_sub_type == 2):
-                    pct = pct+' (CLERGY)'
-                elif(other_sub_type == 3):
-                    pct = pct+' (police)'
-                elif(other_sub_type == 4):
-                    pct = pct+' (SHOES)'
-                elif(other_sub_type == 98):
-                    pct = pct+' (CUSTOMER SERVICE)'
-                elif(other_sub_type == 99):
-                    pct = pct+' (OTHER)'
-                else:
-                    pct = pct+' (?)'
-            elif(disc_type == 5):
-                pct = 'Advertising [code '+advert_code+']'
-            elif(disc_type == 6):
-                pct = 'Customer Appreciation'
-            elif(disc_type == 7):
-                pct = 'Store relocation'
-            elif(disc_type == 8):
-                pct = 'Corporate'
-                pct = pct+' (ID '+corp_id+')'
-            elif(disc_type == 9):
-                pct = 'Affiliate employee'
-                kgm_cmd = "LIST DATA LNAME FNAME COMPANY.CODE {} KG.EM ToJSON".format(emp_id)
-                kgm_details = u2py.Command(kgm_cmd).run(capture=True)
-                kgm_details = json.loads(kgm_details)
-                pct = kgm_details["KG.EM"]["0"]["COMPANY.CODE"]+' employee'
-                pct = pct + \
-                    ' ('+kgm_details["KG.EM"]["0"]["FNAME"] + \
-                    ' '+kgm_details["KG.EM"]["0"]["LNAME"]+')'
-            elif(disc_type == 10):
-                pct = 'Affiliate employee family'
-                pct = kgm_details["KG.EM"]["0"]["COMPANY.CODE"] + \
-                    ' employee family'
-                pct = pct + \
-                    ' (of '+kgm_details["KG.EM"]["0"]["FNAME"] + \
-                    ' '+kgm_details["KG.EM"]["0"]["LNAME"]+')'
-            elif(disc_type == 11):
-                pct = 'Coupon [id '+coupon_code+']'
-            elif(disc_type == 12):
-                pct = 'Perfect Fit signup'
-            elif(disc_type == 13):
-                pct = ' "PROMO"'
-                pct = pct+' ('+promos_id+')'
-                if(other_sub_type == 1):
-                    pct = pct+' (automatically applied)'
-                elif(other_sub_type == 2):
-                    pct = pct+' (required a coupon)'
-                else:
-                    pct = pct+' (?)'
-            elif(disc_type == 14):
-                pct = "N-FOR"
-                pct = pct+' ('+promos_id+')'
+        count = (len((details['TRANSACTION'][0]['DISCOUNT.TYPE_MV'][0]['DISCOUNT.TYPE'])))
+        saved_list_name = "PAGE.LIST"
+        u2py.run('SAVE.LIST {}'.format(saved_list_name))
+        my_list = u2py.List(0, saved_list_name)
+        t_id = my_list.readlist()
+        total_count = t_id.dcount(u2py.FM)
+        pct = ''
+        sub_total = ''
+        discount_details = {}
+        coupon_code = details['TRANSACTION'][0]['COUPON.CODE_MV'][0]['COUPON.CODE']
+        disc_type = int(details['TRANSACTION'][0]['DISCOUNT.TYPE_MV'][0]['DISCOUNT.TYPE'])
+        pod_type = details['TRANSACTION'][0]['DISCOUNT.POD.TYPE_MV'][0]['DISCOUNT.POD.TYPE']
+        pod_amt = details['TRANSACTION'][0]['DISCOUNT.POD.AMT_MV'][0]['DISCOUNT.POD.AMT']
+        emp_id = details['TRANSACTION'][0]['DISCOUNT.EMPLOYEE.ID_MV'][0]['DISCOUNT.EMPLOYEE.ID']
+        other_sub_type = details['TRANSACTION'][0]['DISCOUNT.REASON.CODE_MV'][0]['DISCOUNT.REASON.CODE']
+        other_comments = details['TRANSACTION'][0]['DISCOUNT.REASON.TEXT_MV'][0]['DISCOUNT.REASON.TEXT']
+        promos_id = details['TRANSACTION'][0]['PROMOS.ID_MV'][0]['PROMOS.ID']
+        in_add_to_mkdn = details['TRANSACTION'][0]['IN.ADDITION.TO.MRKDN_MV'][0]['IN.ADDITION.TO.MRKDN']
+        disc_conv_to_mkdn = details['TRANSACTION'][0]['DISC.CNV.MRKDN_MV'][0]['DISC.CNV.MRKDN']
+        advert_code = details['TRANSACTION'][0]['ADVERT.CODE_MV'][0]['ADVERT.CODE']
+        corp_id = details['TRANSACTION'][0]['CORP.ACCT.NO_MV'][0]['CORP.ACCT.NO']
+        scr_discount = 0
+        discount = 0
+        for y in range(0,1):
+            scr_discount = scr_discount+(int(details['TRANSACTION'][0]['ITEM_MV'][y]['RESERVATIONS'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT']))
+            discount = discount+float(details['TRANSACTION'][y]['ITEM_MV'][0]['QUANTITY'])*float(details['TRANSACTION'][y]['ITEM_MV'][count]['LINE.DISCOUNT'])
+        employee_cmd = f"LIST EM WITH @ID = '{emp_id}' SHORTNAME TOJSON"
+        employee_details = u2py.Command(cmd).run(capture=True)
+        employee_details = json.loads(employee_details)
+        if(disc_type == 1):
+            pct = 'Employee'
+            EM_file = u2py.File("EM")
+            s_name = employee_details['EM'][0]['ITEMS_MV'][0]['SHORTNAME']
+            if(s_name):
+                pct = pct+s_name
+        elif(disc_type == 2):
+            pct = 'Family'
+            s_name = employee_details['EM'][0]['ITEMS_MV'][0]['SHORTNAME']
+            if(s_name):
+                pct = pct+'of '+s_name
+        elif(disc_type == 3):
+            pct = 'Other'
+            if(other_sub_type == 1):
+                pct = pct+' (mall associate)'
+            elif(other_sub_type == 2):
+                pct = pct+' (CLERGY)'
+            elif(other_sub_type == 3):
+                pct = pct+' (police)'
+            elif(other_sub_type == 4):
+                pct = pct+' (SHOES)'
+            elif(other_sub_type == 98):
+                pct = pct+' (CUSTOMER SERVICE)'
+            elif(other_sub_type == 99):
+                pct = pct+' (OTHER)'
             else:
-                pct = 'NO'
-            sale_total = discount
-            data = str(pct)+' discount of '+str(scr_discount*100)
-            if (disc_conv_to_mkdn):
-                data = data+' converted to markdown.'
+                pct = pct+' (?)'
+        elif(disc_type == 5):
+            pct = 'Advertising [code '+advert_code+']'
+        elif(disc_type == 6):
+            pct = 'Customer Appreciation'
+        elif(disc_type == 7):
+            pct = 'Store relocation'
+        elif(disc_type == 8):
+            pct = 'Corporate'
+            pct = pct+' (ID '+corp_id+')'
+        elif(disc_type == 9):
+            pct = 'Affiliate employee'
+            kg_em_cmd = f"LIST KG.EM WITH @ID = '{emp_id}' LNAME FNAME COMPANY.CODE TOJSON"
+            kg_em_details = u2py.Command(kg_em_cmd).run(capture=True)
+            kg_em_details = json.loads(kg_em_details)
+            pct = kg_em_details["KG.EM"]["0"]["COMPANY.CODE"]+' employee'
+            pct = pct + \
+                ' ('+kg_em_details["KG.EM"]["0"]["FNAME"] + \
+                ' '+kg_em_details["KG.EM"]["0"]["LNAME"]+')'
+        elif(disc_type == 10):
+            pct = 'Affiliate employee family'
+            pct = kg_em_details["KG.EM"]["0"]["COMPANY.CODE"] + \
+                ' employee family'
+            pct = pct + \
+                ' (of '+kg_em_details["KG.EM"]["0"]["FNAME"] + \
+                ' '+kg_em_details["KG.EM"]["0"]["LNAME"]+')'
+        elif(disc_type == 11):
+            pct = 'Coupon [id '+coupon_code+']'
+        elif(disc_type == 12):
+            pct = 'Perfect Fit signup'
+        elif(disc_type == 13):
+            pct = ' "PROMO"'
+            pct = pct+' ('+promos_id+')'
+            if(other_sub_type == 1):
+                pct = pct+' (automatically applied)'
+            elif(other_sub_type == 2):
+                pct = pct+' (required a coupon)'
             else:
-                data = data+'.'
-            sale_total=0
-            items_mv=len(details['TRANSACTION'][0]['ITEM_MV'])
-            for i in range(0,items_mv):
-                 retail=float(details['TRANSACTION'][0]['ITEM_MV'][count]['RETAIL'])
-                 mrkdn=float(details['TRANSACTION'][0]['ITEM_MV'][count]['LONG.MRKDN'])
-                 quantity=int(details['TRANSACTION'][0]['ITEM_MV'][count]['QUANTITY'])
-                 sale_total=sale_total+(retail-mrkdn)*quantity
-            sale_total=sale_total+float(details['TRANSACTION'][0]["TAX.AMT"])
-            sale_total=sale_total-discount
-            discount_details['pct'] = pct
-            discount_details['subTotal'] = sale_total
-            response = {
-                "discountDetails": discount_details
-            }
-            return Response(
-                json.dumps(response),
-                status=200,
-                mimetype='application/json')
+                pct = pct+' (?)'
+        elif(disc_type == 14):
+            pct = "N-FOR"
+            pct = pct+' ('+promos_id+')'
+        else:
+            pct = 'NO'
+        sale_total = discount
+        data = str(pct)+' discount of '+str(scr_discount*100)
+        if (disc_conv_to_mkdn):
+            data = data+' converted to markdown.'
+        else:
+            data = data+'.'
+        sale_total=0
+        items_mv=len(details['TRANSACTION'][0]['ITEM_MV'])
+        for i in range(0,items_mv):
+                retail=float(details['TRANSACTION'][0]['ITEM_MV'][count]['RETAIL'])
+                mrkdn=float(details['TRANSACTION'][0]['ITEM_MV'][count]['LONG.MRKDN'])
+                quantity=int(details['TRANSACTION'][0]['ITEM_MV'][count]['QUANTITY'])
+                sale_total=sale_total+(retail-mrkdn)*quantity
+        sale_total=sale_total+float(details['TRANSACTION'][0]["TAX.AMT"])
+        sale_total=sale_total-discount
+        discount_details['pct'] = pct
+        discount_details['subTotal'] = sale_total
+        response = {
+            "discountDetails": discount_details
+        }
+        return Response(
+            json.dumps(response),
+            status=200,
+            mimetype='application/json')
     else:
         msg = 'Transaction file not found'
         data = {
@@ -675,11 +672,11 @@ def refund(transactionId):
     status = check_existing_record('TRANSACTION', transaction_id)
     if(status):
         data_file = u2py.File("TRANSACTION")
-        cmd = "LIST DATA LIKE.TENDER.OVERRIDE.MGR.ID HAND.TKT.NO {} TRANSACTION TOJSON".format(transaction_id)
+        cmd = f"LIST TRANSACTION WITH @ID = '{transaction_id}' LIKE.TENDER.OVERRIDE.MGR.ID HAND.TKT.NO TOJSON"
         details = u2py.Command(cmd).run(capture=True)
         details = json.loads(details)
         refund_mgr_id = details['TRANSACTION'][0]['LIKE.TENDER.OVERRIDE.MGR.ID']
-        em_cmd="LIST DATA NICKNAME FNAME LNAME SHORTNAME {} EM TOJSON".format(177092.0)
+        em_cmd= f"LIST EM WITH @ID = '{refund_mgr_id}' NICKNAME FNAME LNAME SHORTNAME TOJSON"
         em_details=u2py.Command(em_cmd).run(capture=True)
         em_details=json.loads(em_details)
         if(refund_mgr_id):
@@ -724,7 +721,7 @@ def transactionGet(transactionId):
     status = check_existing_record('TRANSACTION', transaction_id)
     if status:
         transaction={}
-        cmd="LIST TRANSACTION WITH @ID = {} DESC ALT.PHONE ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON".format(transaction_id)
+        cmd= f"LIST TRANSACTION WITH @ID = '{transaction_id}' DESC ALT.PHONE ITEM.NO RETAIL PHONE TRAN.DATE MRKDN TRANSFER.CARTONS QUANTITY LONG.MRKDN TUX.RENTAL.AMT TUX.INSURANCE.AMT TUX.RUSH.AMT TUX.MARKDOWN.AMT RESERVATIONS MKDN.AUDIT ITEM.SHIP.GROUP RETURN.QTY SHIP.GROUP CommEmplId TRAN.TYPE TOJSON"
         details=u2py.Command(cmd).run(capture=True)
         details=json.loads(details)
         transaction['transactionId'] = transaction_id
@@ -733,7 +730,7 @@ def transactionGet(transactionId):
         transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
         transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
         comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
-        em_cmd="LIST EM WITH @ID = {} NICKNAME FNAME LNAME TOJSON".format(comm_empl_id)
+        em_cmd= f"LIST EM WITH @ID = '{comm_empl_id}' NICKNAME FNAME LNAME TOJSON"
         em_details=u2py.Command(em_cmd).run(capture=True)
         em_details=json.loads(em_details)
         if 'NICKNAME' in em_details['EM'][0].keys():
@@ -811,7 +808,7 @@ def transactionGet(transactionId):
             transaction_details_list.append(transaction_details)
         response = {
             "transactionDetails": transaction_details_list,
-            "transactionHeader": transaction
+            "customerDetails": transaction
         }
         return Response(
             json.dumps(response),
