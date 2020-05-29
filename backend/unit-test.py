@@ -198,16 +198,17 @@ class TransactionTestCases(unittest.TestCase):
         data = response.json()['transactionDetails']
         self.assertEqual(data[0], obj.transaction_details)
 
-    def test_non_existing_transaction_data(self):
+    # Check if no transaction details exists
+    def test_transaction_details(self):
         obj = TransactionData()
         response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1345')
         data = response.json()['error']
         self.assertEqual(data,obj.transaction_details_error())
 
-    def test_customer_transaction_details(self):
+    def test_customer_details(self):
         obj = TransactionData()
         response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1672')
-        data = response.json()['transactionHeader']
+        data = response.json()['customerDetails']
         self.assertEqual(data, obj.customer_transaction_details)
 
 if __name__ == '__main__':

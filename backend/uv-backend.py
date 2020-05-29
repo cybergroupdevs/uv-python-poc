@@ -336,15 +336,14 @@ def customer_history():
 ########################
 #### COMMISSION API ####
 ########################
-@app.route('/commission/<transId>', methods=['GET'])
-def commission_list(transId):
+@app.route('/commission/<transaction_id>', methods=['GET'])
+def commission_list(transaction_id):
     commission_data_list = []
     transaction_file_name = 'TRANSACTION'
     employee_file_name = 'EM'
     transaction_file = u2py.File(transaction_file_name)
     employee_file = u2py.File(employee_file_name)
-    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(
-        transId)
+    command_line = f"LIST TRANSACTION WITH @ID = '{transaction_id}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON"
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
 
     if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
