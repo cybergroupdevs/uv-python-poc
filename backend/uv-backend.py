@@ -437,7 +437,7 @@ def credit_card_details(transactionId):
 ###################### Order API ############################
 #############################################################
 
-@app.route('/order/<transactionId>', methods=['GET'])
+@app.route('/transaction/<transactionId>/order', methods=['GET'])
 def order_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
@@ -520,7 +520,7 @@ def order_detail(transactionId):
 ###################### Discount API #########################
 #############################################################
 
-@app.route('/transaction/discount/<transactionId>', methods=['GET'])
+@app.route('/transaction/<transactionId>/discount', methods=['GET'])
 def discount_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
@@ -666,7 +666,7 @@ def discount_detail(transactionId):
 ####################### Refund API ##########################
 #############################################################
 
-@app.route('/transaction/refund/<transactionId>', methods=['GET'])
+@app.route('/transaction/<transactionId>/refund', methods=['GET'])
 def refund_detail(transactionId):
     transaction_id = transactionId
     status = check_existing_record('TRANSACTION', transaction_id)
