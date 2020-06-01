@@ -239,10 +239,9 @@ def customer_details():
 def consultant_details():
     transaction_id=request.args.get('transactionId')
     transaction_file=u2py.File("TRANSACTION")
-    transaction_cmd=f"LIST TRANS.NO PHONE CommEmplId CommEmplType FITTER DATA {transaction_id} TRANSACTION TOJSON"
+    transaction_cmd=f"LIST PHONE CommEmplId CommEmplType FITTER DATA {transaction_id} TRANSACTION TOJSON"
     transaction_details=u2py.Command(transaction_cmd).run(capture=True)
     transaction_details=json.loads(transaction_details)
-    trans_no=transaction_details['TRANSACTION'][0]["TRANS.NO"]
     phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
     em_file=u2py.File("EM")
     details={}
@@ -317,7 +316,7 @@ def consultant_details():
 def customer_history():
 	saved_list_name="PAGE.LIST"
 	start =1
-	phone_no=int(request.args.get('phoneNo'))
+	phone_no=request.args.get('phoneNo')
 	page_index =int(request.args.get('pageIndex'))
 	page_size =int(request.args.get('pageSize'))
 	start = page_index * page_size + 1
