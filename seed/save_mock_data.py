@@ -332,6 +332,14 @@ def save_mock_data():
         employee_file.writev(phone,17,first_name[0:3].upper()+str(random.randint(10,100)))
         
         employee_file.writev(phone,27,first_name)
+        
+        employee_file.writev(like_tender_override_mgr_id,1,first_name)
+ 
+        employee_file.writev(like_tender_override_mgr_id,2,last_name)
+ 
+        employee_file.writev(like_tender_override_mgr_id,17,first_name[0:3].upper()+str(random.randint(10,100)))
+ 
+        employee_file.writev(like_tender_override_mgr_id,27,first_name)
 
         kg_employee_file.writev(employee_id,1,kg_em_first_name)
         
