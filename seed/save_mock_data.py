@@ -307,7 +307,8 @@ def save_mock_data():
         transaction_file.writev(transaction_id, 242, data)
 
         if comm_empl_id != 'nan':
-            data = bytes(comm_empl_id, "utf-8") + u2py.VM + bytes(comm_empl_id, "utf-8") + u2py.VM + bytes(comm_empl_id, "utf-8")
+            comm_empl_id = int(float(comm_empl_id))
+            data = bytes(str(comm_empl_id), "utf-8") + u2py.VM + bytes(str(comm_empl_id), "utf-8") + u2py.VM + bytes(str(comm_empl_id), "utf-8")
             transaction_file.writev(transaction_id, 244, data)
 
         data = bytes(str(comm_empl_percent_used), "utf-8") + u2py.VM + bytes(str(comm_empl_percent_used), "utf-8") + u2py.VM + bytes(str(comm_empl_percent_used), "utf-8")
@@ -316,16 +317,20 @@ def save_mock_data():
         data = bytes(str(comm_empl_type), "utf-8") + u2py.VM + bytes(str(comm_empl_type),"utf-8") + u2py.VM + bytes(str(comm_empl_type), "utf-8")
         transaction_file.writev(transaction_id, 246, data)
 
-        employee_file.writev(comm_empl_id,1,first_name)
+        if comm_empl_id != 'nan':
+            comm_empl_id = str(comm_empl_id)
+            employee_file.writev(comm_empl_id,1,first_name)
+            employee_file.writev(comm_empl_id, 2,last_name)
+            employee_file.writev(comm_empl_id,17,first_name[0:3].upper()+str(random.randint(10,100)))
+            employee_file.writev(comm_empl_id,27,first_name)
+        
+        phone = phone.replace('-','')
         employee_file.writev(phone,1,first_name)
 
-        employee_file.writev(comm_empl_id, 2,last_name)
         employee_file.writev(phone,2,last_name)
 
-        employee_file.writev(comm_empl_id,17,first_name[0:3].upper()+str(random.randint(10,100)))
         employee_file.writev(phone,17,first_name[0:3].upper()+str(random.randint(10,100)))
-
-        employee_file.writev(comm_empl_id,27,first_name)
+        
         employee_file.writev(phone,27,first_name)
 
         kg_employee_file.writev(employee_id,1,kg_em_first_name)
