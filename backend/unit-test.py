@@ -166,5 +166,50 @@ class CommissionTestCases(unittest.TestCase):
         print(data)
         self.assertEqual(data,obj.credit_card_details)
 
+class TransactionData:
+    def __init__(self):
+        self.transaction_details = {
+            "class": "4928",
+            "sku": "4907",
+            "mkdn": "58.37",
+            "desc": "rhoncus mauris enim",
+            "rental": "(Rental 32172613 for 278,287 ins,39 rush, 279 mkdn)"
+        }
+        self.customer_transaction_details = {
+            "transactionId": "4830*35*1672",
+            "phoneNo": "340-537-6594",
+            "date": "08.14.62",
+            "transactionType": "AMEX",
+            "rentalNo": "176461",
+            "operator": "Moyra Moyra",
+            "tuxConsult": "Moyra Moyra",
+            "phone": "340-537-6594",
+            "name": "Othilie Gounard",
+            "pfid": "8826"
+        }
+
+    def transaction_details_error(self):
+        return 'No transaction existed'
+
+class TransactionTestCases(unittest.TestCase):
+    def test_transaction_data(self):
+        obj = TransactionData()
+        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1672')
+        data = response.json()['transactionDetails']
+        self.assertEqual(data[0], obj.transaction_details)
+
+    # Check if no transaction details exists
+    def test_transaction_details(self):
+        obj = TransactionData()
+        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1345')
+        data = response.json()['error']
+        self.assertEqual(data,obj.transaction_details_error())
+
+    def test_customer_details(self):
+        obj = TransactionData()
+        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1672')
+        data = response.json()['customerDetails']
+        self.assertEqual(data, obj.customer_transaction_details)
+
 if __name__ == '__main__':
     unittest.main()

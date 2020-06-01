@@ -336,15 +336,14 @@ def customer_history():
 ########################
 #### COMMISSION API ####
 ########################
-@app.route('/commission/<transId>', methods=['GET'])
-def commission_list(transId):
+@app.route('/commission/<transaction_id>', methods=['GET'])
+def commission_list(transaction_id):
     commission_data_list = []
     transaction_file_name = 'TRANSACTION'
     employee_file_name = 'EM'
     transaction_file = u2py.File(transaction_file_name)
     employee_file = u2py.File(employee_file_name)
-    command_line = "LIST TRANSACTION WITH @ID = '{}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON".format(
-        transId)
+    command_line = f"LIST TRANSACTION WITH @ID = '{transaction_id}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON"
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
 
     if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
@@ -386,8 +385,7 @@ def commission_list(transId):
 def credit_card_details(transactionId):
     card_details = []
     transaction_file = u2py.File('TRANSACTION')
-    command_line = "LIST TRANSACTION WITH @ID = '{}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON".format(
-        transactionId)
+    command_line = f"LIST TRANSACTION WITH @ID = '{transactionId}' TIME.OUT TRAN.DATE APPROVAL.TIME TIME.IN TRY.POINTER TIME.DONE ATTEMPT.TYPE ATTEMPT.AMT ACCT.METHOD AUTH.METHOD TOJSON"
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
     try_pointer = [int(key['TRY.POINTER']) for key in transaction_data['PAY_MV']]
     attempts_to_print = [key['TIME.DONE'] for key in transaction_data['PAY_MV']]
