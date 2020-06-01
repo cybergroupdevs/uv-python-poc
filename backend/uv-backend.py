@@ -113,7 +113,7 @@ def set_empsn_values(transaction_data, employee_file):
     commission_employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
     for i in range(len(commission_employee_id)):
         employee_id = commission_employee_id[i]
-        if check_existing_record(employee_file, employee_id):
+        if check_existing_record('EM', employee_id):
             empsn = list(employee_file.readv(employee_id, 17))[0][0]
         else:
             empsn = employee_id
@@ -188,7 +188,6 @@ def transaction_credit_details(transaction_data, pmt_val):
     credit_details['done'] = times_done
     credit_details['type'] = attempt_types
     entry_mode = acc_methods[0]
-
     approval_time = [key['APPROVAL.TIME'] for key in transaction_data['PAY_MV']][pmt_val]
     transaction_date_int = transaction_data['TRAN.DATE']
     if approval_time != '':
@@ -223,10 +222,11 @@ def transaction_credit_details(transaction_data, pmt_val):
 
     return credit_details
 
-########################
-#### CUSTOMER API   ####
-########################
-@app.route('/api/customer', methods=['GET'])
+#############################################################
+###################### Customer API #########################
+#############################################################
+
+@app.route('/customer', methods=['GET'])
 def customer_details():
     customer_id=request.args.get('customerId')
     customer_file= u2py.File("CUSTOMERS")
@@ -252,10 +252,12 @@ def customer_details():
     	    json.dumps(data),
     	    status=200,
     	    mimetype='application/json')
-########################
-#### CONSULTANT API ####
-########################
-@app.route('/api/consultant',methods=['GET'])
+        
+#############################################################
+###################### Consultant API #######################
+#############################################################
+
+@app.route('/consultant',methods=['GET'])
 def consultant_details():
     transaction_id=request.args.get('transactionId')
     transaction_file=u2py.File("TRANSACTION")
@@ -332,7 +334,12 @@ def consultant_details():
 		status=200,
 		mimetype="application/json"
 		)
-@app.route('/api/customer/history',methods=['GET'])
+    
+#############################################################
+################# Customer history API ######################
+#############################################################
+
+@app.route('/customer/history',methods=['GET'])
 def customer_history():
 	saved_list_name="PAGE.LIST"
 	start =1
