@@ -317,12 +317,16 @@ def save_mock_data():
         transaction_file.writev(transaction_id, 246, data)
 
         employee_file.writev(comm_empl_id,1,first_name)
+        employee_file.writev(phone,1,first_name)
 
         employee_file.writev(comm_empl_id, 2,last_name)
+        employee_file.writev(phone,2,last_name)
 
         employee_file.writev(comm_empl_id,17,first_name[0:3].upper()+str(random.randint(10,100)))
+        employee_file.writev(phone,17,first_name[0:3].upper()+str(random.randint(10,100)))
 
         employee_file.writev(comm_empl_id,27,first_name)
+        employee_file.writev(phone,27,first_name)
 
         kg_employee_file.writev(employee_id,1,kg_em_first_name)
         
