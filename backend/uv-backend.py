@@ -289,7 +289,7 @@ def consultant_details():
         employee_first_name=employee_details['EM'][0]["FNAME"]
         employee_last_name=employee_details['EM'][0]["LNAME"]
         employee_short_name=employee_details['EM'][0]["SHORTNAME"]
-        details[employee_type]=f"{employee_file_name} {employee_last_name} ({employee_short_name})"
+        details[employee_type]=f"{employee_first_name} {employee_last_name} ({employee_short_name})"
     else:
         details[employee_type]="No consultant"
         ####add name from em file where recordId is we get from record<248> of transaction
