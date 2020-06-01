@@ -88,7 +88,7 @@ def set_empsn_values(transaction_data, employee_file):
     commission_employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
     for i in range(len(commission_employee_id)):
         employee_id = commission_employee_id[i]
-        if check_existing_record(employee_file, employee_id):
+        if check_existing_record('EM', employee_id):
             empsn = list(employee_file.readv(employee_id, 17))[0][0]
         else:
             empsn = employee_id
