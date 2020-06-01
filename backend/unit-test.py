@@ -23,7 +23,7 @@ class customerTests(unittest.TestCase):
 
 
 class customerHistoryTests(unittest.TestCase):
-    def test_get_customerHistory(self):
+    def test_get_customer_history(self):
         obj = PocTest()
         print("--customerHistoryMultiple--")
         data = [
@@ -44,7 +44,7 @@ class customerHistoryTests(unittest.TestCase):
         ]
         self.assertEqual(obj.customer_history(), data)
 
-    def test_get_customerHistory_empty(self):
+    def test_get_customer_history_empty(self):
         obj = PocTest()
         print("--No history--")
         data = ["No customer History available"]
