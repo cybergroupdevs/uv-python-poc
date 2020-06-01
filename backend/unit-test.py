@@ -23,7 +23,7 @@ class customerTests(unittest.TestCase):
 
 
 class customerHistoryTests(unittest.TestCase):
-    def test_get_customerHistory(self):
+    def test_get_customer_history(self):
         obj = PocTest()
         print("--customerHistoryMultiple--")
         data = [
@@ -44,7 +44,11 @@ class customerHistoryTests(unittest.TestCase):
         ]
         self.assertEqual(obj.customer_history(), data)
 
-
+    def test_get_customer_history_empty(self):
+        obj = PocTest()
+        print("--No history--")
+        data = ["No customer History available"]
+        self.assertEqual(obj.customer_history_empty(), data)
 class consultantTests(unittest.TestCase):
 
     def test_get_consultant_empty(self):
@@ -77,13 +81,13 @@ class consultantTests(unittest.TestCase):
             {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
         self.assertEqual(obj.consultant_sales(), data)
 
-    def test_get_consultant_businessName(self):
+    def test_get_consultant_business_name(self):
         # businessName
         obj = PocTest()
         print("-------businessName----")
         data = [
             {"operator": "RON SIMS (SION)", "SLS CONSULT": "RON SIMS (SION)"}]
-        self.assertEqual(obj.consultant_businessName(), data)
+        self.assertEqual(obj.consultant_business_name(), data)
 
 
 class PocTest():
@@ -107,7 +111,7 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/consultant?transactionId=555666')
         return data.json()
-    def consultant_businessName(self):
+    def consultant_business_name(self):
         data = requests.get(
             'http://127.0.0.1:5000/api/consultant?transactionId=444555')
         return data.json()
@@ -115,16 +119,13 @@ class PocTest():
         data = requests.get(
             'http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
         return data.json()
-
-	def customer(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer?customerId=0001')
-		return data.json()
-	def consultant(self):
-		data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
-		return data.json()
-	def customer_history(self):
-		data=requests.get('http://127.0.0.1:5000/api/customer/history?phoneNo=8054544097&pageIndex=0&pageSize=5')
-		return data.json()
+    def customer_history_empty(self):
+        data = requests.get(
+            'http://127.0.0.1:5000/api/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
+        return data.json()
+    def consultant(self):
+        data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
+        return data.json()
 
 class CommissionData():
     def __init__(self):
@@ -182,51 +183,6 @@ class CommissionTestCases(unittest.TestCase):
         data = response.json()['cardDetails'][0]
         print(data)
         self.assertEqual(data,obj.credit_card_details)
-
-class TransactionData:
-    def __init__(self):
-        self.transaction_details = {
-            "class": "4928",
-            "sku": "4907",
-            "mkdn": "58.37",
-            "desc": "rhoncus mauris enim",
-            "rental": "(Rental 32172613 for 278,287 ins,39 rush, 279 mkdn)"
-        }
-        self.customer_transaction_details = {
-            "transactionId": "4830*35*1672",
-            "phoneNo": "340-537-6594",
-            "date": "08.14.62",
-            "transactionType": "AMEX",
-            "rentalNo": "176461",
-            "operator": "Moyra Moyra",
-            "tuxConsult": "Moyra Moyra",
-            "phone": "340-537-6594",
-            "name": "Othilie Gounard",
-            "pfid": "8826"
-        }
-
-    def transaction_details_error(self):
-        return 'No transaction existed'
-
-class TransactionTestCases(unittest.TestCase):
-    def test_transaction_data(self):
-        obj = TransactionData()
-        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1672')
-        data = response.json()['transactionDetails']
-        self.assertEqual(data[0], obj.transaction_details)
-
-    # Check if no transaction details exists
-    def test_transaction_details(self):
-        obj = TransactionData()
-        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1345')
-        data = response.json()['error']
-        self.assertEqual(data,obj.transaction_details_error())
-
-    def test_customer_details(self):
-        obj = TransactionData()
-        response = requests.get('http://127.0.0.1:5000/transaction/4830*35*1672')
-        data = response.json()['customerDetails']
-        self.assertEqual(data, obj.customer_transaction_details)
 
 if __name__ == '__main__':
     unittest.main()
