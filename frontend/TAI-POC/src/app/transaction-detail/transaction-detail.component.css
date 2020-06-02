@@ -1,0 +1,19 @@
+table{
+    width: 100%;
+}
+
+.container{
+    width: 1000px!important;
+}
+
+.container-fluid{
+    padding: 0!important;
+}
+
+.wrapper{
+    margin-top: 10px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

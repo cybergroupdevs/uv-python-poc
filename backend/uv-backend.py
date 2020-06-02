@@ -1,30 +1,13 @@
 import logging
 from flask import Flask
+import pdb
 from flask import request,jsonify,Response
 from flask import make_response
 from functools import wraps
 import u2py
-import pdb
 import json
 from datetime import datetime
 from flask_cors import CORS, cross_origin
-
-import logging
-
-logger = logging.getLogger()
-formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
-
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.INFO)
-console_handler.setFormatter(formatter)
-
-file_handler = logging.FileHandler('./logs/api.log')
-file_handler.setFormatter(formatter)
-
-logger.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
-logger.addHandler(console_handler)
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisthesercretkey'
 CORS(app)
@@ -222,6 +205,7 @@ def transaction_credit_details(transaction_data, pmt_val):
 
     return credit_details
 
+<<<<<<< HEAD
 #############################################################
 ###################### Customer API #########################
 #############################################################
@@ -258,6 +242,32 @@ def customer_details():
 #############################################################
 
 @app.route('/consultant',methods=['GET'])
+=======
+########################
+#### CUSTOMER API   ####
+########################
+@app.route('/api/customer', methods=['GET'])
+def customer_details():
+	customer_id=request.args.get('customerId')
+	customer_file= u2py.File("CUSTOMERS")
+	data=[]
+	cmd="LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {} CUSTOMERS TOJSON".format(customer_id)
+	details=u2py.Command(cmd).run(capture=True)
+	details=json.loads(details)
+	del details['CUSTOMERS'][0]["_ID"]
+	values=details['CUSTOMERS'][0].values()
+	keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
+	customer_dict={key: value for key, value in zip(keys, values)}
+	data.append(customer_dict)
+	return Response(
+		json.dumps(data),
+		status=200,
+		mimetype='application/json')
+########################
+#### CONSULTANT API ####
+########################
+@app.route('/api/consultant',methods=['GET'])
+>>>>>>> 68e0723dc51df81ff96336b52771fd11805b289a
 def consultant_details():
     transaction_id=request.args.get('transactionId')
     transaction_file=u2py.File("TRANSACTION")
@@ -381,10 +391,16 @@ def customer_history():
 		status=200,
 		mimetype='application/json')
 
+<<<<<<< HEAD
 #############################################################
 #################### Commission API #########################
 #############################################################
 
+=======
+########################
+#### COMMISSION API ####
+########################
+>>>>>>> 68e0723dc51df81ff96336b52771fd11805b289a
 @app.route('/commission/<transaction_id>', methods=['GET'])
 def commission_list(transaction_id):
     commission_data_list = []
@@ -459,6 +475,7 @@ def credit_card_details(transactionId):
     }
     return Response(json.dumps(response), status=200, mimetype='application/json')
 
+<<<<<<< HEAD
 #############################################################
 ###################### Order API ############################
 #############################################################
@@ -848,6 +865,8 @@ def transaction_detail(transactionId):
             status=404,
             mimetype='application/json'
         )
+=======
+>>>>>>> 68e0723dc51df81ff96336b52771fd11805b289a
 
 if __name__ == '__main__':
     app.run()
