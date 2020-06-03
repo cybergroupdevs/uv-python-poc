@@ -15,9 +15,11 @@
     <div class="body">
         <div class="col-md-5 col-7">
             <h1>Enter transaction id</h1>
-            <input class="form-control" type="text" placeholder="Transaction Id" formControlName='transactionid'
-                style="text-align: right;" />
-            <button type="submit" class="btn btn-dark">Submit</button>
+            <form [formGroup]="transactionForm">
+                <input class="form-control" type="text" placeholder="Transaction Id" formControlName="transactionId"
+                    style="text-align: right;" />
+                <button type="button" class="btn btn-dark" (click)="getTransactionDetails()">Submit</button>
+            </form>
         </div>
     </div>
 </div>
