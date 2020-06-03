@@ -381,16 +381,10 @@ def customer_history():
 		status=200,
 		mimetype='application/json')
 
-<<<<<<< HEAD
 #############################################################
 #################### Commission API #########################
 #############################################################
 
-=======
-########################
-#### COMMISSION API ####
-########################
->>>>>>> frontend
 @app.route('/commission/<transaction_id>', methods=['GET'])
 def commission_list(transaction_id):
     commission_data_list = []
