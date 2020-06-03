@@ -7,21 +7,23 @@ import {MatTabsModule} from '@angular/material/tabs';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TransactionDetailComponent,customerDialog,consultantDialog} from './transaction-detail/transaction-detail.component';
+import { TransactionDetailComponent} from './transaction-detail/transaction-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainpageComponent } from './mainpage/mainpage.component';
-import { CutomerHistoryComponent } from './cutomer-history/cutomer-history.component';
 import { CommissionComponent } from './commission/commission.component';
+import { CustomerComponent } from './customer/customer.component';
+import { ConsultantComponent } from './consultant/consultant.component';
+import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TransactionDetailComponent,
     MainpageComponent,
-    customerDialog,
-    consultantDialog,
-    CutomerHistoryComponent,
-    CommissionComponent
+    CommissionComponent,
+    CustomerComponent,
+    ConsultantComponent,
+    CustomerHistoryComponent,
     
   ],
   imports: [
@@ -35,6 +37,6 @@ import { CommissionComponent } from './commission/commission.component';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[customerDialog,consultantDialog],
+  entryComponents:[],
 })
 export class AppModule { }
