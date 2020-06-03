@@ -1,0 +1,40 @@
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import {MatTableModule} from '@angular/material/table';
+import {MatDialogModule} from '@angular/material/dialog';
+import { HttpClientModule } from '@angular/common/http';
+import {MatTabsModule} from '@angular/material/tabs';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { TransactionDetailComponent,customerDialog,consultantDialog} from './transaction-detail/transaction-detail.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainpageComponent } from './mainpage/mainpage.component';
+import { CutomerHistoryComponent } from './cutomer-history/cutomer-history.component';
+import { CommissionComponent } from './commission/commission.component';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    TransactionDetailComponent,
+    MainpageComponent,
+    customerDialog,
+    consultantDialog,
+    CutomerHistoryComponent,
+    CommissionComponent
+    
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    MatTableModule,
+    MatDialogModule,
+    HttpClientModule,
+    MatTabsModule 
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+  entryComponents:[customerDialog,consultantDialog],
+})
+export class AppModule { }
