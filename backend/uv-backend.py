@@ -1,13 +1,30 @@
 import logging
 from flask import Flask
-import pdb
 from flask import request,jsonify,Response
 from flask import make_response
 from functools import wraps
 import u2py
+import pdb
 import json
 from datetime import datetime
 from flask_cors import CORS, cross_origin
+
+import logging
+
+logger = logging.getLogger()
+formatter = logging.Formatter('%(asctime)s %(name)s %(levelname)s %(message)s')
+
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+console_handler.setFormatter(formatter)
+
+file_handler = logging.FileHandler('./logs/api.log')
+file_handler.setFormatter(formatter)
+
+logger.setLevel(logging.DEBUG)
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'thisisthesercretkey'
 CORS(app)
@@ -377,7 +394,7 @@ def commission_list(transaction_id):
     employee_file = u2py.File(employee_file_name)
     command_line = f"LIST TRANSACTION WITH @ID = '{transaction_id}' COMMISSION.TYPE ITEM.NO RETAIL LIST.PRICE TRAN.TYPE TRAN.SUB.TYPE MRKDN MKUP.STORE.QTY DESC CommSaleAmt CommEmplId CommEmplType CommRate CommEmplPercentUsed RESERVATIONS RECEIVED.ASN DISCOUNT.TYPE TOJSON"
     transaction_data = json.loads(u2py.run(command_line, capture=True))['TRANSACTION'][0]
-
+    
     if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
         amount_list = calculate_amount(transaction_data)
         empsn_list = set_empsn_values(transaction_data, employee_file)
