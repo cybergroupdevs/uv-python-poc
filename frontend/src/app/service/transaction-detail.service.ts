@@ -23,7 +23,6 @@ export class TransactionDetailService {
     },
     error  => {
       console.log(error)
-      // return 0;
     })
   }
 }

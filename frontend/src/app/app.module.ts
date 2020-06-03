@@ -16,6 +16,8 @@ import { ConsultantComponent } from './consultant/consultant.component';
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 import { CreditCardComponent } from './credit-card/credit-card.component';
 import {Observable} from 'rxjs';
+import { TransactionComponent } from './transaction/transaction.component';
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +29,8 @@ import {Observable} from 'rxjs';
     ConsultantComponent,
     CustomerHistoryComponent,
     CreditCardComponent,
+    TransactionComponent,
+    OrderComponent,
     
   ],
   imports: [

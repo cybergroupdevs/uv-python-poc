@@ -18,6 +18,8 @@ export class TransactionDetailComponent implements OnInit {
   operator;
   pfid;
   saleCns;
+  rental;
+  postedOn;
   constructor(private _commissionService: CommissionService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
@@ -36,6 +38,8 @@ export class TransactionDetailComponent implements OnInit {
     this.name = details.customerDetails.name;
     this.pfid = details.customerDetails.pfid;
     this.saleCns = details.customerDetails.saleCns;
+    this.rental = details.customerDetails.rentalNo;
+    this.postedOn = details.customerDetails.date;
 
   }
   onChangeTab(event){

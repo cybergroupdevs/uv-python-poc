@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormBuilder,  Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { TransactionDetailService } from '../service/transaction-detail.service'
+import { TransactionDetailService } from '../service/transaction-detail.service';
 @Component({
   selector: 'app-mainpage',
   templateUrl: './mainpage.component.html',

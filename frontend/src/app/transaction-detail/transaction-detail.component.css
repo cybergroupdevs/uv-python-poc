@@ -18,3 +18,8 @@
 .div-center{
     margin:  auto;
 }
+.date{
+    color: rgb(109, 109, 109);
+    font-size: 13px;
+    /* font-family: monospace; */
+}
