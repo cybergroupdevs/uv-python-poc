@@ -21,7 +21,6 @@ export class CommissionComponent implements OnInit {
       if(data.toString() == 'Commission'){
         this._commissionService.get('4830*35*1672').subscribe((data) =>{
           if(data['error']){
-            console.log('error')
             this.errorMsg = data['error']
           }
           else{
