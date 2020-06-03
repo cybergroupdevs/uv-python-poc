@@ -1,9 +1,9 @@
 <div *ngIf="errorMsg else commissionDataTable;">
-    <p>hello</p>
     <div class="errorMsg">{{ errorMsg }}</div>
 </div>
 
 <ng-template #commissionDataTable>
+    <p></p>
     <table mat-table [dataSource]="commissionData" class="mat-elevation-z8 z-depth-5">
         <ng-container matColumnDef="class">
             <th mat-header-cell *matHeaderCellDef class="text-right">Class </th>

@@ -20,4 +20,8 @@ export class CommissionService {
   changeActiveTab(value){
     this.activeTab.next(value);
   }
+
+  creditCardDetails(transactionId: string){
+    return this._http.get(`${this.baseUri}/transaction/${transactionId}/creditCard/authentication`)
+  }
 }

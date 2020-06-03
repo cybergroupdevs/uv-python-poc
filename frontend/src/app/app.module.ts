@@ -14,6 +14,7 @@ import { CommissionComponent } from './commission/commission.component';
 import { CustomerComponent } from './customer/customer.component';
 import { ConsultantComponent } from './consultant/consultant.component';
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
+import { CreditCardComponent } from './credit-card/credit-card.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { CustomerHistoryComponent } from './customer-history/customer-history.co
     CustomerComponent,
     ConsultantComponent,
     CustomerHistoryComponent,
+    CreditCardComponent,
     
   ],
   imports: [
