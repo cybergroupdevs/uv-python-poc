@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router , ActivatedRoute, NavigationExtras} from '@angular/router';
+import { map, filter } from 'rxjs/operators';
+import {Observable} from 'rxjs';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 const transactionData: Transaction[] = [
   {class: '0026', sku: '80000', retail: '16.00', qun:'1', desc:'PAINT WAIST-SEAT',qtrtn:''},
@@ -11,10 +14,22 @@ const transactionData: Transaction[] = [
   styleUrls: ['./transaction-detail.component.css']
 })
 export class TransactionDetailComponent implements OnInit {
+private sub;
+state$: Observable<object>;
+  constructor(public dialog:MatDialog, private activatedRoute: ActivatedRoute) { }
 
-  constructor(public dialog:MatDialog) { }
+  // ngOnInit() {
+    // this.sub = this.activatedRoute
+    // .data
+    // .subscribe(v => console.log(v));
+    // this.state$ = this.activatedRoute.paramMap
+    // .pipe(map(() => window.history.state))
+  // }
+  ngOnInit(): void {
 
-  ngOnInit() {
+      this.activatedRoute.queryParams.subscribe(params => {
+        console.log(JSON.parse(params["user"]));
+      });
   }
 
   columnHeadings :string[] = ['class','sku','retail','qun','desc','qtrtn'];

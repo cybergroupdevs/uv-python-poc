@@ -4,9 +4,9 @@ import {CutomerHistoryComponent} from '../app/cutomer-history/cutomer-history.co
 import {TransactionDetailComponent} from '../app/transaction-detail/transaction-detail.component'
 import {MainpageComponent} from '../app/mainpage/mainpage.component'
 const routes: Routes = [
-  {path: 'customer/history' , component: CutomerHistoryComponent},
-  {path: '',component:MainpageComponent},
-  {path: 'transaction',component:TransactionDetailComponent}
+  {path: 'customer/history' , component : CutomerHistoryComponent},
+  {path: '', component : MainpageComponent},
+  {path: 'transaction', component : TransactionDetailComponent}
 ];
 
 @NgModule({
