@@ -14,11 +14,11 @@ export class CommissionComponent implements OnInit {
   
 
   ngOnInit() {
-    this._commissionService.get('2996*25*7652').subscribe((data) =>{
-      this.commissionData = data['commissionList']
-      this.commissionHeading = Object.keys(this.commissionData[0])
+    // this._commissionService.get('2996*25*7652').subscribe((data) =>{
+    //   this.commissionData = data['commissionList']
+    //   this.commissionHeading = Object.keys(this.commissionData[0])
       
-    })
+    // })
   }
 
 }

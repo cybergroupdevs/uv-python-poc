@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "TAI-POC"
+  "defaultProject": "TAI-POC",
+  "cli": {
+    "analytics": false
+  }
 }

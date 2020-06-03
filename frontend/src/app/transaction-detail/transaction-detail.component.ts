@@ -14,7 +14,7 @@ const transactionData: Transaction[] = [
 })
 export class TransactionDetailComponent implements OnInit {
 
-  constructor(public dialog:MatDialog, private _commissionSerivce: CommissionService) { }
+  constructor( private _commissionSerivce: CommissionService) { }
 
   ngOnInit() {
   }
@@ -31,42 +31,6 @@ export class TransactionDetailComponent implements OnInit {
       this.data = data['commissionList']
       this.columnHeadings = Object.keys(this.data[0])
     })
-  }
-
-  customerDialog(): void {
-    const dialogRef = this.dialog.open(customerDialog, {
-      width: '60%',
-      
-    });
-}
-consultantDialog():void{
-  const dialogRef =this.dialog.open(consultantDialog,{
-    width:'450px',
-  });
-}
-}
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: 'customerDialog.html',
-})
-export class customerDialog {
-  constructor(
-    public dialogRef: MatDialogRef<customerDialog>,
-    ) {}
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-}
-@Component({
-  selector: 'dialog-overview-example-dialog',
-  templateUrl: 'consultantDialog.html',
-})
-export class consultantDialog {
-  constructor(
-    public dialogRef: MatDialogRef<consultantDialog>,
-    ) {}
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 }
 export interface Transaction{
