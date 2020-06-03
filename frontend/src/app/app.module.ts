@@ -37,6 +37,6 @@ import { CustomerHistoryComponent } from './customer-history/customer-history.co
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents:[],
+  entryComponents:[CustomerComponent,TransactionDetailComponent],
 })
 export class AppModule { }

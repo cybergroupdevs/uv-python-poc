@@ -12,7 +12,7 @@ export class CustomerService {
   get(customerId){
     let params= new HttpParams();
     params=params.append("customerId",customerId)
-    return this.http.get(this.baseUri+'api/customer',{
+    return this.http.get(this.baseUri+'/api/customer',{
       params:params
     });
   }

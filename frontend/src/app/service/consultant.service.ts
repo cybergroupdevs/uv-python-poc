@@ -13,7 +13,7 @@ export class ConsultantService {
     console.log(consultantId)
     let params= new HttpParams();
     params=params.append("transactionId",consultantId)
-    return this.http.get(this.baseUri+'api/consultant',{
+    return this.http.get(this.baseUri+'/api/consultant',{
       params:params
     });
   }

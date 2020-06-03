@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import{CustomerService} from '../service/customer.service'
 
 @Component({
@@ -9,17 +8,19 @@ import{CustomerService} from '../service/customer.service'
 })
 export class CustomerComponent implements OnInit {
  customerId:string
+ customerDetails:any
   constructor(
-    public dialogRef: MatDialogRef<CustomerComponent>,private customerService: CustomerService
+    private customerService: CustomerService
     ) {}
     ngOnInit(){
-        this.customerId="9782"
-        this.customerService.get("9782").subscribe((res:any)=>{
-        })
-      
+        
     }
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+    get(){
+      this.customerId="9782"
+        this.customerService.get("9782").subscribe((res:any)=>{
+          console.log(res)
+          this.customerDetails=Object.values(res[0])
+        })
+    }
 
 }

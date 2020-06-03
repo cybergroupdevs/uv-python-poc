@@ -10,14 +10,16 @@ export class ConsultantComponent implements OnInit {
   transactionId:any
   operator:any
   type:any
+  keys:any
+  data:any
   constructor(
     private consultantService:ConsultantService
     ) {}
     ngOnInit() {
-      console.log("----hi----")
       this.transactionId="5334*24*1373"
           this.consultantService.get(this.transactionId).subscribe((res:any)=>{
-            console.log(res[0])
+            this.data=res[0]
+            this.keys = Object.keys(res[0])
           })
       
     }

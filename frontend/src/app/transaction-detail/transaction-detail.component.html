@@ -73,7 +73,7 @@
         <mat-tab label="Transaction">Content 1</mat-tab>
         <mat-tab label="Commission"><commission></commission></mat-tab>
         <mat-tab label="Consultant"><app-consultant></app-consultant></mat-tab>
-        <mat-tab label="Customer">Content 4</mat-tab>
+        <mat-tab label="Customer" (click)="get()"><app-customer></app-customer></mat-tab>
       </mat-tab-group>
       <!-- <table mat-table [dataSource]="data" class="mat-elevation-z8 ">
         <ng-container matColumnDef="class">
