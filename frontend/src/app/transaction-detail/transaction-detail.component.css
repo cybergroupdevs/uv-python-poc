@@ -1,0 +1,16 @@
+.container{
+    width: 1500px!important;
+}
+
+.container-fluid{
+    padding: 0!important;
+}
+
+.wrapper{
+    margin-top: 10px;
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
