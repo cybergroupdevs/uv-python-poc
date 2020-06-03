@@ -1,11 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { CommissionService } from '../service/commission.service'
-
-const transactionData: Transaction[] = [
-  {class: '0026', sku: '80000', retail: '16.00', qun:'1', desc:'PAINT WAIST-SEAT',qtrtn:''},
-  {class: '0026', sku: '80000', retail: '13.00', qun:'1', desc:'PAINT PLAIN BOTTOM',qtrtn:''}
-]
+import { CommissionService } from '../service/commission.service';
 
 @Component({
   selector: 'transaction-detail',
@@ -14,30 +8,12 @@ const transactionData: Transaction[] = [
 })
 export class TransactionDetailComponent implements OnInit {
 
-  constructor( private _commissionSerivce: CommissionService) { }
+  constructor(private _commissionService: CommissionService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  columnHeadings :string[] = ['class','sku','retail','qun','desc','qtrtn'];
-
-  commissionData : Boolean = false;
-  
-  data = transactionData;
-
-  commissionDetails(){
-    this._commissionSerivce.get('2996*25*7652').subscribe((data) =>{
-      this.commissionData = true;
-      this.data = data['commissionList']
-      this.columnHeadings = Object.keys(this.data[0])
-    })
+  onChangeTab(event){
+    this._commissionService.changeActiveTab(event['tab']['textLabel'])
   }
 }
-export interface Transaction{
-  class: String,
-  sku: String,
-  retail: String,
-  qun: String,
-  desc: String,
-  qtrtn: String
-}
+
