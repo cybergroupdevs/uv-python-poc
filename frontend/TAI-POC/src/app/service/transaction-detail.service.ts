@@ -18,12 +18,13 @@ export class TransactionDetailService {
      this.http.get(`http://localhost:5000/transaction/${transactionId}`)
      .subscribe((res: any) => {
       // this.saveData(res)
+      // console.log(res)
       let navigationExtras: NavigationExtras = {
         queryParams: {
             "user": JSON.stringify(res)
         }
       };
-  
+      // console.log(navigationExtras)
       this.router.navigate(["/transaction"],  navigationExtras);
       // this.router.navigate(['/transaction'] ,{state: {v: res}});
     },
