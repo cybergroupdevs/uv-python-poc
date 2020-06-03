@@ -3,7 +3,7 @@ table{
 }
 
 .container{
-    width: 1000px!important;
+    width: 1500px!important;
 }
 
 .container-fluid{
@@ -16,4 +16,12 @@ table{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.mat-cell{
+    padding: 0px 8px 0px 0px;
+}
+
+.mat-header-cell{
+    padding: 0px 8px 0px 0px;
 }
