@@ -1,107 +1,96 @@
 <div class="container-fluid">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Website name</a>
-    </nav>
-    <div class="container">
-      <div class="p-4 d-flex justify-content-between">
-        <p>Transaction Details</p>
-        <button class="btn btn-dark">Close</button>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-6">
-              <p>Transaction</p>
-            </div>
-            <div class="col-md-6">
-              <p># 3304*32*6579</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p>Tran. type</p>
-            </div>
-            <div class="col-md-6">
-              <p>Sale</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p>Operator</p>
-            </div>
-            <div class="col-md-6">
-              <p>Brain Taylor</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p>SaleCNS</p>
-            </div>
-            <div class="col-md-6">
-              <p>Travis Pulfard</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="row">
-            <div class="col-md-6">
-              <p>Phone</p>
-            </div>
-            <div class="col-md-6">
-              <p>901-234-2321</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p>Name</p>
-            </div>
-            <div class="col-md-6">
-              <p>Ashley Simpson</p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-6">
-              <p>PFID</p>
-            </div>
-            <div class="col-md-6">
-              <p>2323232323</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <mat-tab-group mat-align-tabs="center">
-        <mat-tab label="Transaction">Content 1</mat-tab>
-        <mat-tab label="Commission"><commission></commission></mat-tab>
-        <mat-tab label="Consultant"><app-consultant></app-consultant></mat-tab>
-        <mat-tab label="Customer" (click)="get()"><app-customer></app-customer></mat-tab>
-      </mat-tab-group>
-      <!-- <table mat-table [dataSource]="data" class="mat-elevation-z8 ">
-        <ng-container matColumnDef="class">
-          <th mat-header-cell *matHeaderCellDef>Class </th>
-          <td mat-cell *matCellDef="let element"> {{element.class}} </td>
-        </ng-container>
-        <ng-container matColumnDef="sku">
-          <th mat-header-cell *matHeaderCellDef> Sku </th>
-          <td mat-cell *matCellDef="let element"> {{element.sku}} </td>
-        </ng-container>
-        <ng-container matColumnDef="retail">
-          <th mat-header-cell *matHeaderCellDef> Retail </th>
-          <td mat-cell *matCellDef="let element"> {{element.retail}} </td>
-        </ng-container>
-        <ng-container matColumnDef="qun">
-          <th mat-header-cell *matHeaderCellDef> Qun </th>
-          <td mat-cell *matCellDef="let element"> {{element.qun}} </td>
-        </ng-container>
-        <ng-container matColumnDef="desc">
-          <th mat-header-cell *matHeaderCellDef> Desc </th>
-          <td mat-cell *matCellDef="let element"> {{element.desc}} </td>
-        </ng-container>
-        <ng-container matColumnDef="qtrtn">
-          <th mat-header-cell *matHeaderCellDef> Qtrtn </th>
-          <td mat-cell *matCellDef="let element"> {{element.qtrtn}} </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="columnHeadings"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnHeadings;"></tr>
-      </table> -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Website name</a>
+  </nav>
+  <div class="container">
+    <div class="p-4 d-flex justify-content-between">
+      <p>Transaction Details</p>
+      <button class="btn btn-dark">Close</button>
     </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Transaction</p>
+          </div>
+          <div class="col-md-6">
+            <p># 3304*32*6579</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Tran. type</p>
+          </div>
+          <div class="col-md-6">
+            <p>Sale</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Operator</p>
+          </div>
+          <div class="col-md-6">
+            <p>Brain Taylor</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>SaleCNS</p>
+          </div>
+          <div class="col-md-6">
+            <p>Travis Pulfard</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Phone</p>
+          </div>
+          <div class="col-md-6">
+            <p>901-234-2321</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Name</p>
+          </div>
+          <div class="col-md-6">
+            <p>Ashley Simpson</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>PFID</p>
+          </div>
+          <div class="col-md-6">
+            <p>2323232323</p>
+          </div>
+        </div>
+        <div class="row w-75">
+          <div class="col-md-6">
+            <p>Search by phone no</p>
+          </div>
+          <div class="col-md-6">
+            <input class="form-control" type="text" placeholder="901-234-2321">
+            <div>
+            <button class="btn btn-dark">Search</button>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
+      <mat-tab label="Transaction">Content 1</mat-tab>
+      <mat-tab label="Commission">
+        <commission></commission>
+      </mat-tab>
+      <mat-tab label="Consultant">
+        <app-consultant></app-consultant>
+      </mat-tab>
+      <mat-tab label="Customer">
+        <app-customer></app-customer>
+      </mat-tab>
+    </mat-tab-group>
   </div>
+</div>

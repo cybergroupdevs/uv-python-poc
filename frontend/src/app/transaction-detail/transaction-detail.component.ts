@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Inject } from '@angular/core';
+import { CommissionService } from '../service/commission.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { CommissionService } from '../service/commission.service'
-import {CustomerComponent} from '../customer/customer.component'
-const transactionData: Transaction[] = [
-  {class: '0026', sku: '80000', retail: '16.00', qun:'1', desc:'PAINT WAIST-SEAT',qtrtn:''},
-  {class: '0026', sku: '80000', retail: '13.00', qun:'1', desc:'PAINT PLAIN BOTTOM',qtrtn:''}
-]
+import{CustomerService} from '../service/customer.service'
+""
 
 @Component({
   selector: 'transaction-detail',
@@ -14,33 +11,34 @@ const transactionData: Transaction[] = [
 })
 export class TransactionDetailComponent implements OnInit {
 
-  constructor( private _commissionSerivce: CommissionService,private customerComponent: CustomerComponent) { }
+  constructor(private _commissionService: CommissionService,public dialog:MatDialog,private _CustomerService:CustomerService) { }
+  data=[]
+  ngOnInit() { }
 
-  ngOnInit() {
+  onChangeTab(event){
+    this._commissionService.changeActiveTab(event['tab']['textLabel'])
   }
-
-  columnHeadings :string[] = ['class','sku','retail','qun','desc','qtrtn'];
-
-  commissionData : Boolean = false;
-  
-  data = transactionData;
-  get()
-  {
-    this.customerComponent.get()
-  }
-  commissionDetails(){
-    this._commissionSerivce.get('2996*25*7652').subscribe((data) =>{
-      this.commissionData = true;
-      this.data = data['commissionList']
-      this.columnHeadings = Object.keys(this.data[0])
+  openDialog(): void {
+    this._CustomerService.list("415-566-9525","0","5").subscribe((res:any)=>{
+      this.data=res
     })
+    const dialogRef = this.dialog.open(TransactionDetailComponent, {
+      width: '250px',
+      data: {data:this.data}
+    });
   }
 }
-export interface Transaction{
-  class: String,
-  sku: String,
-  retail: String,
-  qun: String,
-  desc: String,
-  qtrtn: String
-}
+// @Component({
+//   selector: 'customer-dialog',
+//   templateUrl: '../customer-history/customer-history.html',
+// })
+// export class customerHistory {
+
+//   constructor(
+//     public dialogRef: MatDialogRef<customerHistory>,
+//     @Inject(MAT_DIALOG_DATA) public data:any) {}
+
+//   onNoClick(): void {
+//     this.dialogRef.close();
+//   }
+// }

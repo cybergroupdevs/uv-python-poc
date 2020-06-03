@@ -9,3 +9,13 @@
 table{
     width: 100%;
 }
+
+.errorMsg{
+    text-align: center;
+    padding-top: 10px;
+}
+
+.other-details{
+    padding-top: 20px;
+    width: 300px;
+}
