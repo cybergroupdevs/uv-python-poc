@@ -3,11 +3,11 @@ import { FormGroup, FormControl, FormBuilder,  Validators } from '@angular/forms
 import { Router } from '@angular/router';
 import { TransactionDetailService } from '../service/transaction-detail.service';
 @Component({
-  selector: 'app-mainpage',
-  templateUrl: './mainpage.component.html',
-  styleUrls: ['./mainpage.component.css']
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
-export class MainpageComponent implements OnInit {
+export class HomeComponent implements OnInit {
   constructor(private router: Router, private fb: FormBuilder, private transactionDetailService: TransactionDetailService) { }
   transactionForm = new FormGroup({
     transactionId : new FormControl('',[Validators.required])

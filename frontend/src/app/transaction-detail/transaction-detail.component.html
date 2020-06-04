@@ -78,7 +78,11 @@
       </div>
       <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
         <mat-tab label="Transaction"><app-transaction></app-transaction></mat-tab>
-        <mat-tab label="Commission"><commission></commission></mat-tab>
+        <mat-tab label="Commission">
+          <div class="p-3">
+            <commission></commission>
+          </div>
+        </mat-tab>
         <mat-tab label="Consultant"><app-consultant></app-consultant></mat-tab>
         <mat-tab label="Customer">Content 4</mat-tab>
         <mat-tab label="Order"><app-order></app-order></mat-tab>
