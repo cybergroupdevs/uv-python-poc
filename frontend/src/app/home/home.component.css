@@ -19,8 +19,6 @@ button{
 }
 .main{
     overflow-x: hidden;
-
-    /* padding-bottom: 70px; */
 }
 .flip-card-front{
     opacity: 0.77;

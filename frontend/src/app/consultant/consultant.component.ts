@@ -13,15 +13,5 @@ export class ConsultantComponent implements OnInit {
   constructor(
     private consultantService:ConsultantService
     ) {}
-    ngOnInit() {
-      console.log("----hi----")
-      this.transactionId="5334*24*1373"
-          this.consultantService.get(this.transactionId).subscribe((res:any)=>{
-            console.log(res[0])
-          })
-      
-    }
-
-
-
+    ngOnInit() { }
 }
