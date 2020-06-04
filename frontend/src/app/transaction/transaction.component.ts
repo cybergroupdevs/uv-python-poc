@@ -10,12 +10,15 @@ import { Router , ActivatedRoute, NavigationExtras} from '@angular/router';
 })
 export class TransactionComponent implements OnInit {
   data;
-  transactionDetails=[];
+  transactionHeading=[];
+  transactionData;
   constructor(private _commissionService: CommissionService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
       this.data = JSON.parse(params["user"]);
+      this.transactionData = this.data['transactionDetails'];
+      this.transactionHeading = Object.keys(this.transactionData[0])
     });
   }
 

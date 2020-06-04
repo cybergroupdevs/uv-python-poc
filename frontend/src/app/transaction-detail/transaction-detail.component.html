@@ -83,5 +83,15 @@
         <mat-tab label="Customer">Content 4</mat-tab>
         <mat-tab label="Order"><app-order></app-order></mat-tab>
       </mat-tab-group>
+      <div class="discount-container">
+      <span class="discount" (click)="showDiscountDetails()">Discount?</span>
+      <span *ngIf=discountPct>Pct: {{discountPct}}</span>
+      <span *ngIf=discountSubtotal>Subtotal:{{discountSubtotal}}</span>
+      </div>
+      <div class="refund-container">
+        <span class="refund" (click)="showRefundDetails()">Refund?</span>
+        <span *ngIf=refundManagerName>{{ refundManagerName | titlecase }}</span>
+        <span *ngIf=refundTicketNumber>{{ refundTicketNumber | titlecase}}</span>
+      </div>
     </div>
   </div>
