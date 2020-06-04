@@ -11,7 +11,7 @@ import { TransactionDetailComponent } from '../transaction-detail/transaction-de
 export class TransactionDetailService {
 
   constructor(private http: HttpClient,private router: Router) { }
-  getTransactionData(transactionId){
+  get(transactionId){
      this.http.get(`http://localhost:5000/transaction/${transactionId}`)
      .subscribe((res: any) => {
       let navigationExtras: NavigationExtras = {

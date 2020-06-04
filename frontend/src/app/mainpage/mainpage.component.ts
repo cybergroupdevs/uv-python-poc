@@ -16,6 +16,6 @@ export class MainpageComponent implements OnInit {
   }
   async getTransactionDetails(){
     var transactionId = this.transactionForm.value.transactionId
-     var data = await this.transactionDetailService.getTransactionData(transactionId)
+     var data = await this.transactionDetailService.get(transactionId)
   }
 }
