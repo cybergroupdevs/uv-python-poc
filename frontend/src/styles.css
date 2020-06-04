@@ -8,14 +8,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding-top: 10px;
 }
 
-.cell-padding{
-    padding: 0px 8px 0px 0px;
-}
-
-.header-padding{
-    padding: 0px 8px 0px 0px;
-}
-
 table{
     width: 100%;
 }
