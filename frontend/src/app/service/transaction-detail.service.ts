@@ -12,17 +12,7 @@ export class TransactionDetailService {
 
   constructor(private http: HttpClient,private router: Router) { }
   get(transactionId){
-     this.http.get(`http://localhost:5000/transaction/${transactionId}`)
-     .subscribe((res: any) => {
-      let navigationExtras: NavigationExtras = {
-        queryParams: {
-            "user": JSON.stringify(res)
-        }
-      };
-      this.router.navigate(["/transaction"],  navigationExtras);
-    },
-    error  => {
-      console.log(error)
-    })
+    return this.http.get(`http://localhost:5000/transaction/${transactionId}`)
+
   }
 }

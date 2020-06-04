@@ -16,7 +16,7 @@ export class TransactionComponent implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.data = JSON.parse(params["user"]);
+      this.data = JSON.parse(params["transactionData"]);
       this.transactionData = this.data['transactionDetails'];
       this.transactionHeading = Object.keys(this.transactionData[0])
     });

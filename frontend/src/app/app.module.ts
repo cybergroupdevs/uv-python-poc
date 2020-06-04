@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,7 +15,6 @@ import { CustomerComponent } from './customer/customer.component';
 import { ConsultantComponent } from './consultant/consultant.component';
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 import { CreditCardComponent } from './credit-card/credit-card.component';
-import {Observable} from 'rxjs';
 import { TransactionComponent } from './transaction/transaction.component';
 import { OrderComponent } from './order/order.component';
 

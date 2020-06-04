@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderDetailService } from '../service/order-detail.service'
+import { Router , ActivatedRoute, NavigationExtras} from '@angular/router';
 
 
 @Component({
@@ -9,7 +10,7 @@ import { OrderDetailService } from '../service/order-detail.service'
 })
 export class OrderComponent implements OnInit {
 
-  constructor(private orderDetailService: OrderDetailService) { }
+  constructor(private orderDetailService: OrderDetailService, private activatedRoute: ActivatedRoute) { }
   orderNo:string;
   shipDate;
   shipTo:string;
@@ -22,8 +23,13 @@ export class OrderComponent implements OnInit {
   audit:string;
   returnAddress:string;
   email:string;
-  transactionId='2895*50*1709';
+  transactionId;
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      let transactionHeaderDetails = JSON.parse(params["transactionData"]);
+      this.transactionId = transactionHeaderDetails.customerDetails['transactionId'];
+    });
+    
     this.orderDetailService.get(this.transactionId)
     .subscribe((res: any) => {
       this.setValues(res['orderDetail'])

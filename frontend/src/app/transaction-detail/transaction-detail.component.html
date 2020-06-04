@@ -89,13 +89,13 @@
       </mat-tab-group>
       <div class="discount-container">
       <span class="discount" (click)="showDiscountDetails()">Discount?</span>
-      <span *ngIf=discountPct>Promo Code: {{discountPct}}</span>
-      <span *ngIf=discountSubtotal>Subtotal:{{discountSubtotal}}</span>
+      <span *ngIf=discountPct>Pct: {{discountPct}}</span>
+      <span *ngIf=discountSubtotal>Subtotal:{{discountSubtotal | number:'.1-5'}}</span>
       </div>
       <div class="refund-container">
         <span class="refund" (click)="showRefundDetails()">Refund?</span>
-        <span *ngIf=refundManagerName>{{ refundManagerName | titlecase }}</span>
-        <span *ngIf=refundTicketNumber>{{ refundTicketNumber | titlecase}}</span>
+        <span *ngIf=refundManagerName>{{refundManagerName | titlecase}}</span>
+        <span *ngIf=refundTicketNumber>{{refundTicketNumber | titlecase}}</span>
       </div>
     </div>
   </div>

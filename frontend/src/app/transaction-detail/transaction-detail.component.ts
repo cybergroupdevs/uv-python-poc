@@ -30,23 +30,11 @@ export class TransactionDetailComponent implements OnInit {
   refundTicketNumber;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.headerData = JSON.parse(params["user"]);
+      this.headerData = JSON.parse(params["transactionData"]);
       this.setValues(this.headerData)
     });
    }
 
-   setValues(details){
-    this.transactionId = details.customerDetails['transactionId'];
-    this.phoneNo = details.customerDetails['phoneNo'];
-    this.transactionType = details.customerDetails['transactionType'];
-    this.operator = details.customerDetails['operator'];
-    this.name = details.customerDetails['name'];
-    this.pfid = details.customerDetails['pfid'];
-    this.saleCns = details.customerDetails['saleCns'];
-    this.rental = details.customerDetails['rentalNo'];
-    this.postedOn = details.customerDetails['date'];
-
-  }
   showDiscountDetails(){
     this.discountService.get(this.transactionId)
     .subscribe((res:any)=>{
@@ -60,6 +48,19 @@ export class TransactionDetailComponent implements OnInit {
       this.refundManagerName = res.refundData['refundMgrName'];
       this.refundTicketNumber = res.refundData['ticketNumber'];
     })
+  }
+
+  setValues(details){
+    this.transactionId = details.customerDetails['transactionId'];
+    this.phoneNo = details.customerDetails['phoneNo'];
+    this.transactionType = details.customerDetails['transactionType'];
+    this.operator = details.customerDetails['operator'];
+    this.name = details.customerDetails['name'];
+    this.pfid = details.customerDetails['pfid'];
+    this.saleCns = details.customerDetails['saleCns'];
+    this.rental = details.customerDetails['rentalNo'];
+    this.postedOn = details.customerDetails['date'];
+
   }
   onChangeTab(event){
     this._commissionService.changeActiveTab(event['tab']['textLabel'])
