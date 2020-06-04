@@ -34,7 +34,6 @@ export class CustomerHistoryComponent implements OnInit {
     }
   }
   pagination(event) {
-    console.log(event)
     this.pageIndex = event.pageIndex
     this.pageSize = event.pageSize
     let phone = this.phoneNo
