@@ -13,6 +13,7 @@ export class HomeComponent implements OnInit {
   transactionForm = new FormGroup({
     transactionId : new FormControl('',[Validators.required])
  });
+ errorMessage;
   ngOnInit(): void {
   }
   async getTransactionDetails(){
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
       this.router.navigate(["/transaction"],  navigationExtras);
     },
     error  => {
-      console.log(error)
+      this.errorMessage = error.error['error'];
     })
   }
 }

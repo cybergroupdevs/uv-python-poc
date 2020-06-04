@@ -1,4 +1,8 @@
 <div class="main">
+  <div *ngIf="errorMessage else orderTable;">
+    <div class="errorMessage">{{ errorMessage }}</div>
+</div>
+<ng-template #orderTable>
 <div class="order-screen row">
 <div class="col-md-6">
     <div class="row w-75">
@@ -86,4 +90,5 @@
   </div>
   </div>
   <span class="flag">{{audit | titlecase}}</span>
+  </ng-template>
 </div>

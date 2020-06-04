@@ -18,6 +18,7 @@
             <form [formGroup]="transactionForm">
                 <input class="form-control" type="text" placeholder="Transaction Id" formControlName="transactionId"
                     style="text-align: right;" />
+                    <div *ngIf="errorMessage" class="error">{{errorMessage}}</div>
                 <button type="button" class="btn btn-dark" (click)="getTransactionDetails()">Submit</button>
             </form>
         </div>

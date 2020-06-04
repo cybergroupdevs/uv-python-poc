@@ -23,7 +23,10 @@ button{
 .flip-card-front{
     opacity: 0.77;
 }
-
+.error{
+    color: red;
+    font-family: monospace;
+}
 .intro-div{
     width: 100%;
     background-color: #202020;
@@ -188,5 +191,4 @@ span{
     .flip-card-inner,.flip-card{
         width: 100%;
     }
-
  }
