@@ -1,3 +1,6 @@
-<ul>
-    <li *ngFor="let key of keys"><h5>{{ key| uppercase}}</h5>  <b>{{data[key]}}</b></li>
-  </ul>
+  <div class="container">
+    <div class="row" *ngFor="let key of keys">
+      <div class="col">{{key| uppercase}}</div>
+      <div class="col">{{data[key]}}</div>
+    </div>
+  </div>

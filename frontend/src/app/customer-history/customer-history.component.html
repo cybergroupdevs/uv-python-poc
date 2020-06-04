@@ -1,1 +1,32 @@
-<p>{{data}}</p>
+<div *ngIf="!history else customerDataTable">
+    <span span style="color:black;font-weight:bold">No customer history available for {{phoneNo}}</span>
+</div>
+<ng-template #customerDataTable>
+    <table id="customerHistory" mat-table [dataSource]="customerData" class="mat-elevation-z10 z-depth-8">
+        <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef class="text-right">First Name</th>
+            <td mat-cell *matCellDef="let customer" class="text-right"> {{customer.firstName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Last Name</th>
+            <td mat-cell *matCellDef="let customer" class="text-right">{{customer.lastName}}</td>
+        </ng-container>
+        <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Address</th>
+            <td mat-cell *matCellDef="let customer" class="text-right">{{customer.address}}</td>
+        </ng-container>
+        <ng-container matColumnDef="city">
+            <th mat-header-cell *matHeaderCellDef class="text-right">City</th>
+            <td mat-cell *matCellDef="let customer" class="text-right">{{customer.city}}</td>
+        </ng-container>
+        <ng-container matColumnDef="pf">
+            <th mat-header-cell *matHeaderCellDef class="text-right">PF</th>
+            <td mat-cell *matCellDef="let customer" class="text-right">{{customer.pf}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="customerHeading"></tr>
+        <tr mat-row *matRowDef="let row; columns: customerHeading;"></tr>
+    </table>
+    <mat-paginator [length]="length" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]"
+        (page)="pagination($event)">
+    </mat-paginator>
+</ng-template>

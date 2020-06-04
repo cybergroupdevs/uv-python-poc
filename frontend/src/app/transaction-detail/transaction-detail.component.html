@@ -72,10 +72,10 @@
             <p>Search by phone no</p>
           </div>
           <div class="col-md-6">
-            <input class="form-control" type="text" placeholder="901-234-2321">
-            <div>
-            <button class="btn btn-dark">Search</button>
-          </div>
+            <form [formGroup]="phoneNoForm">
+              <input class="form-control" type="text" placeholder="901-234-2321" name="phoneNo" formControlName="phoneNo">
+                <button class="btn btn-dark" type="submit" (click)="openDialog()">Search</button>
+            </form>
           </div>
         </div>
       </div>

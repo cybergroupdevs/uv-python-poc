@@ -1,13 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {MatTableModule} from '@angular/material/table';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabsModule } from '@angular/material/tabs';
 
+import { FormsModule,ReactiveFormsModule } from '@angular/forms'
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TransactionDetailComponent} from './transaction-detail/transaction-detail.component';
+import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainpageComponent } from './mainpage/mainpage.component';
 import { CommissionComponent } from './commission/commission.component';
@@ -35,7 +37,10 @@ import { CreditCardComponent } from './credit-card/credit-card.component';
     MatTableModule,
     MatDialogModule,
     HttpClientModule,
-    MatTabsModule 
+    MatTabsModule,
+    MatPaginatorModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],
