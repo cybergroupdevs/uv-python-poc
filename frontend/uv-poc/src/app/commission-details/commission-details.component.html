@@ -1,0 +1,69 @@
+<div *ngIf="errorMsg else commissionDataTable;">
+    <div class="errorMsg">{{ errorMsg }}</div>
+</div>
+
+<ng-template #commissionDataTable>
+    <p></p>
+    <table mat-table [dataSource]="commissionData" class="mat-elevation-z8 z-depth-5">
+        <ng-container matColumnDef="class">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Class</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.class}}</td>
+        </ng-container>
+        <ng-container matColumnDef="sku">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Sku</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.sku}}</td>
+        </ng-container>
+        <ng-container matColumnDef="retail">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Retail</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.retail}}</td>
+        </ng-container>
+        <ng-container matColumnDef="mkdn">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Markdown</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.mkdn}}</td>
+        </ng-container>
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef class="text-right pr-4">Quantity</th>
+            <td mat-cell *matCellDef="let commission" class="text-right pr-4">{{commission.quantity}}</td>
+        </ng-container>
+        <ng-container matColumnDef="desc">
+            <th mat-header-cell *matHeaderCellDef class="text-left">Description</th>
+            <td mat-cell *matCellDef="let commission" class="text-left">{{commission.desc}}</td>
+        </ng-container>
+        <ng-container matColumnDef="commissionType">
+            <th mat-header-cell *matHeaderCellDef>Commission Type</th>
+            <td mat-cell *matCellDef="let commission">{{commission.commissionType}}</td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Amount</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.amount}}</td>
+        </ng-container>
+        <ng-container matColumnDef="employeePercentage">
+            <th mat-header-cell *matHeaderCellDef class="text-right">Employee (%)</th>
+            <td mat-cell *matCellDef="let commission" class="text-right">{{commission.employeePercentage}}</td>
+        </ng-container>
+        <ng-container matColumnDef="salePercentage">
+            <th mat-header-cell *matHeaderCellDef class="text-right pr-4">Sales (%)</th>
+            <td mat-cell *matCellDef="let commission" class="text-right pr-4">{{commission.salePercentage}}</td>
+        </ng-container>
+        <ng-container matColumnDef="employeeShortname">
+            <th mat-header-cell *matHeaderCellDef>Emp. short name</th>
+            <td mat-cell *matCellDef="let commission">{{commission.employeeShortname}}</td>
+        </ng-container>
+        <ng-container matColumnDef="employeeCommissionType">
+            <th mat-header-cell *matHeaderCellDef>Consultant Type</th>
+            <td mat-cell *matCellDef="let commission">{{commission.employeeCommissionType}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="commissionHeading"></tr>
+        <tr mat-row *matRowDef="let row; columns: commissionHeading;"></tr>
+    </table>
+    <div class="pt-2 w-25">
+        <div class="d-flex justify-content-between">
+            <div><b>Commission amount</b></div>
+            <div>$ {{commissionAmount}}</div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div><b>Retail amount</b></div>
+            <div>$ {{retailAmount}}</div>
+        </div>
+    </div>
+</ng-template>
