@@ -71,7 +71,7 @@ class customerHistoryTests(unittest.TestCase):
     def test_get_customer_history_empty(self):
         obj = PocTest()
         print("--No history--")
-        data = {["No customer History available"],"count":0}
+        data = {"customerHistory":["No customer History available"],"count":0}
         self.assertEqual(obj.customer_history_empty(), data)
 class consultantTests(unittest.TestCase):
 
@@ -117,38 +117,39 @@ class consultantTests(unittest.TestCase):
 class PocTest():
     def customer(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/customer?customerId=0001')
+            'http://127.0.0.1:5000/customer?customerId=0001')
         return data.json()
     def consultant_sales(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/consultant?transactionId=999888')
+            'http://127.0.0.1:5000/consultant?transactionId=999888')
         return data.json()
     def consultant_src(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/consultant?transactionId=000111')
+            'http://127.0.0.1:5000/consultant?transactionId=000111')
         return data.json()
     def consultant_operator(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/consultant?transactionId=222111')
+            'http://127.0.0.1:5000/consultant?transactionId=222111')
         return data.json()
     def consultant_empty(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/consultant?transactionId=555666')
+            'http://127.0.0.1:5000/consultant?transactionId=555666')
         return data.json()
     def consultant_business_name(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/consultant?transactionId=444555')
+            'http://127.0.0.1:5000/consultant?transactionId=444555')
         return data.json()
     def customer_history(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/customer/history?phoneNo=804-334-6333&pageIndex=0&pageSize=5')
+            'http://127.0.0.1:5000/customer/history?phoneNo=804-334-6333&pageIndex=0&pageSize=5')
         return data.json()
     def customer_history_empty(self):
         data = requests.get(
-            'http://127.0.0.1:5000/api/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
+            'http://127.0.0.1:5000/customer/history?phoneNo=637382228&pageIndex=0&pageSize=5')
         return data.json()
     def consultant(self):
-        data=requests.get('http://127.0.0.1:5000/api/consultant?transactionId=999888')
+        data=requests.get(
+            'http://127.0.0.1:5000/consultant?transactionId=999888')
         return data.json()
 
 class CommissionData():
