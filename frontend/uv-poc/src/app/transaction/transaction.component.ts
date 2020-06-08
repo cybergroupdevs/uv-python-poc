@@ -20,5 +20,4 @@ export class TransactionComponent implements OnInit {
       this.transactionHeading = Object.keys(this.transactionData[0])
     });
   }
-
 }
