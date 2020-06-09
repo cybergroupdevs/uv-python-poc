@@ -1,16 +1,16 @@
-import { Component, OnInit, Inject } from "@angular/core";
-import { CustomerService } from "../service/customer.service";
-import { PageEvent } from "@angular/material/paginator";
+import { Component, OnInit, Inject } from '@angular/core';
+import { CustomerService } from '../service/customer.service';
+import { PageEvent } from '@angular/material/paginator';
 import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
-} from "@angular/material/dialog";
+} from '@angular/material/dialog';
 
 @Component({
-  selector: "app-customer-history",
-  templateUrl: "./customer-history.component.html",
-  styleUrls: ["./customer-history.component.css"],
+  selector: 'app-customer-history',
+  templateUrl: './customer-history.component.html',
+  styleUrls: ['./customer-history.component.css'],
 })
 export class CustomerHistoryComponent implements OnInit {
   customerHeading: any;
@@ -29,15 +29,15 @@ export class CustomerHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.length = this.data["count"];
+    this.length = this.data['count'];
     if (this.length == 0) {
       this.history = false;
-      this.phoneNo = this.data["phoneNo"];
+      this.phoneNo = this.data['phoneNo'];
     } else {
       this.history = true;
-      this.customerHeading = Object.keys(this.data["customerData"][0]);
-      this.customerData = this.data["customerData"];
-      this.phoneNo = this.data["phoneNo"];
+      this.customerHeading = Object.keys(this.data['customerData'][0]);
+      this.customerData = this.data['customerData'];
+      this.phoneNo = this.data['phoneNo'];
     }
   }
   pagination(event) {
@@ -50,7 +50,7 @@ export class CustomerHistoryComponent implements OnInit {
     this._customerService
       .list(phone, this.pageIndex, this.pageSize)
       .subscribe((res: any) => {
-        this.customerData = res["customerHistory"];
+        this.customerData = res['customerHistory'];
       });
   }
 }
