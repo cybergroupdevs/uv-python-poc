@@ -230,15 +230,15 @@ def transaction_credit_details(transaction_data, pmt_val):
 def customer_details():
     customer_id=request.args.get('customerId')
     customer_file= u2py.File("CUSTOMERS")
-    data=[]
+    response=[]
     error={}
     cmd=f"LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {customer_id} CUSTOMERS TOJSON"
     details=u2py.Command(cmd).run(capture=True)
     if "not found."in details:
         error["msg"]=f"{customer_id}, not found"
-        data.append(error)
+        response.append(error)
         return Response(
-            json.dumps(data),
+            json.dumps(response),
             status=404,
             mimetype='application/json')
     else:
@@ -247,9 +247,9 @@ def customer_details():
         values=details['CUSTOMERS'][0].values()
         keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
         customer_dict={key: value for key, value in zip(keys, values)}
-        data.append(customer_dict)
+        response.append(customer_dict)
         return Response(
-    	    json.dumps(data),
+    	    json.dumps(response),
     	    status=200,
     	    mimetype='application/json')
       
@@ -267,7 +267,7 @@ def consultant_details():
     phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
     em_file=u2py.File("EM")
     details={}
-    data=[]
+    response=[]
     consultant_cmd=f"LIST FNAME LNAME SHORTNAME NICKNAME DATA {phone_no} EM TOJSON"
     consultant_details=u2py.Command(consultant_cmd).run(capture=True)
     consultant_details=json.loads(consultant_details)
@@ -328,9 +328,9 @@ def consultant_details():
         else:
             fitter_name=fitter_id
 	####only adds if there is a fitterId(doubt why they set its value null if not sending
-    data.append(details)
+    response.append(details)
     return Response(
-		json.dumps(data),
+		json.dumps(response),
 		status=200,
 		mimetype="application/json"
 		)
@@ -376,8 +376,9 @@ def customer_history():
 				pfid=""
 			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
+	response = {'customerHistory':data,'count':total_count}
 	return Response(
-		json.dumps(data),
+		json.dumps(response),
 		status=200,
 		mimetype='application/json')
 
