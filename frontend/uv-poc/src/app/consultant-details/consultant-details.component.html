@@ -1,0 +1,6 @@
+<div class="container">
+  <div class="row" *ngFor="let key of keys">
+    <div class="col">{{ key | uppercase }}</div>
+    <div class="col">{{ data[key] }}</div>
+  </div>
+</div>

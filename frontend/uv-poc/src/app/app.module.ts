@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms'
+import { ConsultantDetailsComponent } from "./consultant-details/consultant-details.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ConsultantDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -21,6 +23,6 @@ import { ReactiveFormsModule } from '@angular/forms'
     BrowserAnimationsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
