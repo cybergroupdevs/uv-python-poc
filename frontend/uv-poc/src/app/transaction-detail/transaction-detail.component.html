@@ -1,76 +1,83 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Website name</a>
-  </nav>
-  <div class="container">
-    <div class="d-flex justify-content-between transaction-detail-heading">
-      <p><b>Transaction Details</b></p>
+  <a class="navbar-brand" href="#">Website name</a>
+</nav>
+<div class="container">
+  <div class="d-flex justify-content-between transaction-detail-heading">
+    <p><b>Transaction Details</b></p>
+    <div class="row w-75">
+      <div class="col-md-6">
+        <span class="date">Posted On: {{ postedOn }}</span>
+      </div>
+    </div>
+    <button class="btn btn-dark" routerLink="/">Close</button>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
       <div class="row w-75">
         <div class="col-md-6">
-          <span class="date">Posted On: {{ postedOn }}</span>
+          <p>Transaction</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ transactionId }}</p>
         </div>
       </div>
-      <button class="btn btn-dark" routerLink='/'>Close</button>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Transaction Type</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ transactionType }}</p>
+        </div>
+      </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Operator</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ operator }}</p>
+        </div>
+      </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>R2R Rental</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ rental }}</p>
+        </div>
+      </div>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Transaction</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ transactionId }}</p>
-          </div>
+    <div class="col-md-6">
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Phone</p>
         </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Transaction Type</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ transactionType }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Operator</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ operator }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>R2R Rental</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ rental }}</p>
-          </div>
+        <div class="col-md-6">
+          <p>{{ phoneNo }}</p>
         </div>
       </div>
-      <div class="col-md-6">
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Phone</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ phoneNo }}</p>
-          </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Name</p>
         </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Name</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ name }}</p>
-          </div>
+        <div class="col-md-6">
+          <p>{{ name }}</p>
         </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>PFID</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ pfid }}</p>
-          </div>
+      </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>PFID</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ pfid }}</p>
         </div>
       </div>
     </div>
   </div>
+  <div class="discount-container">
+    <span class="discount" (click)="showDiscountDetails()">Discount?</span>
+    <span *ngIf="discountPct">Pct: {{ discountPct }}</span>
+    <span *ngIf="discountSubtotal">
+      Subtotal:{{ discountSubtotal | number: '.1-5' }}
+    </span>
+  </div>
+</div>

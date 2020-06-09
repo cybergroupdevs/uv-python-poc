@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DiscountService } from '../service/discount.service';
 
 @Component({
   selector: 'transaction-detail',
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.css']
+  styleUrls: ['./transaction-detail.component.css'],
 })
 export class TransactionDetailComponent implements OnInit {
-
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private discountService: DiscountService
+  ) {}
   private headerData;
   transactionId;
   phoneNo;
@@ -20,18 +23,18 @@ export class TransactionDetailComponent implements OnInit {
   rental;
   postedOn;
   discountPct;
-  discountSubtotal:number;
+  discountSubtotal: number;
   refundManagerName;
   refundTicketNumber;
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.headerData = JSON.parse(params["transactionData"]);
-      this.setValues(this.headerData)
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.headerData = JSON.parse(params['transactionData']);
+      this.setValues(this.headerData);
     });
-   }
+  }
 
-  setValues(details){
+  setValues(details) {
     this.transactionId = details.customerDetails['transactionId'];
     this.phoneNo = details.customerDetails['phoneNo'];
     this.transactionType = details.customerDetails['transactionType'];
@@ -41,5 +44,11 @@ export class TransactionDetailComponent implements OnInit {
     this.saleCns = details.customerDetails['saleCns'];
     this.rental = details.customerDetails['rentalNo'];
     this.postedOn = details.customerDetails['date'];
+  }
+  showDiscountDetails() {
+    this.discountService.get(this.transactionId).subscribe((res: any) => {
+      this.discountPct = res.discountDetails['pct'];
+      this.discountSubtotal = res.discountDetails['subTotal'];
+    });
   }
 }
