@@ -8,6 +8,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
+import { OrderComponent } from './order/order.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
     TransactionDetailComponent,
     ConsultantDetailsComponent,
     HomeComponent,
+    OrderComponent,
   ],
   imports: [
     BrowserModule,
