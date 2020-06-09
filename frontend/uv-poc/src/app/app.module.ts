@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
+import { ConsultantDetailsComponent } from "./consultant-details/consultant-details.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    TransactionDetailComponent
+    TransactionDetailComponent,
+    ConsultantDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -18,6 +20,6 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
     HttpClientModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
