@@ -9,8 +9,7 @@ export class ConsultantService {
   constructor(private http: HttpClient) {}
   baseUri: string = environment.baseUrl;
   get(consultantId) {
-    let params = new HttpParams();
-    params = params.append('transactionId', consultantId);
+    let params = new HttpParams().set('transactionId', consultantId);
     return this.http.get(`${this.baseUri}/consultant}`, {
       params: params,
     });
