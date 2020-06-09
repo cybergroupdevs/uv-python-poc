@@ -1,17 +1,17 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TransactionComponent } from './transaction/transaction.component';
-import { ConsultantDetailsComponent } from "./consultant-details/consultant-details.component";
+import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TransactionComponent,
-    ConsultantDetailsComponent
+    ConsultantDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,4 +22,4 @@ import { ConsultantDetailsComponent } from "./consultant-details/consultant-deta
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
