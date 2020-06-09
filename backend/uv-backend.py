@@ -710,13 +710,12 @@ def refund_detail(transactionId):
                 refund_mgr_name = em_details['EM'][0]['NICKNAME']
             else:
                 refund_mgr_name = em_details['EM'][0]['FNAME']	
-        refund_mgr_name = refund_mgr_name,em_details['EM'][0]['LNAME'],'(',em_details['EM'][0]['SHORTNAME'],')'
+        refund_mgr_name = f"{refund_mgr_name} {em_details['EM'][0]['LNAME']} ({em_details['EM'][0]['SHORTNAME']})"
         refund_data = {}
-        refund_data['refundMgrName'] = 'MGR OVERRIDING SUGGESTED REFUND TYPE: ' + str(refund_mgr_name)
+        refund_data['refundMgrName'] =  refund_mgr_name
         ticket_number = details['TRANSACTION'][0]['HAND.TKT.NO']
         if(ticket_number):
-            refund_data['ticketNumber'] = 'HANDWRITTEN TICKET NUMBER: ' + \
-                details['TRANSACTION'][0]['HAND.TKT.NO']
+            refund_data['ticketNumber'] = details['TRANSACTION'][0]['HAND.TKT.NO']
         response = {
             "refundData": refund_data
         }
