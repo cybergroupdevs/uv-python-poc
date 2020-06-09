@@ -21,6 +21,6 @@ import { CommissionDetailsComponent } from './commission-details/commission-deta
     HttpClientModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
