@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { CreditCardService } from '../service/credit-card.service';
 
 @Component({
   selector: 'transaction-detail',
@@ -7,7 +8,10 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./transaction-detail.component.css'],
 })
 export class TransactionDetailComponent implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private creditCardService: CreditCardService
+  ) {}
   private headerData;
   transactionId;
   phoneNo;
@@ -40,5 +44,10 @@ export class TransactionDetailComponent implements OnInit {
     this.saleCns = details.customerDetails['saleCns'];
     this.rental = details.customerDetails['rentalNo'];
     this.postedOn = details.customerDetails['date'];
+  }
+  showCreditCardDetails() {
+    this.creditCardService.get(this.transactionId).subscribe((res: any) => {
+      console.log(res);
+    });
   }
 }
