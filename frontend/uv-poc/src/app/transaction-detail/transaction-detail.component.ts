@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'transaction-detail',
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.css'],
+  styles: [],
 })
 export class TransactionDetailComponent implements OnInit {
   constructor(private activatedRoute: ActivatedRoute) {}
