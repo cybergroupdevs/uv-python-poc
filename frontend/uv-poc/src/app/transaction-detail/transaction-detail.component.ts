@@ -26,6 +26,8 @@ export class TransactionDetailComponent implements OnInit {
   discountSubtotal: number;
   refundManagerName;
   refundTicketNumber;
+  cardDetails: any;
+  creditCardHeading = [];
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -47,7 +49,8 @@ export class TransactionDetailComponent implements OnInit {
   }
   showCreditCardDetails() {
     this.creditCardService.get(this.transactionId).subscribe((res: any) => {
-      console.log(res);
+      this.cardDetails = res['cardDetails'];
+      this.creditCardHeading = Object.keys(res['cardDetails'][0]);
     });
   }
 }
