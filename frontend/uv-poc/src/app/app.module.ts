@@ -5,6 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TransactionComponent } from './transaction/transaction.component';
+import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
+import { HomeComponent } from './home/home.component';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
 
 @NgModule({
@@ -12,10 +15,13 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
     AppComponent,
     TransactionComponent,
     ConsultantDetailsComponent,
+    TransactionDetailComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],
