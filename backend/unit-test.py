@@ -155,8 +155,8 @@ class PocTest():
 class CommissionData():
     def __init__(self):
         self.commission_details = {
-            "class": "4929",
-            "sku": "9167",
+            "class": "4926",
+            "sku": "6856",
             "retail": "190.78",
             "mkdn": "58.37",
             "quantity": "1",
@@ -165,7 +165,7 @@ class CommissionData():
             "amount": "15.55",
             "employeePercentage": "56",
             "salePercentage": "100",
-            "commEmpId": "MKT10",
+            "employeeShortname": "MOY61",
             "employeeCommissionType": "SALECNS"
         }
 
