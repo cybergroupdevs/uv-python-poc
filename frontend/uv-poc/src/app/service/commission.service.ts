@@ -4,20 +4,20 @@ import { environment } from '../../environments/environment';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommissionService {
-  baseUri:string = environment.baseUrl
+  baseUri: string = environment.baseUrl;
 
   activeTab: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
-  constructor(private _http: HttpClient) { }
+  constructor(private _http: HttpClient) {}
 
-  get(transitionId: string){
-    return this._http.get(`${this.baseUri}/commission/${transitionId}`)
+  get(transitionId: string) {
+    return this._http.get(`${this.baseUri}/commission/${transitionId}`);
   }
 
-  changeActiveTab(value){
+  changeActiveTab(value) {
     this.activeTab.next(value);
   }
 }
