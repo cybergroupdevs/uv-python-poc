@@ -14,4 +14,13 @@ export class CustomerService {
       params: params,
     });
   }
+  list(phoneNo, pageIndex, pageSize) {
+    let params = new HttpParams()
+      .set('phoneNo', phoneNo)
+      .set('pageIndex', pageIndex)
+      .set('pageSize', pageSize);
+    return this.http.get(`${this.baseUri}/customer/history}`, {
+      params: params,
+    });
+  }
 }
