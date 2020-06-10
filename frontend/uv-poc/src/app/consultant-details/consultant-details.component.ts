@@ -8,8 +8,6 @@ import { CommissionService } from '../service/commission.service';
 })
 export class ConsultantDetailsComponent implements OnInit {
   transactionId: string;
-  operator: any;
-  type: any;
   keys: any;
   data: any;
   constructor(

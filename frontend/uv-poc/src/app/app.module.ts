@@ -9,7 +9,10 @@ import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
 import { OrderComponent } from './order/order.component';
-
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,12 +20,16 @@ import { OrderComponent } from './order/order.component';
     ConsultantDetailsComponent,
     HomeComponent,
     OrderComponent,
+    CustomerHistoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatDialogModule,
     HttpClientModule,
   ],
   providers: [],
