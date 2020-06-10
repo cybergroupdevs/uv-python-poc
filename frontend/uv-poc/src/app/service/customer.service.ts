@@ -5,12 +5,15 @@ import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class ConsultantService {
+export class CustomerService {
   constructor(private http: HttpClient) {}
   baseUri: string = environment.baseUrl;
-  get(consultantId) {
-    let params = new HttpParams().set('transactionId', consultantId);
-    return this.http.get(`${this.baseUri}/consultant}`, {
+  list(phoneNo, pageIndex, pageSize) {
+    let params = new HttpParams()
+      .set('phoneNo', phoneNo)
+      .set('pageIndex', pageIndex)
+      .set('pageSize', pageSize);
+    return this.http.get(`${this.baseUri}/customer/history}`, {
       params: params,
     });
   }
