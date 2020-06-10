@@ -1,34 +1,34 @@
-<div class="main">
-  <div class="intro-div">
-    <span class="heading">Remember</span>
-    <span class="sub-heading"
-      >this is just a proof of concept, don't save production data</span
-    >
-    <span>
-      <a href="https://github.com/cybergroupdevs/uv-python-poc/tree/develop">
-        <button class="know-more">
-          Code peek
-        </button>
-      </a>
-    </span>
-  </div>
+<div class="p-5 text-center w-100 bg-dark">
+  <span class="heading mt-4 d-block text-white">Remember</span>
+  <span class="sub-heading d-block mt-4 text-secondary"
+    >this is just a proof of concept, don't save production data</span
+  >
+  <span class="d-block">
+    <a href="https://github.com/cybergroupdevs/uv-python-poc/tree/develop">
+      <button class="btn btn-success px-4 py-2 mt-4 know-more">
+        Code peek
+      </button>
+    </a>
+  </span>
 </div>
 <div class="container">
-  <div class="body">
+  <div class="pt-5">
     <div class="col-md-5 col-7">
       <h1>Enter transaction id</h1>
       <form [formGroup]="transactionForm">
         <input
-          class="form-control"
+          class="form-control w-50"
           type="text"
           placeholder="Transaction Id"
           formControlName="transactionId"
           style="text-align: right;"
         />
-        <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+        <div *ngIf="errorMessage" class="text-danger">
+          {{ errorMessage }}
+        </div>
         <button
           type="button"
-          class="btn btn-dark submit-button"
+          class="btn btn-dark submit-button mt-3"
           (click)="getTransactionDetails()"
         >
           Submit

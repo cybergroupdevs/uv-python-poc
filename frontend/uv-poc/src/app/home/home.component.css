@@ -1,59 +1,14 @@
-.body{
-    margin-top: 10%;
+.heading {
+  font-size: 2.7em;
+  font-weight: 200;
 }
-input{
-    width: 50% !important;
+
+.sub-heading {
+  font-size: 1.7em;
+  font-weight: 300;
 }
-input::placeholder{
-    font-weight: 100;
-}
-.submit-button{
-    margin-top: 5%;
-    font-weight: 100;
-}
-.error{
-    color: red;
-    font-family: monospace;
-}
-.intro-div{
-    width: 100%;
-    background-color: #202020;
-    padding: 10px;
-    font-weight: 700;
-    text-align: center;
-    padding-bottom: 20px;
-}
-.heading{
-    color: rgba(255, 255, 255, 1);
-    font-size: 2.7em;
-    font-weight: 200;
-    margin-top: 30px;
-}
-.sub-heading{
-    color: rgba(255,255,255,.6);
-    font-size: 1.7em;
-    font-weight: 300;
-}
-.know-more{
-    padding: 10px 48px;
-    margin-top: 20px;
-    border-radius: 20px;
-    border: none;
-    color: rgba(255, 255, 255, 1);
-    background-color: rgba(0, 158, 45,0.5) !important;
-    cursor: pointer;
-    font-weight: 100;
-    transition-duration: 0.3s;
-    outline: none;
-}
-.know-more:hover{
-    background-color: rgba(0, 158, 45,0.88) !important;
-    transition-duration: 0.3s;
-}
-span{
-    display: block;
-    line-height: 1.5;
-}
-h1{
-    font-weight: 200;
+
+.know-more {
+  transition-duration: 0.3s;
+  outline: none;
 }
