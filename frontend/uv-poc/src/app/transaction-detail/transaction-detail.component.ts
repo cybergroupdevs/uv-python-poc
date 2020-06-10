@@ -5,7 +5,7 @@ import { CreditCardService } from '../service/credit-card.service';
 @Component({
   selector: 'transaction-detail',
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.css'],
+  styles: [],
 })
 export class TransactionDetailComponent implements OnInit {
   constructor(
