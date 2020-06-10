@@ -12,14 +12,14 @@ export class CommissionDetailsComponent implements OnInit {
   commissionAmount: number;
   retailAmount: number;
   commissionHeading = [];
-  errorMsg: string = null;
+  commissionErrorMsg: string = null;
 
   ngOnInit() {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Commission') {
         this._commissionService.get('4830*35*1672').subscribe((data) => {
           if (data['error']) {
-            this.errorMsg = data['error'];
+            this.commissionErrorMsg = data['error'];
           } else {
             this.commissionData = data['commissionList'];
             this.retailAmount = data['retailAmount'];

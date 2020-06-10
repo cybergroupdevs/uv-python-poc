@@ -1,5 +1,5 @@
-<div *ngIf="errorMsg; else commissionDataTable">
-  <div class="text-center text-danger">{{ errorMsg }}</div>
+<div *ngIf="commissionErrorMsg; else commissionDataTable">
+  <div class="text-center text-danger">{{ commissionErrorMsg }}</div>
 </div>
 
 <ng-template #commissionDataTable>
