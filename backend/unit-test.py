@@ -7,7 +7,7 @@ class customerTests(unittest.TestCase):
     def test_get_customer(self):
         obj = PocTest()
         print("-------customer---")
-        data = [
+        data =
             {
                 "phoneNo": "988012-21",
                 "firstName": "DERRICK",
@@ -18,7 +18,6 @@ class customerTests(unittest.TestCase):
                 "altPhoneNo": "8054544097",
                 "pfid": "7462133"
             }
-        ]
         self.assertEqual(obj.customer(), data)
 
 
@@ -79,38 +78,38 @@ class consultantTests(unittest.TestCase):
         #Noconsultant is there
         obj = PocTest()
         print("-No consultant-")
-        data = [{"operator": "RON SIMS (SION)", "SLS CONSULT": "No consultant"}]
+        data = {"operator": "RON SIMS (SION)", "SLS CONSULT": "No consultant"}
         self.assertEqual(obj.consultant_empty(), data)
 
     def test_get_consultant_operator(self):
         # firstNameLastName(operator)
         obj = PocTest()
         print("-operator-FirstName-")
-        data = [{"operator": "RON SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
+        data = {"operator": "RON SIMS (SION)", "SALECNS": "RON SIMS (SION)"}
         self.assertEqual(obj.consultant_operator(), data)
 
     def test_get_consultant_src(self):
         # srcAssoc
         obj = PocTest()
         print("-srcAssoc-")
-        data = [
-            {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)", "SRC ASSOC": "LEBRON JAMES (LBJ)"}]
+        data = 
+            {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)", "SRC ASSOC": "LEBRON JAMES (LBJ)"}
         self.assertEqual(obj.consultant_src(), data)
 
     def test_get_consultant_sales(self):
         # salesCns
         obj = PocTest()
         print("-------salesCns-----")
-        data = [
-            {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)"}]
+        data =
+            {"operator": "SHOUT INC SIMS (SION)", "SALECNS": "RON SIMS (SION)"}
         self.assertEqual(obj.consultant_sales(), data)
 
     def test_get_consultant_business_name(self):
         # businessName
         obj = PocTest()
         print("-------businessName----")
-        data = [
-            {"operator": "RON SIMS (SION)", "SLS CONSULT": "RON SIMS (SION)"}]
+        data = 
+            {"operator": "RON SIMS (SION)", "SLS CONSULT": "RON SIMS (SION)"}
         self.assertEqual(obj.consultant_business_name(), data)
 
 
