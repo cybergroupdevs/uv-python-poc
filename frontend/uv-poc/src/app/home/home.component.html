@@ -1,39 +1,40 @@
-<div class="p-5 text-center w-100 bg-dark">
-  <span class="heading mt-4 d-block text-white">Remember</span>
-  <span class="sub-heading d-block mt-4 text-secondary"
-    >this is just a proof of concept, don't save production data</span
-  >
-  <span class="d-block">
-    <a href="https://github.com/cybergroupdevs/uv-python-poc/tree/develop">
-      <button class="btn btn-success px-4 py-2 mt-4 know-more">
-        Code peek
-      </button>
-    </a>
-  </span>
+<div class="bg-dark p-5">
+  <div class="container">
+    <span class="display-4 text-light ml-8 text-center">Remember</span>
+    <span class="text-muted text-center">
+      <h2>
+        this is just a proof of concept, don't save production data
+      </h2>
+    </span>
+    <span class="text-center">
+      <a href="https://github.com/cybergroupdevs/uv-python-poc/tree/develop">
+        <button class="btn btn-success rounded-4">
+          Code peek
+        </button>
+      </a>
+    </span>
+  </div>
 </div>
 <div class="container">
-  <div class="pt-5">
-    <div class="col-md-5 col-7">
-      <h1>Enter transaction id</h1>
-      <form [formGroup]="transactionForm">
+  <div class="col-md-3 mt-4">
+    <h1>Enter transaction id</h1>
+    <form [formGroup]="transactionForm">
+      <div class="col-xs-1">
         <input
-          class="form-control w-50"
+          class="form-control"
           type="text"
           placeholder="Transaction Id"
           formControlName="transactionId"
-          style="text-align: right;"
         />
-        <div *ngIf="errorMessage" class="text-danger">
-          {{ errorMessage }}
-        </div>
-        <button
-          type="button"
-          class="btn btn-dark submit-button mt-3"
-          (click)="getTransactionDetails()"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+      </div>
+      <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+      <button
+        type="button"
+        class="btn btn-dark mt-3"
+        (click)="getTransactionDetails()"
+      >
+        Submit
+      </button>
+    </form>
   </div>
 </div>

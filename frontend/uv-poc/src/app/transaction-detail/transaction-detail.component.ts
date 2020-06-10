@@ -5,7 +5,7 @@ import { RefundService } from '../service/refund.service';
 @Component({
   selector: 'transaction-detail',
   templateUrl: './transaction-detail.component.html',
-  styleUrls: ['./transaction-detail.component.css'],
+  styleUrls: [],
 })
 export class TransactionDetailComponent implements OnInit {
   constructor(
