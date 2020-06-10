@@ -9,7 +9,11 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
 import { HomeComponent } from './home/home.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
+import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,12 +21,16 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
     ConsultantDetailsComponent,
     TransactionDetailComponent,
     HomeComponent,
+    CustomerHistoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatDialogModule,
     HttpClientModule,
   ],
   providers: [],
