@@ -108,18 +108,18 @@ def calculate_commission_amount(transaction_data):
     return commission_amount
 
 
-def set_empsn_values(transaction_data, employee_file):
-    empsn_list = []
+def set_employee_shortname(transaction_data, employee_file):
+    emp_shortname_list = []
     commission_employee_id = [key['CommEmplId'] for key in transaction_data['ITEM_MV']]
     for i in range(len(commission_employee_id)):
         employee_id = commission_employee_id[i]
         if check_existing_record('EM', employee_id):
-            empsn = list(employee_file.readv(employee_id, 17))[0][0]
+            emp_shortname = list(employee_file.readv(employee_id, 17))[0][0]
         else:
-            empsn = employee_id
-        empsn_list.append(empsn)
+            emp_shortname = employee_id
+        emp_shortname_list.append(emp_shortname)
 
-    return empsn_list
+    return emp_shortname_list
 
 
 def set_employee_total(transaction_data, transaction_file, desc_length):
@@ -230,15 +230,15 @@ def transaction_credit_details(transaction_data, pmt_val):
 def customer_details():
     customer_id=request.args.get('customerId')
     customer_file= u2py.File("CUSTOMERS")
-    data=[]
+    response=[]
     error={}
     cmd=f"LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {customer_id} CUSTOMERS TOJSON"
     details=u2py.Command(cmd).run(capture=True)
     if "not found."in details:
         error["msg"]=f"{customer_id}, not found"
-        data.append(error)
+        response.append(error)
         return Response(
-            json.dumps(data),
+            json.dumps(response),
             status=404,
             mimetype='application/json')
     else:
@@ -247,9 +247,9 @@ def customer_details():
         values=details['CUSTOMERS'][0].values()
         keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
         customer_dict={key: value for key, value in zip(keys, values)}
-        data.append(customer_dict)
+        response.append(customer_dict)
         return Response(
-    	    json.dumps(data),
+    	    json.dumps(response),
     	    status=200,
     	    mimetype='application/json')
       
@@ -267,7 +267,7 @@ def consultant_details():
     phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
     em_file=u2py.File("EM")
     details={}
-    data=[]
+    response=[]
     consultant_cmd=f"LIST FNAME LNAME SHORTNAME NICKNAME DATA {phone_no} EM TOJSON"
     consultant_details=u2py.Command(consultant_cmd).run(capture=True)
     consultant_details=json.loads(consultant_details)
@@ -328,9 +328,9 @@ def consultant_details():
         else:
             fitter_name=fitter_id
 	####only adds if there is a fitterId(doubt why they set its value null if not sending
-    data.append(details)
+    response.append(details)
     return Response(
-		json.dumps(data),
+		json.dumps(response),
 		status=200,
 		mimetype="application/json"
 		)
@@ -376,8 +376,9 @@ def customer_history():
 				pfid=""
 			customer_history=map_customer_history(first_name,last_name,address,city,pfid)
 			data.append(customer_history)
+	response = {'customerHistory':data,'count':total_count}
 	return Response(
-		json.dumps(data),
+		json.dumps(response),
 		status=200,
 		mimetype='application/json')
 
@@ -397,7 +398,7 @@ def commission_list(transaction_id):
 
     if transaction_data['ITEM_MV'][0]['CommEmplId'] != '':
         amount_list = calculate_amount(transaction_data)
-        empsn_list = set_empsn_values(transaction_data, employee_file)
+        emp_shortname_list = set_employee_shortname(transaction_data, employee_file)
         description = [key['DESC'] for key in transaction_data['ITEM_MV']]
         employee_total = set_employee_total(transaction_data, transaction_file, len(description))
         commission_amount = calculate_commission_amount(transaction_data)
@@ -415,7 +416,7 @@ def commission_list(transaction_id):
             commission_data['amount'] = amount_list[i]
             commission_data['employeePercentage'] = convert_field_formats(commission_rate[i], 'MD2', 'internal')
             commission_data['salePercentage'] = transaction_data['ITEM_MV'][i]['CommEmplPercentUsed']
-            commission_data['commEmpId'] = empsn_list[i]
+            commission_data['employeeShortname'] = emp_shortname_list[i]
             commission_data['employeeCommissionType'] = calculate_commission_employee_type(commission_employee_type[i])
             commission_data_list.append(commission_data)
         response = {
