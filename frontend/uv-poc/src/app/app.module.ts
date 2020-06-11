@@ -21,7 +21,6 @@ import { CustomerHistoryComponent } from './customer-history/customer-history.co
     TransactionDetailComponent,
     CommissionDetailsComponent,
     ConsultantDetailsComponent,
-    TransactionDetailComponent,
     HomeComponent,
     CustomerHistoryComponent,
   ],
