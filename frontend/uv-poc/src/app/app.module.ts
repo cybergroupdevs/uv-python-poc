@@ -5,6 +5,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 
+import { CommissionDetailsComponent } from './commission-details/commission-details.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,6 +14,7 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
 @NgModule({
   declarations: [
     AppComponent,
+    CommissionDetailsComponent,
     ConsultantDetailsComponent,
     CustomerHistoryComponent,
   ],
@@ -20,10 +22,10 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatPaginatorModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
