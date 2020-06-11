@@ -1,16 +1,15 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatTableModule } from '@angular/material/table';
-import { MatDialogModule } from '@angular/material/dialog';
-
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CustomerHistoryComponent } from './customer-history/customer-history.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { ConsultantDetailsComponent } from './consultant-details/consultant-details.component';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
+import { CustomerHistoryComponent } from './customer-history/customer-history.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { NgModule } from '@angular/core';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,13 +18,13 @@ import { CustomerDetailsComponent } from './customer-details/customer-details.co
     CustomerHistoryComponent,
   ],
   imports: [
-    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    BrowserModule,
+    HttpClientModule,
+    MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
-    MatDialogModule,
-    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
