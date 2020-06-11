@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HomeComponent } from './home/home.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
+import { CommissionDetailsComponent } from './commission-details/commission-details.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
@@ -17,6 +18,7 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
   declarations: [
     AppComponent,
     HomeComponent,
+    CommissionDetailsComponent,
     ConsultantDetailsComponent,
     TransactionDetailComponent,
     CustomerHistoryComponent,
@@ -26,10 +28,10 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatPaginatorModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
