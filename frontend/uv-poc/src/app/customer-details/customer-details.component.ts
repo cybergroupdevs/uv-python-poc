@@ -10,18 +10,7 @@ import { CommissionService } from '../service/commission.service';
 export class CustomerDetailsComponent implements OnInit {
   customerId: string;
   customerData: any;
-  dataLength: any;
-  customerDetails = new Map();
-  customerkeys = [
-    'Phone number',
-    'First name',
-    'Last name',
-    'Address',
-    'City',
-    'Zip-code',
-    'Alternate Number',
-    'PFID',
-  ];
+  customerKeys: any;
   constructor(
     private _customerService: CustomerService,
     private _commissionService: CommissionService
@@ -32,14 +21,26 @@ export class CustomerDetailsComponent implements OnInit {
       if (data.toString() == 'Customer') {
         this.customerId = '9782';
         this._customerService.get(this.customerId).subscribe((res: any) => {
-          this.customerData = Object.values(res);
-          this.dataLength = this.customerData.length;
-          for (let values = 0; values < this.dataLength; values++) {
-            this.customerDetails.set(
-              this.customerkeys[values],
-              this.customerData[values]
-            );
-          }
+          this.customerData = res;
+          this.customerData['Phone number'] = this.customerData['phoneNo'];
+          this.customerData['First name'] = this.customerData['firstName'];
+          this.customerData['Last name'] = this.customerData['lastName'];
+          this.customerData['Address'] = this.customerData['address'];
+          this.customerData['City'] = this.customerData['city'];
+          this.customerData['Zip code'] = this.customerData['zipCode'];
+          this.customerData['PFID'] = this.customerData['pfid'];
+          this.customerData['Alternate phone number'] = this.customerData[
+            'altPhoneNo'
+          ];
+          delete this.customerData['phoneNo'];
+          delete this.customerData['firstName'];
+          delete this.customerData['lastName'];
+          delete this.customerData['address'];
+          delete this.customerData['city'];
+          delete this.customerData['zipCode'];
+          delete this.customerData['pfid'];
+          delete this.customerData['altPhoneNo'];
+          this.customerKeys = Object.keys(this.customerData);
         });
       }
     });
