@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   template: `<router-outlet></router-outlet>`,
   styles: [],
 })
-export class AppComponent {
-  title = 'uv-poc';
-}
+export class AppComponent {}
