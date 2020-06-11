@@ -11,12 +11,13 @@ import { ConsultantDetailsComponent } from './consultant-details/consultant-deta
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { CommissionDetailsComponent } from './commission-details/commission-details.component';
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 @NgModule({
   declarations: [
     AppComponent,
     TransactionDetailComponent,
+    CommissionDetailsComponent,
     ConsultantDetailsComponent,
     HomeComponent,
     CustomerHistoryComponent,
@@ -26,10 +27,10 @@ import { CustomerHistoryComponent } from './customer-history/customer-history.co
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    HttpClientModule,
     MatPaginatorModule,
     MatTableModule,
     MatDialogModule,
-    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
