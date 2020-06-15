@@ -1,6 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DiscountService } from '../service/discount.service';
+import { RefundService } from '../service/refund.service';
 
 @Component({
   selector: 'transaction-detail',
@@ -9,13 +10,25 @@ import { DiscountService } from '../service/discount.service';
 })
 
 export class TransactionDetailComponent implements OnInit {
-  constructor(private activatedRoute: ActivatedRoute) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private refundService: RefundService
+  ) {}
   headerData;
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
     });
+  }
+
+  showRefundDetails() {
+    this.refundService
+      .refundDetails(this.transactionId)
+      .subscribe((res: any) => {
+        this.refundManagerName = res.refundData['refundMgrName'];
+        this.refundTicketNumber = res.refundData['ticketNumber'];
+      });
   }
   
   showDiscountDetails() {
