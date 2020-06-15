@@ -1,7 +1,7 @@
 <table
   mat-table
   [dataSource]="transactionData"
-  class="mat-elevation-z8 z-depth-5"
+  class="mat-elevation-z8 z-depth-5 w-100"
 >
   <ng-container matColumnDef="class">
     <th mat-header-cell *matHeaderCellDef class="text-right">Class</th>
@@ -16,8 +16,8 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="mkdn">
-    <th mat-header-cell *matHeaderCellDef class="text-right">Markdown</th>
-    <td mat-cell *matCellDef="let transactionData" class="text-right">
+    <th mat-header-cell *matHeaderCellDef class="text-right pr-4">Markdown</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-right pr-4">
       {{ transactionData.mkdn }}
     </td>
   </ng-container>
