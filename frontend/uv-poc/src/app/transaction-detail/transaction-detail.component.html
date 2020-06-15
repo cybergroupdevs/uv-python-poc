@@ -91,21 +91,11 @@
         </div>
         <div class="col-md-6">
           <form [formGroup]="phoneNoForm">
-            <input
-              class="form-control"
-              type="text"
-              placeholder="901-234-2321"
-              name="phoneNo"
-              formControlName="phoneNo"
-            />
+            <input class="form-control" type="text" placeholder="901-234-2321" name="phoneNo"
+              formControlName="phoneNo" />
             <div>
-              <span
-                class="badge badge-danger"
-                *ngIf="
-                  phoneNoForm.controls['phoneNo'].invalid && toggle == true
-                "
-                >Required</span
-              >
+              <span class="badge badge-danger"
+                *ngIf="phoneNoForm.controls['phoneNo'].invalid && toggle == true">Required</span>
             </div>
             <button class="btn btn-dark" type="submit" (click)="openDialog()">
               Search
@@ -134,29 +124,26 @@
         Subtotal:{{ discountSubtotal | number: '.1-5' }}
       </span>
     </div>
-    <mat-tab-group
-      mat-align-tabs="center"
-      (selectedTabChange)="onChangeTab($event)"
-    >
-      <mat-tab label="Transaction"><app-transaction></app-transaction></mat-tab>
-      <mat-tab label="Commission"
-        ><app-commission-details></app-commission-details
-      ></mat-tab>
-      <mat-tab label="Customer"
-        ><app-customer-details></app-customer-details
-      ></mat-tab>
-      <mat-tab label="Consultant"
-        ><app-consultant-details></app-consultant-details
-      ></mat-tab>
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
+      <mat-tab label="Transaction">
+        <app-transaction></app-transaction>
+      </mat-tab>
+      <mat-tab label="Commission">
+        <app-commission-details></app-commission-details>
+      </mat-tab>
+      <mat-tab label="Customer">
+        <app-customer-details></app-customer-details>
+      </mat-tab>
+      <mat-tab label="Consultant">
+        <app-consultant-details></app-consultant-details>
+      </mat-tab>
 
-      <mat-tab label="Order"><app-order></app-order></mat-tab>
+      <mat-tab label="Order">
+        <app-order></app-order>
+      </mat-tab>
       <mat-tab label="Credit card">
         <div class="credit-card-container">
-          <table
-            mat-table
-            [dataSource]="cardDetails"
-            class="mat-elevation-z8 z-depth-5 w-100"
-          >
+          <table mat-table [dataSource]="cardDetails" class="mat-elevation-z8 z-depth-5 w-100">
             <ng-container matColumnDef="sent">
               <th mat-header-cell *matHeaderCellDef class="text-right">Sent</th>
               <td mat-cell *matCellDef="let details" class="text-right">
