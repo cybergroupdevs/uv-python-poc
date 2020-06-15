@@ -31,6 +31,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
   ],
   imports: [
     AppRoutingModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     BrowserModule,
     HttpClientModule,

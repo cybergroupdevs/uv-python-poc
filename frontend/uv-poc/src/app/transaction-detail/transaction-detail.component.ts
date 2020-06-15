@@ -1,5 +1,6 @@
 import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { CreditCardService } from '../service/credit-card.service';
 import { DiscountService } from '../service/discount.service';
 import { RefundService } from '../service/refund.service';
 
@@ -12,14 +13,25 @@ import { RefundService } from '../service/refund.service';
 export class TransactionDetailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
+    private creditCardService: CreditCardService,
     private refundService: RefundService
   ) {}
   headerData;
+  cardDetails: any;
+  creditCardHeading = [];
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
     });
+  }
+  showCreditCardDetails() {
+    this.creditCardService
+      .get(this.headerData.customerDetails['transactionId'])
+      .subscribe((res: any) => {
+        this.cardDetails = res['cardDetails'];
+        this.creditCardHeading = Object.keys(res['cardDetails'][0]);
+      });
   }
 
   showRefundDetails() {
