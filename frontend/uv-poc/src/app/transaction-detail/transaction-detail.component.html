@@ -98,6 +98,15 @@
               name="phoneNo"
               formControlName="phoneNo"
             />
+            <div>
+              <span
+                class="badge badge-danger"
+                *ngIf="
+                  phoneNoForm.controls['phoneNo'].invalid && toggle == true
+                "
+                >Required</span
+              >
+            </div>
             <button class="btn btn-dark" type="submit" (click)="openDialog()">
               Search
             </button>
