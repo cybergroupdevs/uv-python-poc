@@ -230,15 +230,13 @@ def transaction_credit_details(transaction_data, pmt_val):
 def customer_details():
     customer_id=request.args.get('customerId')
     customer_file= u2py.File("CUSTOMERS")
-    response=[]
     error={}
     cmd=f"LIST PHONE.NO F.NAME L.NAME ADDRESS CITY ZIP.CODE PHONE.LONG PFID DATA {customer_id} CUSTOMERS TOJSON"
     details=u2py.Command(cmd).run(capture=True)
     if "not found."in details:
         error["msg"]=f"{customer_id}, not found"
-        response.append(error)
         return Response(
-            json.dumps(response),
+            json.dumps(error),
             status=404,
             mimetype='application/json')
     else:
@@ -247,9 +245,8 @@ def customer_details():
         values=details['CUSTOMERS'][0].values()
         keys=["phoneNo","firstName","lastName","address","city","zipCode","altPhoneNo","pfid"]
         customer_dict={key: value for key, value in zip(keys, values)}
-        response.append(customer_dict)
         return Response(
-    	    json.dumps(response),
+    	    json.dumps(customer_dict),
     	    status=200,
     	    mimetype='application/json')
       
@@ -267,7 +264,6 @@ def consultant_details():
     phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
     em_file=u2py.File("EM")
     details={}
-    response=[]
     consultant_cmd=f"LIST FNAME LNAME SHORTNAME NICKNAME DATA {phone_no} EM TOJSON"
     consultant_details=u2py.Command(consultant_cmd).run(capture=True)
     consultant_details=json.loads(consultant_details)
@@ -328,9 +324,8 @@ def consultant_details():
         else:
             fitter_name=fitter_id
 	####only adds if there is a fitterId(doubt why they set its value null if not sending
-    response.append(details)
     return Response(
-		json.dumps(response),
+		json.dumps(details),
 		status=200,
 		mimetype="application/json"
 		)
@@ -711,13 +706,12 @@ def refund_detail(transactionId):
                 refund_mgr_name = em_details['EM'][0]['NICKNAME']
             else:
                 refund_mgr_name = em_details['EM'][0]['FNAME']	
-        refund_mgr_name = refund_mgr_name,em_details['EM'][0]['LNAME'],'(',em_details['EM'][0]['SHORTNAME'],')'
+        refund_mgr_name = f"{refund_mgr_name} {em_details['EM'][0]['LNAME']} ({em_details['EM'][0]['SHORTNAME']})"
         refund_data = {}
-        refund_data['refundMgrName'] = 'MGR OVERRIDING SUGGESTED REFUND TYPE: ' + str(refund_mgr_name)
+        refund_data['refundMgrName'] =  refund_mgr_name
         ticket_number = details['TRANSACTION'][0]['HAND.TKT.NO']
         if(ticket_number):
-            refund_data['ticketNumber'] = 'HANDWRITTEN TICKET NUMBER: ' + \
-                details['TRANSACTION'][0]['HAND.TKT.NO']
+            refund_data['ticketNumber'] = details['TRANSACTION'][0]['HAND.TKT.NO']
         response = {
             "refundData": refund_data
         }
