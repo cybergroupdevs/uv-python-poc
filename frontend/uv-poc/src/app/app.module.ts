@@ -37,6 +37,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
