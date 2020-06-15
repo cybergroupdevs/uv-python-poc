@@ -770,6 +770,9 @@ def transaction_detail(transactionId):
         transaction['tuxConsult'] = tux_consult
         # alt_phone_number is the RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
         alt_phone_number = details['TRANSACTION'][0]['ALT.PHONE']
+        if("OPER.ID" in details['TRANSACTION'][0].keys()):
+            transaction['operatorId'] = details['TRANSACTION'][0]['OPER.ID']
+        transaction['alternatePhone'] = alt_phone_number
         customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format(alt_phone_number)
         customer_details=u2py.Command(customer_cmd).run(capture=True)
         customer_details=json.loads(customer_details)
