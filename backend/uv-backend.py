@@ -649,13 +649,13 @@ def discount_detail(transactionId):
             pct = pct+' ('+promos_id+')'
         else:
             pct = 'NO'
-        sale_total = discount
+        sale_total = sale_total - discount
         data = str(pct)+' discount of '+str(scr_discount*100)
         if (disc_conv_to_mkdn):
             data = data+' converted to markdown.'
         else:
             data = data+'.'
-        sale_total=0
+        sale_total=0                                #######
         items_mv=len(details['TRANSACTION'][0]['ITEM_MV'])
         for i in range(0,items_mv):
                 retail=float(details['TRANSACTION'][0]['ITEM_MV'][count]['RETAIL'])

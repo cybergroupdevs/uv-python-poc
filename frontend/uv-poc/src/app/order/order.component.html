@@ -10,7 +10,7 @@
             <p>Order No.</p>
           </div>
           <div class="col-md-6">
-            <p>{{ orderNo }}</p>
+            <p>{{ orderData['orderNo'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -18,7 +18,7 @@
             <p>Method</p>
           </div>
           <div class="col-md-6">
-            <p>{{ method }}</p>
+            <p>{{ orderData['method'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -26,7 +26,7 @@
             <p>Carrier</p>
           </div>
           <div class="col-md-6">
-            <p>{{ carrier }}</p>
+            <p>{{ orderData['carrier'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -34,7 +34,7 @@
             <p>Trace No.</p>
           </div>
           <div class="col-md-6">
-            <p>{{ traceNo }}</p>
+            <p>{{ orderData['traceNo'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -42,7 +42,7 @@
             <p>Email</p>
           </div>
           <div class="col-md-6">
-            <p>{{ email }}</p>
+            <p>{{ orderData['email'] }}</p>
           </div>
         </div>
       </div>
@@ -52,7 +52,7 @@
             <p>Ship Date</p>
           </div>
           <div class="col-md-6">
-            <p>{{ shipDate }}</p>
+            <p>{{ orderData['shipDate'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -60,7 +60,7 @@
             <p>Ship Address</p>
           </div>
           <div class="col-md-6">
-            <p>{{ address }}</p>
+            <p>{{ orderData['shipToAddress'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -68,7 +68,7 @@
             <p>CSZ</p>
           </div>
           <div class="col-md-6">
-            <p>{{ csz }}</p>
+            <p>{{ orderData['csz'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -76,7 +76,7 @@
             <p>Comment Label</p>
           </div>
           <div class="col-md-6">
-            <p>{{ commentLabel }}</p>
+            <p>{{ orderData['commentLabel'] }}</p>
           </div>
         </div>
         <div class="row w-75">
@@ -84,11 +84,11 @@
             <p>Return Address</p>
           </div>
           <div class="col-md-6">
-            <p>{{ returnAddress }}</p>
+            <p>{{ orderData['returnIds'] }}</p>
           </div>
         </div>
       </div>
     </div>
-    <span class="flag">{{ audit | titlecase }}</span>
+    <span class="flag">{{ orderData['auditFlag'] | titlecase }}</span>
   </ng-template>
 </div>
