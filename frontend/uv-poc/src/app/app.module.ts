@@ -16,10 +16,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
+    TransactionDetailComponent,
     CommissionDetailsComponent,
     ConsultantDetailsComponent,
     CustomerDetailsComponent,
