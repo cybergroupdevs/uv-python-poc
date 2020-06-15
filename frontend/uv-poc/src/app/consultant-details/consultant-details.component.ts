@@ -22,8 +22,8 @@ export class ConsultantDetailsComponent implements OnInit {
         this._consultantService
           .get(this.transactionId)
           .subscribe((res: any) => {
-            this.data = res[0];
-            this.keys = Object.keys(res[0]);
+            this.data = res;
+            this.keys = Object.keys(res);
           });
       }
     });
