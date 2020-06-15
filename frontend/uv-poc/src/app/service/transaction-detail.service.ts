@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TransactionDetailService {
-
-  constructor(private http: HttpClient,private router: Router) { }
-  get(transactionId){
-    return this.http.get(`http://localhost:5000/transaction/${transactionId}`)
+  constructor(private http: HttpClient) {}
+  baseUri: string = environment.baseUrl;
+  get(transactionId) {
+    return this.http.get(`${this.baseUri}/transaction/${transactionId}`);
   }
 }

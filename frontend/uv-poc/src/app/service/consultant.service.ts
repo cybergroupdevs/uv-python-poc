@@ -10,7 +10,7 @@ export class ConsultantService {
   baseUri: string = environment.baseUrl;
   get(consultantId) {
     let params = new HttpParams().set('transactionId', consultantId);
-    return this.http.get(`${this.baseUri}/consultant}`, {
+    return this.http.get(`${this.baseUri}/consultant`, {
       params: params,
     });
   }

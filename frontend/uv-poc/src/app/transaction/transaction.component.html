@@ -1,0 +1,38 @@
+<table
+  mat-table
+  [dataSource]="transactionData"
+  class="mat-elevation-z8 z-depth-5"
+>
+  <ng-container matColumnDef="class">
+    <th mat-header-cell *matHeaderCellDef class="text-right">Class</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-right">
+      {{ transactionData.class }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="sku">
+    <th mat-header-cell *matHeaderCellDef class="text-right">Sku</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-right">
+      {{ transactionData.sku }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="mkdn">
+    <th mat-header-cell *matHeaderCellDef class="text-right">Markdown</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-right">
+      {{ transactionData.mkdn }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="desc">
+    <th mat-header-cell *matHeaderCellDef class="text-left">Description</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-left">
+      {{ transactionData.desc }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="rental">
+    <th mat-header-cell *matHeaderCellDef>Rental</th>
+    <td mat-cell *matCellDef="let transactionData">
+      {{ transactionData.rental }}
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="transactionHeading"></tr>
+  <tr mat-row *matRowDef="let row; columns: transactionHeading"></tr>
+</table>
