@@ -85,6 +85,25 @@
           <p>{{ headerData.customerDetails['pfid'] }}</p>
         </div>
       </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Search by phone no</p>
+        </div>
+        <div class="col-md-6">
+          <form [formGroup]="phoneNoForm">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="901-234-2321"
+              name="phoneNo"
+              formControlName="phoneNo"
+            />
+            <button class="btn btn-dark" type="submit" (click)="openDialog()">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
   <button class="btn btn-dark mr-2" (click)="showRefundDetails()">
@@ -114,6 +133,13 @@
       <mat-tab label="Commission"
         ><app-commission-details></app-commission-details
       ></mat-tab>
+      <mat-tab label="Customer"
+        ><app-customer-details></app-customer-details
+      ></mat-tab>
+      <mat-tab label="Consultant"
+        ><app-consultant-details></app-consultant-details
+      ></mat-tab>
+
       <mat-tab label="Order"><app-order></app-order></mat-tab>
       <mat-tab label="Credit card">
         <div class="credit-card-container">
