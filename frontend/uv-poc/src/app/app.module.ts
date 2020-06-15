@@ -12,6 +12,7 @@ import { NgModule } from '@angular/core';
 import { OrderComponent } from './order/order.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionComponent } from './transaction/transaction.component';
@@ -38,9 +39,10 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
     MatDialogModule,
     MatPaginatorModule,
     MatTableModule,
+    MatTabsModule,
     ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

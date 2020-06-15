@@ -14,11 +14,17 @@ export class TransactionDetailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private creditCardService: CreditCardService,
+    private discountService: DiscountService,
     private refundService: RefundService
-  ) {}
+  ) { }
   headerData;
   cardDetails: any;
   creditCardHeading = [];
+  discountPct: any;
+  discountSubtotal: any;
+  transactionId: any;
+  refundManagerName: any;
+  refundTicketNumber: any;
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -42,7 +48,7 @@ export class TransactionDetailComponent implements OnInit {
         this.refundTicketNumber = res.refundData['ticketNumber'];
       });
   }
-  
+
   showDiscountDetails() {
     this.discountService.get(this.transactionId).subscribe((res: any) => {
       this.discountPct = res.discountDetails['pct'];
