@@ -655,7 +655,7 @@ def discount_detail(transactionId):
             data = data+' converted to markdown.'
         else:
             data = data+'.'
-        sale_total=0                                #######
+        sale_total=0
         items_mv=len(details['TRANSACTION'][0]['ITEM_MV'])
         for i in range(0,items_mv):
                 retail=float(details['TRANSACTION'][0]['ITEM_MV'][count]['RETAIL'])
