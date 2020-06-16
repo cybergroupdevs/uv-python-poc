@@ -19,7 +19,7 @@ export class CustomerService {
       .set('phoneNo', phoneNo)
       .set('pageIndex', pageIndex)
       .set('pageSize', pageSize);
-    return this.http.get(`${this.baseUri}/customer/history}`, {
+    return this.http.get(`${this.baseUri}/customer/history`, {
       params: params,
     });
   }

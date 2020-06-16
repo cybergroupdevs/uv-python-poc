@@ -85,10 +85,31 @@
           <p>{{ headerData.customerDetails['pfid'] }}</p>
         </div>
       </div>
+      <div class="row w-75">
+        <div class="col-md-6">
+          <p>Search by phone no</p>
+        </div>
+        <div class="col-md-6">
+          <form [formGroup]="phoneNoForm">
+            <input class="form-control" type="text" placeholder="901-234-2321" name="phoneNo"
+              formControlName="phoneNo" />
+            <div>
+              <span class="badge badge-danger"
+                *ngIf="phoneNoForm.controls['phoneNo'].invalid && toggle == true">Required</span>
+            </div>
+            <button class="btn btn-dark" type="submit" (click)="openDialog()">
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
-  <button class="btn btn-dark" (click)="showRefundDetails()">
+  <button class="btn btn-dark mr-2" (click)="showRefundDetails()">
     Refund details
+  </button>
+  <button class="btn btn-dark" (click)="showDiscountDetails()">
+    Discount Details
   </button>
   <div class="pt-2">
     <p *ngIf="refundManagerName">
@@ -98,67 +119,74 @@
       <b>Ticket number</b> : {{ refundTicketNumber | titlecase }}
     </p>
     <div class="discount-container">
-      <span class="discount" (click)="showDiscountDetails()">Discount?</span>
       <span *ngIf="discountPct">Pct: {{ discountPct }}</span>
       <span *ngIf="discountSubtotal">
         Subtotal:{{ discountSubtotal | number: '.1-5' }}
       </span>
     </div>
-    <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="Transaction"><app-transaction></app-transaction></mat-tab>
-    </mat-tab-group>
-    <mat-tab-group mat-align-tabs="center">
-      <mat-tab label="Order"><app-order></app-order></mat-tab>
+    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
+      <mat-tab label="Transaction">
+        <app-transaction></app-transaction>
+      </mat-tab>
+      <mat-tab label="Commission">
+        <app-commission-details></app-commission-details>
+      </mat-tab>
+      <mat-tab label="Customer">
+        <app-customer-details></app-customer-details>
+      </mat-tab>
+      <mat-tab label="Consultant">
+        <app-consultant-details></app-consultant-details>
+      </mat-tab>
+
+      <mat-tab label="Order">
+        <app-order></app-order>
+      </mat-tab>
+      <mat-tab label="Credit card">
+        <div class="credit-card-container">
+          <table mat-table [dataSource]="cardDetails" class="mat-elevation-z8 z-depth-5 w-100">
+            <ng-container matColumnDef="sent">
+              <th mat-header-cell *matHeaderCellDef class="text-right">Sent</th>
+              <td mat-cell *matCellDef="let details" class="text-right">
+                {{ details.sent }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="rcvd">
+              <th mat-header-cell *matHeaderCellDef class="text-right">RCVD</th>
+              <td mat-cell *matCellDef="let details" class="text-right">
+                {{ details.rcvd }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="done">
+              <th mat-header-cell *matHeaderCellDef class="text-right pr-4">
+                Done
+              </th>
+              <td mat-cell *matCellDef="let details" class="text-right pr-4">
+                {{ details.done }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef class="text-left">Type</th>
+              <td mat-cell *matCellDef="let details" class="text-left">
+                {{ details.type }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="entry">
+              <th mat-header-cell *matHeaderCellDef class="text-left">Entry</th>
+              <td mat-cell *matCellDef="let details" class="text-left">
+                {{ details.entry }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="auth">
+              <th mat-header-cell *matHeaderCellDef class="text-left">Auth</th>
+              <td mat-cell *matCellDef="let details" class="text-left">
+                {{ details.auth }}
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="creditCardHeading"></tr>
+            <tr mat-row *matRowDef="let row; columns: creditCardHeading"></tr>
+          </table>
+        </div>
+      </mat-tab>
     </mat-tab-group>
   </div>
-  <div class="credit-card-container">
-    <span class="credit-card" (click)="showCreditCardDetails()"
-      >Credit Card Details</span
-    >
-    <div *ngIf="cardDetails">
-      <table
-        mat-table
-        [dataSource]="cardDetails"
-        class="mat-elevation-z8 z-depth-5"
-      >
-        <ng-container matColumnDef="sent">
-          <th mat-header-cell *matHeaderCellDef class="text-right">Sent</th>
-          <td mat-cell *matCellDef="let details" class="text-right">
-            {{ details.sent }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="rcvd">
-          <th mat-header-cell *matHeaderCellDef class="text-right">RCVD</th>
-          <td mat-cell *matCellDef="let details" class="text-right">
-            {{ details.rcvd }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="done">
-          <th mat-header-cell *matHeaderCellDef class="text-right">Done</th>
-          <td mat-cell *matCellDef="let details" class="text-right">
-            {{ details.done }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef class="text-left">Type</th>
-          <td mat-cell *matCellDef="let details" class="text-left">
-            {{ details.type }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="entry">
-          <th mat-header-cell *matHeaderCellDef class="text-left">Entry</th>
-          <td mat-cell *matCellDef="let details" class="text-left">
-            {{ details.entry }}
-          </td>
-        </ng-container>
-        <ng-container matColumnDef="auth">
-          <th mat-header-cell *matHeaderCellDef class="text-left">Auth</th>
-          <td mat-cell *matCellDef="let details" class="text-left">
-            {{ details.auth }}
-          </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="creditCardHeading"></tr>
-        <tr mat-row *matRowDef="let row; columns: creditCardHeading"></tr>
-      </table>
-    </div>
 </div>
