@@ -25,7 +25,6 @@ export class OrderComponent implements OnInit {
     this.orderDetailService.get(this.transactionId).subscribe(
       (res: any) => {
         this.orderData = res['orderDetail'];
-        console.log(this.orderData);
       },
       (error) => {
         this.errorMessage = error.error['error'];
