@@ -5,17 +5,17 @@
   <div class="col-md-6">
     <form [formGroup]="phoneNoForm">
       <div class="d-flex">
-      <input
-        class="form-control mr-2"
-        type="text"
-        placeholder="901-234-2321"
-        name="phoneNo"
-        formControlName="phoneNo"
-      />
-      <button class="btn btn-dark" type="submit" (click)="customerHistory()">
-        Search
-      </button>
-    </div>
+        <input
+          class="form-control mr-2"
+          type="text"
+          placeholder="901-234-2321"
+          name="phoneNo"
+          formControlName="phoneNo"
+        />
+        <button class="btn btn-dark" type="submit" (click)="customerHistory()">
+          Search
+        </button>
+      </div>
       <div>
         <span
           class="badge badge-danger"
@@ -23,11 +23,10 @@
           >Required</span
         >
       </div>
-      
     </form>
   </div>
 </div>
-<div *ngIf="toggle  && phone != ''">
+<div *ngIf="toggle && phone != ''">
   <div *ngIf="!history; else customerDataTable">
     <span span style="color: black; font-weight: bold;"
       >No customer history available for {{ phone }}</span
@@ -75,7 +74,7 @@
     <mat-paginator
       [length]="length"
       [pageSize]="pageSize"
-      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSizeOptions]="[5, 10]"
       (page)="pagination($event)"
     >
     </mat-paginator>
