@@ -12,20 +12,9 @@ export class OrderComponent implements OnInit {
     private orderDetailService: OrderDetailService,
     private activatedRoute: ActivatedRoute
   ) {}
-  orderNo: string;
-  shipDate;
-  shipTo: string;
-  method: string;
-  address: string;
-  carrier: string;
-  csz: string;
-  traceNo: number;
-  commentLabel: number;
-  audit: string;
-  returnAddress: string;
-  email: string;
   transactionId;
   errorMessage;
+  orderData;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       let transactionHeaderDetails = JSON.parse(params['transactionData']);
@@ -35,24 +24,11 @@ export class OrderComponent implements OnInit {
 
     this.orderDetailService.get(this.transactionId).subscribe(
       (res: any) => {
-        this.setValues(res['orderDetail']);
+        this.orderData = res['orderDetail'];
       },
       (error) => {
         this.errorMessage = error.error['error'];
       }
     );
-  }
-  setValues(data) {
-    this.orderNo = data.orderNo;
-    this.shipDate = data.shipDate;
-    this.method = data.method;
-    this.address = data.shipToAddress;
-    this.carrier = data.carrier;
-    this.csz = data.csz;
-    this.traceNo = data.traceNo;
-    this.commentLabel = data.commentLabel;
-    this.audit = data.auditFlag;
-    this.returnAddress = data.returnIds;
-    this.email = data.email;
   }
 }

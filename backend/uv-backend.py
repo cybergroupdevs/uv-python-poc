@@ -655,7 +655,6 @@ def discount_detail(transactionId):
             data = data+' converted to markdown.'
         else:
             data = data+'.'
-        sale_total=0
         items_mv=len(details['TRANSACTION'][0]['ITEM_MV'])
         for i in range(0,items_mv):
                 retail=float(details['TRANSACTION'][0]['ITEM_MV'][count]['RETAIL'])
@@ -770,6 +769,7 @@ def transaction_detail(transactionId):
         transaction['tuxConsult'] = tux_consult
         # alt_phone_number is the RELATING FIELD BETWEEN CUSTOMER AND TRANSACTION
         alt_phone_number = details['TRANSACTION'][0]['ALT.PHONE']
+        transaction['alternatePhone'] = alt_phone_number
         customer_cmd="LIST CUSTOMERS WITH @ID = {} PHONE.NO FNAME LNAME PFID TOJSON".format(alt_phone_number)
         customer_details=u2py.Command(customer_cmd).run(capture=True)
         customer_details=json.loads(customer_details)
