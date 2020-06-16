@@ -44,7 +44,7 @@ export class CustomerHistoryComponent implements OnInit {
     this.history = false;
     let pageIndex = 0;
     let pageSize = 5;
-    this.check = false;
+    this.check = true;
     this.phone = this.phoneNoForm.value['phoneNo'];
     if (this.phone != '') {
       this.check = true;
@@ -58,7 +58,9 @@ export class CustomerHistoryComponent implements OnInit {
           if (this.length != 0) {
             this.history = true;
           }
+          else this.history = false;
         });
     }
+    else this.toggle = !this.toggle
   }
 }
