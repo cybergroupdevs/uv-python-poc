@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommissionService } from '../service/commission.service';
 
 @Component({
@@ -13,11 +13,12 @@ export class CommissionDetailsComponent implements OnInit {
   retailAmount: number;
   commissionHeading = [];
   commissionErrorMsg: string = null;
+  @Input() transactionId : string;
 
   ngOnInit() {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Commission') {
-        this._commissionService.get('4830*35*1672').subscribe((data) => {
+        this._commissionService.get(this.transactionId).subscribe((data) => {
           if (data['error']) {
             this.commissionErrorMsg = data['error'];
           } else {
