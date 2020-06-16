@@ -9,7 +9,7 @@ import { CommissionService } from '../service/commission.service';
 })
 export class CustomerDetailsComponent implements OnInit {
   customerId: string;
-  customerData = {};
+  customerData: any;
   customerKeys: any;
   constructor(
     private _customerService: CustomerService,
@@ -19,17 +19,18 @@ export class CustomerDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Customer') {
-        this.customerId = '9782';
+        this.customerId = '4626';
         this._customerService.get(this.customerId).subscribe((res: any) => {
-          this.customerData['Phone number'] = res['phoneNo'];
-          this.customerData['First name'] = res['firstName'];
-          this.customerData['Last name'] = res['lastName'];
-          this.customerData['Address'] = res['address'];
-          this.customerData['City'] = res['city'];
-          this.customerData['Zip code'] = res['zipCode'];
-          this.customerData['PFID'] = res['pfid'];
-          this.customerData['Alternate phone number'] = res['altPhoneNo'];
-          this.customerKeys = Object.keys(this.customerData);
+          this.customerData = [res];
+          console.log(this.customerData);
+          // this.customerData['Firstname'] = res['firstName'];
+          // this.customerData['Lastname'] = res['lastName'];
+          // this.customerData['Address'] = res['address'];
+          // this.customerData['City'] = res['city'];
+          // this.customerData['Zipcode'] = res['zipCode'];
+          // this.customerData['PFID'] = res['pfid'];
+          // this.customerData['Alternatephonenumber'] = res['altPhoneNo'];
+          this.customerKeys = Object.keys(this.customerData[0]);
         });
       }
     });

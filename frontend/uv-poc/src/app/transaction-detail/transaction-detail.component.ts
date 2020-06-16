@@ -21,16 +21,8 @@ export class TransactionDetailComponent implements OnInit {
     private discountService: DiscountService,
     private refundService: RefundService,
     private commissionService: CommissionService,
-    private customerService: CustomerService,
     public dialog: MatDialog
   ) {}
-  customerData = [];
-  toggle: boolean = false;
-  phone: string;
-  count: Number;
-  phoneNoForm = new FormGroup({
-    phoneNo: new FormControl('', [Validators.required]),
-  });
   headerData;
   cardDetails: any;
   creditCardHeading = [];

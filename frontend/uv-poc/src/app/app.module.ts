@@ -10,14 +10,14 @@ import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { OrderComponent } from './order/order.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +37,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
     BrowserModule,
     HttpClientModule,
     MatDialogModule,
+    MatIconModule,
     MatPaginatorModule,
     MatTableModule,
     MatTabsModule,
@@ -45,4 +46,4 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

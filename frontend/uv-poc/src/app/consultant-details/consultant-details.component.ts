@@ -10,6 +10,11 @@ export class ConsultantDetailsComponent implements OnInit {
   transactionId: string;
   keys: any;
   data: any;
+  length: Number;
+  consultantHeadings = ['Type', 'Name'];
+  details = {};
+  values: any;
+  consultant = [];
   constructor(
     private _consultantService: ConsultantService,
     private _commissionService: CommissionService
@@ -23,7 +28,16 @@ export class ConsultantDetailsComponent implements OnInit {
           .get(this.transactionId)
           .subscribe((res: any) => {
             this.data = res;
+            debugger;
             this.keys = Object.keys(res);
+            this.length = this.keys.length;
+            this.values = Object.values(res);
+            for (let key = 0; key < this.length; key++) {
+              this.details[this.consultantHeadings[key]] = this.values[key];
+              this.consultant.push(this.details);
+            }
+
+            console.log(this.consultant);
           });
       }
     });
