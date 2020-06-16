@@ -6,6 +6,7 @@ import {
   MatDialogRef,
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-customer-history',
@@ -13,37 +14,32 @@ import {
   styleUrls: ['./customer-history.component.css'],
 })
 export class CustomerHistoryComponent implements OnInit {
+  phoneNoForm = new FormGroup({
+    phoneNo: new FormControl('', [Validators.required]),
+  });
+  toggle: boolean = false;
+  phone: string;
   customerHeading: any;
   pageSize = 5;
   pageEvent: PageEvent;
   pageIndex = 0;
   length: number;
-  customerData: any;
-  phoneNo: string;
+  customerData: [];
   history: boolean;
+  count: Number;
 
   constructor(
     public dialogRef: MatDialogRef<CustomerHistoryComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private _customerService: CustomerService
+    private _customerService: CustomerService,
+    public dialog: MatDialog
   ) {}
 
-  ngOnInit(): void {
-    this.length = this.data['count'];
-    if (this.length == 0) {
-      this.history = false;
-      this.phoneNo = this.data['phoneNo'];
-    } else {
-      this.history = true;
-      this.customerHeading = Object.keys(this.data['customerData'][0]);
-      this.customerData = this.data['customerData'];
-      this.phoneNo = this.data['phoneNo'];
-    }
-  }
+  ngOnInit(): void {}
   pagination(event) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-    let phone = this.phoneNo;
+    let phone = this.phone;
     this.paginateCustomer(phone);
   }
   paginateCustomer(phone) {
@@ -52,5 +48,23 @@ export class CustomerHistoryComponent implements OnInit {
       .subscribe((res: any) => {
         this.customerData = res['customerHistory'];
       });
+  }
+  customerHistory() {
+    this.toggle = true;
+    let pageIndex = 0;
+    let pageSize = 5;
+    this.phone = this.phoneNoForm.value['phoneNo'];
+    if (this.phone != '') {
+      this._customerService
+        .list(this.phone, pageIndex, pageSize)
+        .subscribe((res: any) => {
+          console.log(res);
+          this.customerData = res['customerHistory'];
+          this.count = res['count'];
+          if (this.count != 0) {
+            this.history = true;
+          }
+        });
+    }
   }
 }

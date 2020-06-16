@@ -85,24 +85,7 @@
           <p>{{ headerData.customerDetails['pfid'] }}</p>
         </div>
       </div>
-      <div class="row w-75">
-        <div class="col-md-6">
-          <p>Search by phone no</p>
-        </div>
-        <div class="col-md-6">
-          <form [formGroup]="phoneNoForm">
-            <input class="form-control" type="text" placeholder="901-234-2321" name="phoneNo"
-              formControlName="phoneNo" />
-            <div>
-              <span class="badge badge-danger"
-                *ngIf="phoneNoForm.controls['phoneNo'].invalid && toggle == true">Required</span>
-            </div>
-            <button class="btn btn-dark" type="submit" (click)="openDialog()">
-              Search
-            </button>
-          </form>
-        </div>
-      </div>
+      <button (click)="openDialog()">pop</button>
     </div>
   </div>
   <button class="btn btn-dark mr-2" (click)="showRefundDetails()">
