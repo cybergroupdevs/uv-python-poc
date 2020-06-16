@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { CommissionService } from '../service/commission.service';
+import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customer-details',
@@ -13,7 +15,8 @@ export class CustomerDetailsComponent implements OnInit {
   customerKeys: any;
   constructor(
     private _customerService: CustomerService,
-    private _commissionService: CommissionService
+    private _commissionService: CommissionService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -22,17 +25,14 @@ export class CustomerDetailsComponent implements OnInit {
         this.customerId = '4626';
         this._customerService.get(this.customerId).subscribe((res: any) => {
           this.customerData = [res];
-          console.log(this.customerData);
-          // this.customerData['Firstname'] = res['firstName'];
-          // this.customerData['Lastname'] = res['lastName'];
-          // this.customerData['Address'] = res['address'];
-          // this.customerData['City'] = res['city'];
-          // this.customerData['Zipcode'] = res['zipCode'];
-          // this.customerData['PFID'] = res['pfid'];
-          // this.customerData['Alternatephonenumber'] = res['altPhoneNo'];
           this.customerKeys = Object.keys(this.customerData[0]);
         });
       }
+    });
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+      width: '800px',
     });
   }
 }

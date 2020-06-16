@@ -22,6 +22,7 @@ export class CustomerHistoryComponent implements OnInit {
   customerData: [];
   history: boolean = false;
   empty: boolean = true;
+  check: boolean = false;
 
   constructor(private _customerService: CustomerService) {}
 
@@ -43,8 +44,10 @@ export class CustomerHistoryComponent implements OnInit {
     this.history = false;
     let pageIndex = 0;
     let pageSize = 5;
+    this.check = false;
     this.phone = this.phoneNoForm.value['phoneNo'];
     if (this.phone != '') {
+      this.check = true;
       this._customerService
         .list(this.phone, pageIndex, pageSize)
         .subscribe((res: any) => {
