@@ -10,7 +10,6 @@ export class ConsultantDetailsComponent implements OnInit {
   transactionId: string;
   keys: any;
   length: Number;
-  details = {};
   consultantData = [];
   constructor(
     private _consultantService: ConsultantService,

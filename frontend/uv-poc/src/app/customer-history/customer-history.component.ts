@@ -57,10 +57,8 @@ export class CustomerHistoryComponent implements OnInit {
           this.length = res['count'];
           if (this.length != 0) {
             this.history = true;
-          }
-          else this.history = false;
+          } else this.history = false;
         });
-    }
-    else this.toggle = !this.toggle
+    } else this.toggle = !this.toggle;
   }
 }
