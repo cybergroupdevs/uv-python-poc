@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConsultantService } from '../service/consultant.service';
 import { CommissionService } from '../service/commission.service';
 @Component({
@@ -7,10 +7,10 @@ import { CommissionService } from '../service/commission.service';
   styleUrls: ['./consultant-details.component.css'],
 })
 export class ConsultantDetailsComponent implements OnInit {
-  transactionId: string;
   keys: any;
   length: Number;
   consultantData = [];
+  @Input() transactionId: string;
   constructor(
     private _consultantService: ConsultantService,
     private _commissionService: CommissionService
@@ -19,7 +19,6 @@ export class ConsultantDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Consultant') {
-        this.transactionId = '5334*24*1373';
         this._consultantService
           .get(this.transactionId)
           .subscribe((res: any) => {
