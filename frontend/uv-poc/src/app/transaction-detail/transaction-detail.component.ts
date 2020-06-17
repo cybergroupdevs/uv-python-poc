@@ -31,21 +31,21 @@ export class TransactionDetailComponent implements OnInit {
   refundHeading: string[];
   discountData: any;
   discountHeading: string[];
+  customerId;
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
-      this.transactionId = this.headerData.customerDetails['transactionId']
+      this.transactionId = this.headerData.customerDetails['transactionId'];
+      this.customerId = this.headerData.customerDetails['alternatePhone'];
     });
 
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
-        this.creditCardService
-          .get(this.transactionId)
-          .subscribe((res: any) => {
-            this.cardDetails = res['cardDetails'];
-            this.creditCardHeading = Object.keys(res['cardDetails'][0]);
-          });
+        this.creditCardService.get(this.transactionId).subscribe((res: any) => {
+          this.cardDetails = res['cardDetails'];
+          this.creditCardHeading = Object.keys(res['cardDetails'][0]);
+        });
       } else if (data.toString() == 'Refund') {
         this.showRefundDetails();
       } else if (data.toString() == 'Discount') {
@@ -64,12 +64,10 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   showDiscountDetails() {
-    this.discountService
-      .get(this.transactionId)
-      .subscribe((res: any) => {
-        this.discountData = [res.discountDetails];
-        this.discountHeading = Object.keys(res.discountDetails);
-      });
+    this.discountService.get(this.transactionId).subscribe((res: any) => {
+      this.discountData = [res.discountDetails];
+      this.discountHeading = Object.keys(res.discountDetails);
+    });
   }
 
   onChangeTab(event) {
