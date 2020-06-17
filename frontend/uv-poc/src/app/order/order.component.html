@@ -1,94 +1,130 @@
-<div class="main">
-  <div *ngIf="errorMessage; else orderTable">
-    <div class="errorMessage">{{ errorMessage }}</div>
-  </div>
-  <ng-template #orderTable>
-    <div class="order-screen row">
-      <div class="col-md-6">
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Order No.</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['orderNo'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Method</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['method'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Carrier</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['carrier'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Trace No.</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['traceNo'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Email</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['email'] }}</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Ship Date</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['shipDate'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Ship Address</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['shipToAddress'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>CSZ</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['csz'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Comment Label</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['commentLabel'] }}</p>
-          </div>
-        </div>
-        <div class="row w-75">
-          <div class="col-md-6">
-            <p>Return Address</p>
-          </div>
-          <div class="col-md-6">
-            <p>{{ orderData['returnIds'] }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <span class="flag">{{ orderData['auditFlag'] | titlecase }}</span>
-  </ng-template>
-</div>
+<table
+  mat-table
+  [dataSource]="orderData"
+  class="mat-elevation-z8 z-depth-5 w-100"
+>
+  <ng-container matColumnDef="orderNo">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="text-center justify-content-center"
+    >
+      Order No.
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let orderData"
+      class="text-center justify-content-center"
+    >
+      {{ orderData.orderNo }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="method">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="text-center justify-content-center"
+    >
+      Method
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let orderData"
+      class="text-center justify-content-center"
+    >
+      {{ orderData.method }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="carrier">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="text-center justify-content-center"
+    >
+      Carrier
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let orderData"
+      class="text-center justify-content-center"
+    >
+      {{ orderData.carrier }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="traceNo">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="text-center justify-content-center"
+    >
+      Trace No.
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let orderData"
+      class="text-center justify-content-center"
+    >
+      {{ orderData.traceNo }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="email">
+    <th
+      mat-header-cell
+      *matHeaderCellDef
+      class="text-center justify-content-center"
+    >
+      Email
+    </th>
+    <td
+      mat-cell
+      *matCellDef="let orderData"
+      class="text-center justify-content-center"
+    >
+      {{ orderData.email }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="shipDate">
+    <th mat-header-cell *matHeaderCellDef>Ship Date</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.shipDate }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="shipToAddress">
+    <th mat-header-cell *matHeaderCellDef>Shipping Address</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.shipToAddress }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="csz">
+    <th mat-header-cell *matHeaderCellDef>CSZ</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.csz }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="commentLabel">
+    <th mat-header-cell *matHeaderCellDef>Comment Label</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.commentLabel }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="shipTo">
+    <th mat-header-cell *matHeaderCellDef>Ship To</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.shipTo }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="auditFlag">
+    <th mat-header-cell *matHeaderCellDef>Audit</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.auditFlag }}
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="returnIds">
+    <th mat-header-cell *matHeaderCellDef>Return To</th>
+    <td mat-cell *matCellDef="let orderData">
+      {{ orderData.returnIds }}
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="orderHeading"></tr>
+  <tr mat-row *matRowDef="let row; columns: orderHeading"></tr>
+</table>

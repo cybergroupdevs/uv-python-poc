@@ -747,8 +747,10 @@ def transaction_detail(transactionId):
         transaction['transactionId'] = transaction_id
         transaction['phoneNo'] = details['TRANSACTION'][0]['PHONE']
         transaction['date'] = details['TRANSACTION'][0]['TRAN.DATE']
-        transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
-        transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
+        if 'TRAN.TYPE' in details['TRANSACTION'][0].keys():
+            transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
+        if 'TRANSFER.CARTONS' in details['TRANSACTION'][0].keys():
+            transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
         comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
         em_cmd= f"LIST EM WITH @ID = '{comm_empl_id}' NICKNAME FNAME LNAME TOJSON"
         em_details=u2py.Command(em_cmd).run(capture=True)
