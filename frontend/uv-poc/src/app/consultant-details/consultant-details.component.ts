@@ -9,7 +9,8 @@ import { CommissionService } from '../service/commission.service';
 export class ConsultantDetailsComponent implements OnInit {
   transactionId: string;
   keys: any;
-  data: any;
+  length: Number;
+  consultantData = [];
   constructor(
     private _consultantService: ConsultantService,
     private _commissionService: CommissionService
@@ -22,8 +23,15 @@ export class ConsultantDetailsComponent implements OnInit {
         this._consultantService
           .get(this.transactionId)
           .subscribe((res: any) => {
-            this.data = res;
             this.keys = Object.keys(res);
+            this.length = this.keys.length;
+            this.keys.forEach((element) => {
+              var data = {};
+              data['type'] = element;
+              data['value'] = res[element];
+              this.consultantData.push(data);
+              this.keys = Object.keys(this.consultantData[0]);
+            });
           });
       }
     });

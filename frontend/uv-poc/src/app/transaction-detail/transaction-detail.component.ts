@@ -21,16 +21,8 @@ export class TransactionDetailComponent implements OnInit {
     private discountService: DiscountService,
     private refundService: RefundService,
     private commissionService: CommissionService,
-    private customerService: CustomerService,
     public dialog: MatDialog
   ) {}
-  customerData = [];
-  toggle: boolean = false;
-  phone: string;
-  count: Number;
-  phoneNoForm = new FormGroup({
-    phoneNo: new FormControl('', [Validators.required]),
-  });
   headerData;
   cardDetails: any;
   creditCardHeading = [];
@@ -84,25 +76,8 @@ export class TransactionDetailComponent implements OnInit {
     this.commissionService.changeActiveTab(event['tab']['textLabel']);
   }
   openDialog(): void {
-    this.toggle = true;
-    let pageIndex = 0;
-    let pageSize = 5;
-    this.phone = this.phoneNoForm.value['phoneNo'];
-    if (this.phone != '') {
-      this.customerService
-        .list(this.phone, pageIndex, pageSize)
-        .subscribe((res: any) => {
-          this.customerData = res['customerHistory'];
-          this.count = res['count'];
-          const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-            width: '800px',
-            data: {
-              customerData: this.customerData,
-              phoneNo: this.phone,
-              count: this.count,
-            },
-          });
-        });
-    }
+    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+      width: '800px',
+    });
   }
 }

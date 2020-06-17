@@ -1,6 +1,68 @@
-<div class="container">
-  <div class="row" *ngFor="let key of customerKeys">
-    <div class="col">{{ key }}</div>
-    <div class="col">{{ customerData[key] }}</div>
-  </div>
+<div class="customer-details-container">
+  <table
+    mat-table
+    [dataSource]="customerData"
+    class="mat-elevation-z8 z-depth-5 w-100"
+  >
+    <ng-container matColumnDef="phoneNo">
+      <th mat-header-cell *matHeaderCellDef class="text-right">Phone number</th>
+      <td mat-cell *matCellDef="let details" class="text-right">
+        {{ details.phoneNo }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef class="text-right">First name</th>
+      <td mat-cell *matCellDef="let details" class="text-right">
+        {{ details.firstName }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef class="text-right pr-4">
+        Last name
+      </th>
+      <td mat-cell *matCellDef="let details" class="text-right pr-4">
+        {{ details.lastName }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef class="text-left">Address</th>
+      <td mat-cell *matCellDef="let details" class="text-left">
+        {{ details.address }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="city">
+      <th mat-header-cell *matHeaderCellDef class="text-left">City</th>
+      <td mat-cell *matCellDef="let details" class="text-left">
+        {{ details.city }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="zipCode">
+      <th mat-header-cell *matHeaderCellDef class="text-left">Zip code</th>
+      <td mat-cell *matCellDef="let details" class="text-left">
+        {{ details.zipCode }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="altPhoneNo">
+      <th mat-header-cell *matHeaderCellDef class="text-left">
+        Alternate phone number
+      </th>
+      <td mat-cell *matCellDef="let details" class="text-left">
+        {{ details.altPhoneNo }}
+        <mat-icon
+          aria-hidden="false"
+          aria-label="Example home icon"
+          (click)="openDialog()"
+          >search
+        </mat-icon>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="pfid">
+      <th mat-header-cell *matHeaderCellDef class="text-left">PFID</th>
+      <td mat-cell *matCellDef="let details" class="text-left">
+        {{ details.pfid }}
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="customerKeys"></tr>
+    <tr mat-row *matRowDef="let row; columns: customerKeys"></tr>
+  </table>
 </div>

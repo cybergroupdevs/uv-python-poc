@@ -1,11 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { PageEvent } from '@angular/material/paginator';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-customer-history',
@@ -13,37 +9,28 @@ import {
   styleUrls: ['./customer-history.component.css'],
 })
 export class CustomerHistoryComponent implements OnInit {
+  phoneNoForm = new FormGroup({
+    phoneNo: new FormControl('', [Validators.required]),
+  });
+  toggle: boolean = false;
+  phone: string;
   customerHeading: any;
   pageSize = 5;
   pageEvent: PageEvent;
   pageIndex = 0;
   length: number;
-  customerData: any;
-  phoneNo: string;
-  history: boolean;
+  customerData: [];
+  history: boolean = false;
+  empty: boolean = true;
+  check: boolean = false;
 
-  constructor(
-    public dialogRef: MatDialogRef<CustomerHistoryComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private _customerService: CustomerService
-  ) {}
+  constructor(private _customerService: CustomerService) {}
 
-  ngOnInit(): void {
-    this.length = this.data['count'];
-    if (this.length == 0) {
-      this.history = false;
-      this.phoneNo = this.data['phoneNo'];
-    } else {
-      this.history = true;
-      this.customerHeading = Object.keys(this.data['customerData'][0]);
-      this.customerData = this.data['customerData'];
-      this.phoneNo = this.data['phoneNo'];
-    }
-  }
+  ngOnInit(): void {}
   pagination(event) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
-    let phone = this.phoneNo;
+    let phone = this.phone;
     this.paginateCustomer(phone);
   }
   paginateCustomer(phone) {
@@ -52,5 +39,26 @@ export class CustomerHistoryComponent implements OnInit {
       .subscribe((res: any) => {
         this.customerData = res['customerHistory'];
       });
+  }
+  customerHistory() {
+    this.history = false;
+    let pageIndex = 0;
+    let pageSize = 5;
+    this.check = true;
+    this.phone = this.phoneNoForm.value['phoneNo'];
+    if (this.phone != '') {
+      this.check = true;
+      this._customerService
+        .list(this.phone, pageIndex, pageSize)
+        .subscribe((res: any) => {
+          this.toggle = true;
+          this.customerData = res['customerHistory'];
+          this.customerHeading = Object.keys(res['customerHistory'][0]);
+          this.length = res['count'];
+          if (this.length != 0) {
+            this.history = true;
+          } else this.history = false;
+        });
+    } else this.toggle = !this.toggle;
   }
 }
