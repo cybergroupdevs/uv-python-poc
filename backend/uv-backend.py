@@ -258,13 +258,13 @@ def customer_details():
 def consultant_details():
     transaction_id=request.args.get('transactionId')
     transaction_file=u2py.File("TRANSACTION")
-    transaction_cmd=f"LIST PHONE CommEmplId CommEmplType FITTER DATA {transaction_id} TRANSACTION TOJSON"
+    transaction_cmd=f"LIST OPER.ID CommEmplId CommEmplType FITTER DATA {transaction_id} TRANSACTION TOJSON"
     transaction_details=u2py.Command(transaction_cmd).run(capture=True)
     transaction_details=json.loads(transaction_details)
-    phone_no=transaction_details['TRANSACTION'][0]["PHONE"]
+    operator_id=transaction_details['TRANSACTION'][0]["OPER.ID"]
     em_file=u2py.File("EM")
     details={}
-    consultant_cmd=f"LIST FNAME LNAME SHORTNAME NICKNAME DATA {phone_no} EM TOJSON"
+    consultant_cmd=f"LIST FNAME LNAME SHORTNAME NICKNAME DATA {operator_id} EM TOJSON"
     consultant_details=u2py.Command(consultant_cmd).run(capture=True)
     consultant_details=json.loads(consultant_details)
     if(("NICKNAME",consultant_details['EM'][0])==True):
