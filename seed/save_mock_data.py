@@ -9,7 +9,7 @@ def save_mock_data():
     transaction_file = u2py.File('TRANSACTION')
     employee_file = u2py.File('EM')
     customer_file = u2py.File('CUSTOMERS')
-    # kg_employee_file = u2py.File('KG.EM')
+    kg_employee_file = u2py.File('KG.EM')
     data = pd.read_csv('/usr/uv/PY/UPDATED_TRANSACTION.csv')
     data_dict = data.to_dict()
     length = len(data_dict['transactionID'])
