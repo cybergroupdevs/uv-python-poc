@@ -66,14 +66,6 @@
         </div>
         <div class="col-md-6">
           {{ headerData.customerDetails['phoneNo'] }}
-          <mat-icon
-            class="btn"
-            style="margin-top: -10px;"
-            aria-hidden="false"
-            aria-label="Example home icon"
-            (click)="openDialog()"
-            >search
-          </mat-icon>
         </div>
       </div>
       <div class="row w-75">
@@ -119,7 +111,7 @@
       <mat-tab label="Order">
         <app-order></app-order>
       </mat-tab>
-      <mat-tab label="Credit card">
+      <mat-tab label="Credit card" style="margin-bottom: 0; overflow: hidden;">
         <div class="credit-card-container">
           <table
             mat-table
