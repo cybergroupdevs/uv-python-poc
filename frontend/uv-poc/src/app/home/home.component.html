@@ -54,6 +54,11 @@
           formControlName="phoneNo"
           mask="000-000-0000"
         />
+        <span
+          class="badge badge-danger"
+          *ngIf="phoneNoForm.controls['phoneNo'].invalid && check"
+          >Required</span
+        >
       </div>
     </form>
   </div>

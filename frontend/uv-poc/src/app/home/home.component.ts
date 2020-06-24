@@ -16,6 +16,7 @@ export class HomeComponent implements OnInit {
     private transactionDetailService: TransactionDetailService,
     public dialog: MatDialog
   ) {}
+  check: boolean = false;
   transactionForm = new FormGroup({
     transactionId: new FormControl('', [Validators.required]),
   });
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit {
     );
   }
   openDialog(): void {
+    this.check = true;
     var phoneNo = this.phoneNoForm.value.phoneNo;
     if (phoneNo != '') {
       const dialogRef = this.dialog.open(CustomerHistoryComponent, {
