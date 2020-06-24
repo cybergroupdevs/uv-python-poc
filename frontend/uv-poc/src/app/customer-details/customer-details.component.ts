@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class CustomerDetailsComponent implements OnInit {
   customerId: string;
-  customerData = {};
+  customerData : any;
   customerKeys: any;
   constructor(
     private _customerService: CustomerService,
@@ -32,7 +32,7 @@ export class CustomerDetailsComponent implements OnInit {
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '800px',
+      width: '600px',
     });
   }
 }
