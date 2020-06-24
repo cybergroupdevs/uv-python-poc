@@ -109,10 +109,12 @@
         ></app-commission-details>
       </mat-tab>
       <mat-tab label="Customer">
-        <app-customer-details></app-customer-details>
+        <app-customer-details [customerId]="customerId"></app-customer-details>
       </mat-tab>
       <mat-tab label="Consultant">
-        <app-consultant-details></app-consultant-details>
+        <app-consultant-details
+          [transactionId]="transactionId"
+        ></app-consultant-details>
       </mat-tab>
 
       <mat-tab label="Order">

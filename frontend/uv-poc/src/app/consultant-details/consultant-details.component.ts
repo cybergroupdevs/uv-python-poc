@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ConsultantService } from '../service/consultant.service';
 import { CommissionService } from '../service/commission.service';
 @Component({
@@ -7,7 +7,7 @@ import { CommissionService } from '../service/commission.service';
   styleUrls: ['./consultant-details.component.css'],
 })
 export class ConsultantDetailsComponent implements OnInit {
-  transactionId: string;
+  @Input() transactionId: string;
   keys: any;
   length: Number;
   consultantData = [];
