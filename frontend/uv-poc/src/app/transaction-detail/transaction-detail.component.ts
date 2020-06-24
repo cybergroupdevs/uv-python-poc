@@ -4,10 +4,8 @@ import { CreditCardService } from '../service/credit-card.service';
 import { DiscountService } from '../service/discount.service';
 import { RefundService } from '../service/refund.service';
 import { CommissionService } from '../service/commission.service';
-import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomerService } from '../service/customer.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
 
 @Component({
   selector: 'transaction-detail',
