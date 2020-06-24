@@ -75,7 +75,7 @@ export class TransactionDetailComponent implements OnInit {
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '800px',
+      width: '600px',
     });
   }
 }
