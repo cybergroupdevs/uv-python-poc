@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { PageEvent } from '@angular/material/paginator';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-customer-history',
@@ -24,28 +25,17 @@ export class CustomerHistoryComponent implements OnInit {
   empty: boolean = true;
   check: boolean = false;
 
-  constructor(private _customerService: CustomerService) {}
+  constructor(
+    private _customerService: CustomerService,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
-  ngOnInit(): void {}
-  pagination(event) {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    let phone = this.phone;
-    this.paginateCustomer(phone);
-  }
-  paginateCustomer(phone) {
-    this._customerService
-      .list(phone, this.pageIndex, this.pageSize)
-      .subscribe((res: any) => {
-        this.customerData = res['customerHistory'];
-      });
-  }
-  customerHistory() {
+  ngOnInit(): void {
     this.history = false;
     let pageIndex = 0;
     let pageSize = 5;
     this.check = true;
-    this.phone = this.phoneNoForm.value['phoneNo'];
+    this.phone = this.data['phoneNo'];
     if (this.phone != '') {
       this.check = true;
       this._customerService
@@ -60,5 +50,18 @@ export class CustomerHistoryComponent implements OnInit {
           } else this.history = false;
         });
     } else this.toggle = !this.toggle;
+  }
+  pagination(event) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    let phone = this.phone;
+    this.paginateCustomer(phone);
+  }
+  paginateCustomer(phone) {
+    this._customerService
+      .list(phone, this.pageIndex, this.pageSize)
+      .subscribe((res: any) => {
+        this.customerData = res['customerHistory'];
+      });
   }
 }

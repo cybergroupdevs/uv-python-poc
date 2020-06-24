@@ -1,33 +1,8 @@
-<div class="row">
-  <div class="col-md-6">
-    <p class="mt-2">Search by phone no</p>
-  </div>
-  <div class="col-md-6">
-    <form [formGroup]="phoneNoForm">
-      <div class="d-flex">
-        <input
-          class="form-control mr-2"
-          type="text"
-          placeholder="901-234-2321"
-          name="phoneNo"
-          formControlName="phoneNo"
-        />
-        <button class="btn btn-dark" type="submit" (click)="customerHistory()">
-          Search
-        </button>
-      </div>
-      <div>
-        <span
-          class="badge badge-danger"
-          *ngIf="phoneNoForm.controls['phoneNo'].invalid && check"
-          >Required</span
-        >
-      </div>
-    </form>
-  </div>
-</div>
-<div *ngIf="toggle && phone != ''">
-  <div *ngIf="!history; else customerDataTable" class="text-center justify-content-center mt-2">
+<div>
+  <div
+    *ngIf="!history; else customerDataTable"
+    class="text-center justify-content-center mt-2"
+  >
     <span class="text-dark font-weight-bold"
       >No customer history available for {{ phone }}</span
     >
