@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { CommissionService } from '../service/commission.service';
-import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -22,17 +21,12 @@ export class CustomerDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Customer') {
-        this.customerId = '4626';
+        this.customerId = '646-863-0718';
         this._customerService.get(this.customerId).subscribe((res: any) => {
           this.customerData = [res];
           this.customerKeys = Object.keys(this.customerData[0]);
         });
       }
-    });
-  }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '600px',
     });
   }
 }

@@ -4,9 +4,6 @@ import { CreditCardService } from '../service/credit-card.service';
 import { DiscountService } from '../service/discount.service';
 import { RefundService } from '../service/refund.service';
 import { CommissionService } from '../service/commission.service';
-import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { CustomerService } from '../service/customer.service';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -35,17 +32,15 @@ export class TransactionDetailComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
-      this.transactionId = this.headerData.customerDetails['transactionId']
+      this.transactionId = this.headerData.customerDetails['transactionId'];
     });
 
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
-        this.creditCardService
-          .get(this.transactionId)
-          .subscribe((res: any) => {
-            this.cardDetails = res['cardDetails'];
-            this.creditCardHeading = Object.keys(res['cardDetails'][0]);
-          });
+        this.creditCardService.get(this.transactionId).subscribe((res: any) => {
+          this.cardDetails = res['cardDetails'];
+          this.creditCardHeading = Object.keys(res['cardDetails'][0]);
+        });
       } else if (data.toString() == 'Refund') {
         this.showRefundDetails();
       } else if (data.toString() == 'Discount') {
@@ -64,20 +59,13 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   showDiscountDetails() {
-    this.discountService
-      .get(this.transactionId)
-      .subscribe((res: any) => {
-        this.discountData = [res.discountDetails];
-        this.discountHeading = Object.keys(res.discountDetails);
-      });
+    this.discountService.get(this.transactionId).subscribe((res: any) => {
+      this.discountData = [res.discountDetails];
+      this.discountHeading = Object.keys(res.discountDetails);
+    });
   }
 
   onChangeTab(event) {
     this.commissionService.changeActiveTab(event['tab']['textLabel']);
-  }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '600px',
-    });
   }
 }
