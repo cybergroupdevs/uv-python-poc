@@ -30,9 +30,4 @@ export class CustomerDetailsComponent implements OnInit {
       }
     });
   }
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '800px',
-    });
-  }
 }
