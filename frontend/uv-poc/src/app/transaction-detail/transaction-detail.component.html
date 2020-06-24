@@ -1,27 +1,19 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Website name</a>
+  <a class="navbar-brand"
+    ><b>Transaction:</b>
+    {{ headerData.customerDetails['transactionId'] }}</a
+  >
 </nav>
-<div class="container">
-  <div class="d-flex justify-content-between pt-3">
-    <p><b>Transaction Details</b></p>
-    <div class="row w-75">
-      <div class="col-md-6">
-        <span class="text-muted">
-          Posted On: {{ headerData.customerDetails['date'] }}
-        </span>
-      </div>
-    </div>
-    <button class="btn btn-dark" routerLink="/">Close</button>
-  </div>
+<div class="container mt-4">
   <div class="row">
     <div class="col-md-6">
       <div class="row w-75">
         <div class="col-md-6">
-          <p>Transaction</p>
+          <p>Posted On</p>
         </div>
         <div class="col-md-6">
           <p>
-            {{ headerData.customerDetails['transactionId'] }}
+            {{ headerData.customerDetails['date'] }}
           </p>
         </div>
       </div>
@@ -62,16 +54,15 @@
           <p>Phone</p>
         </div>
         <div class="col-md-6">
-          <p>
-            {{ headerData.customerDetails['phoneNo'] }}
-            <mat-icon
-              aria-hidden="false"
-              class="icon-display"
-              aria-label="Example home icon"
-              (click)="openDialog()"
-              >search
-            </mat-icon>
-          </p>
+          {{ headerData.customerDetails['phoneNo'] }}
+          <mat-icon
+            class="btn"
+            style="margin-top: -10px;"
+            aria-hidden="false"
+            aria-label="Example home icon"
+            (click)="openDialog()"
+            >search
+          </mat-icon>
         </div>
       </div>
       <div class="row w-75">
@@ -95,12 +86,18 @@
     </div>
   </div>
   <div class="pt-2">
-    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
+    <mat-tab-group
+      mat-align-tabs="center"
+      [dynamicHeight]='true'
+      (selectedTabChange)="onChangeTab($event)"
+    >
       <mat-tab label="Transaction">
         <app-transaction></app-transaction>
       </mat-tab>
       <mat-tab label="Commission">
-        <app-commission-details [transactionId]="transactionId"></app-commission-details>
+        <app-commission-details
+          [transactionId]="transactionId"
+        ></app-commission-details>
       </mat-tab>
       <mat-tab label="Customer">
         <app-customer-details></app-customer-details>
@@ -120,40 +117,98 @@
             class="mat-elevation-z8 z-depth-5 w-100"
           >
             <ng-container matColumnDef="sent">
-              <th mat-header-cell *matHeaderCellDef class="text-right">Sent</th>
-              <td mat-cell *matCellDef="let details" class="text-right">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
+                Sent
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.sent }}
               </td>
             </ng-container>
             <ng-container matColumnDef="rcvd">
-              <th mat-header-cell *matHeaderCellDef class="text-right">RCVD</th>
-              <td mat-cell *matCellDef="let details" class="text-right">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
+                Received
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.rcvd }}
               </td>
             </ng-container>
             <ng-container matColumnDef="done">
-              <th mat-header-cell *matHeaderCellDef class="text-right pr-4">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
                 Done
               </th>
-              <td mat-cell *matCellDef="let details" class="text-right pr-4">
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.done }}
               </td>
             </ng-container>
             <ng-container matColumnDef="type">
-              <th mat-header-cell *matHeaderCellDef class="text-left">Type</th>
-              <td mat-cell *matCellDef="let details" class="text-left">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
+                Type
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.type }}
               </td>
             </ng-container>
             <ng-container matColumnDef="entry">
-              <th mat-header-cell *matHeaderCellDef class="text-left">Entry</th>
-              <td mat-cell *matCellDef="let details" class="text-left">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
+                Entry
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.entry }}
               </td>
             </ng-container>
             <ng-container matColumnDef="auth">
-              <th mat-header-cell *matHeaderCellDef class="text-left">Auth</th>
-              <td mat-cell *matCellDef="let details" class="text-left">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="text-left justify-content-center"
+              >
+                Auth
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let details"
+                class="text-left justify-content-center"
+              >
                 {{ details.auth }}
               </td>
             </ng-container>
@@ -197,7 +252,7 @@
               *matCellDef="let discount"
               class="text-center justify-content-center"
             >
-              {{ discount.subTotal | number: '.1-5' }}
+              $ {{ discount.subTotal | number: '.1-5' }}
             </td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="discountHeading"></tr>
@@ -247,5 +302,8 @@
         </table>
       </mat-tab>
     </mat-tab-group>
+  </div>
+  <div class="d-flex justify-content-end pt-4 ">
+    <button class="btn btn-dark" routerLink="/">Back</button>
   </div>
 </div>

@@ -477,7 +477,6 @@ def order_detail(transactionId):
             ship_to_last_name = details['TRANSACTION'][0]['SHIP.LNAME_MV'][0]['SHIP.LNAME']
             order_detail['shipTo'] = ship_to_first_name+" "+ship_to_last_name
             order_detail['method'] = details['TRANSACTION'][0]['SHIPGROUP_MV'][0]['SHIP.METHOD']
-            order_detail['shipToAddress'] = details['TRANSACTION'][0]['SHIP.ADDR_MV'][0]['SHIP.ADDR']
             order_detail['carrier'] = details['TRANSACTION'][0]['ITEM_MV'][0]['SHIP.CARRIER']
             order_detail['csz'] = details['TRANSACTION'][0]['SHIP.CITY_MV'][0]['SHIP.CITY']
             order_detail['traceNo'] = details['TRANSACTION'][0]['ITEM_MV'][0]['SHIP.TRACK.NO']
@@ -502,13 +501,12 @@ def order_detail(transactionId):
             if(coupons):
                 order_detail['coupons'] = 'GENERATED COUPON(S): '+coupons
             if('AUDIT.FLAG' in details['TRANSACTION'][0].keys() and details['TRANSACTION'][0]['AUDIT.FLAG']):
-                order_detail['auditFlag'] = 'AUDIT FLAG: '+audit_flag
                 return_count = details['TRANSACTION'][0]['RETURN.TRANS_MV'][0]['RETURN.TRANS']
                 for i in range(len(return_count)):
                     order_detail['returnIds'] = details['TRANSACTION'][0]['SHIP.ADDR_MV'][x]['SHIP.ADDR']
             if('ERCPT.EMAIL' in details['TRANSACTION'][0].keys()):
                 email = details['TRANSACTION'][0]['ERCPT.EMAIL']
-                order_detail['email'] = 'ERCPT TO: '+email
+                order_detail['email'] = email
             response = {
                 "orderDetail": order_detail,
             }
@@ -747,8 +745,10 @@ def transaction_detail(transactionId):
         transaction['transactionId'] = transaction_id
         transaction['phoneNo'] = details['TRANSACTION'][0]['PHONE']
         transaction['date'] = details['TRANSACTION'][0]['TRAN.DATE']
-        transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
-        transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
+        if 'TRAN.TYPE' in details['TRANSACTION'][0].keys():
+            transaction['transactionType'] = details['TRANSACTION'][0]['TRAN.TYPE']
+        if 'TRANSFER.CARTONS' in details['TRANSACTION'][0].keys():
+            transaction['rentalNo'] = details['TRANSACTION'][0]['TRANSFER.CARTONS']
         comm_empl_id = details['TRANSACTION'][0]['ITEM_MV'][0]['CommEmplId']
         em_cmd= f"LIST EM WITH @ID = '{comm_empl_id}' NICKNAME FNAME LNAME TOJSON"
         em_details=u2py.Command(em_cmd).run(capture=True)
