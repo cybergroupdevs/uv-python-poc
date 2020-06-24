@@ -19,7 +19,6 @@ export class ConsultantDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Consultant') {
-        this.transactionId = '5334*24*1373';
         this._consultantService
           .get(this.transactionId)
           .subscribe((res: any) => {

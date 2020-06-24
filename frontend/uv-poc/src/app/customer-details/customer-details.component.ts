@@ -22,7 +22,6 @@ export class CustomerDetailsComponent implements OnInit {
   ngOnInit(): void {
     this._commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Customer') {
-        this.customerId = '4626';
         this._customerService.get(this.customerId).subscribe((res: any) => {
           this.customerData = [res];
           this.customerKeys = Object.keys(this.customerData[0]);
