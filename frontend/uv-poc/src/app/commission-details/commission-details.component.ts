@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommissionService } from '../service/commission.service';
 
 @Component({
@@ -9,11 +9,10 @@ import { CommissionService } from '../service/commission.service';
 export class CommissionDetailsComponent implements OnInit {
   constructor(private _commissionService: CommissionService) {}
   commissionData: any;
-  commissionAmount: number;
-  retailAmount: number;
   commissionHeading = [];
   commissionErrorMsg: string = null;
   @Input() transactionId : string;
+  @Output() commissionDataEvent = new EventEmitter<{}>();
 
   ngOnInit() {
     this._commissionService.activeTab.subscribe((data) => {
@@ -23,9 +22,11 @@ export class CommissionDetailsComponent implements OnInit {
             this.commissionErrorMsg = data['error'];
           } else {
             this.commissionData = data['commissionList'];
-            this.retailAmount = data['retailAmount'];
-            this.commissionAmount = data['commissionAmount'];
             this.commissionHeading = Object.keys(this.commissionData[0]);
+            this.commissionDataEvent.emit({
+              'retailAmount': data['retailAmount'],
+              'commissionAmount': data['commissionAmount']
+            })
           }
         });
       }

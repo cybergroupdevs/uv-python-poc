@@ -28,6 +28,8 @@ export class TransactionDetailComponent implements OnInit {
   refundHeading: string[];
   discountData: any;
   discountHeading: string[];
+  commissionData: {};
+  showCommissionData: boolean = true;
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -37,6 +39,7 @@ export class TransactionDetailComponent implements OnInit {
 
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
+        this.showCommissionData = false;
         this.creditCardService.get(this.transactionId).subscribe((res: any) => {
           this.cardDetails = res['cardDetails'];
           this.creditCardHeading = Object.keys(res['cardDetails'][0]);
@@ -46,7 +49,15 @@ export class TransactionDetailComponent implements OnInit {
       } else if (data.toString() == 'Discount') {
         this.showDiscountDetails();
       }
+      else if(data.toString() != 'Commission'){
+        this.showCommissionData = false;
+      }
     });
+  }
+
+  receiveCommissionData(event){
+    this.showCommissionData = true;
+    this.commissionData = event;
   }
 
   showRefundDetails() {

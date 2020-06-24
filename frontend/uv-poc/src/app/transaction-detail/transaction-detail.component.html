@@ -1,8 +1,12 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand"
-    ><b>Transaction:</b>
-    {{ headerData.customerDetails['transactionId'] }}</a
-  >
+<nav class="navbar navbar-expand-lg ml-auto navbar-light bg-light">
+  <a class="navbar-brand">
+    <b>Transaction:</b>{{ headerData.customerDetails['transactionId'] }}
+  </a>
+  <ul class="navbar-nav ml-auto">
+    <li>
+      <button class="btn btn-dark" routerLink="/">Back</button>
+    </li>
+  </ul>
 </nav>
 <div class="container mt-4">
   <div class="row">
@@ -47,6 +51,14 @@
           </p>
         </div>
       </div>
+      <div class="row w-75" *ngIf="showCommissionData">
+        <div class="col-md-6">
+          <p>Commission Amount</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ commissionData['commissionAmount'] }}</p>
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="row w-75">
@@ -75,6 +87,14 @@
           <p>{{ headerData.customerDetails['pfid'] }}</p>
         </div>
       </div>
+      <div class="row w-75" *ngIf="showCommissionData">
+        <div class="col-md-6">
+          <p>Retail Amount</p>
+        </div>
+        <div class="col-md-6">
+          <p>{{ commissionData['retailAmount'] }}</p>
+        </div>
+      </div>
     </div>
   </div>
   <div class="pt-2">
@@ -89,6 +109,7 @@
       <mat-tab label="Commission">
         <app-commission-details
           [transactionId]="transactionId"
+          (commissionDataEvent)="receiveCommissionData($event)"
         ></app-commission-details>
       </mat-tab>
       <mat-tab label="Customer">
@@ -294,8 +315,5 @@
         </table>
       </mat-tab>
     </mat-tab-group>
-  </div>
-  <div class="d-flex justify-content-end pt-4 ">
-    <button class="btn btn-dark" routerLink="/">Back</button>
   </div>
 </div>
