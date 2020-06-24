@@ -19,6 +19,9 @@ export class HomeComponent implements OnInit {
   transactionForm = new FormGroup({
     transactionId: new FormControl('', [Validators.required]),
   });
+  phoneNoForm = new FormGroup({
+    phoneNo: new FormControl('', [Validators.required]),
+  });
   errorMessage;
   ngOnInit(): void {}
   async getTransactionDetails() {
@@ -38,8 +41,12 @@ export class HomeComponent implements OnInit {
     );
   }
   openDialog(): void {
-    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
-      width: '800px',
-    });
+    var phoneNo = this.phoneNoForm.value.phoneNo;
+    if (phoneNo != '') {
+      const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+        width: '800px',
+        data: { phoneNo: phoneNo },
+      });
+    }
   }
 }

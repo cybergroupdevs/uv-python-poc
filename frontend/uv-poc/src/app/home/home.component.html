@@ -43,9 +43,22 @@
     </form>
     <h3 class="mt-4">Or</h3>
   </div>
-  <h1 class="ml-3">Search customer history using phone no.</h1>
+  <div class="col-md-3 mt-4">
+    <h1>Search customer history using phone no.</h1>
+    <form [formGroup]="phoneNoForm">
+      <div class="col-xs-1">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Phone No"
+          formControlName="phoneNo"
+          mask="000-000-0000"
+        />
+      </div>
+    </form>
+  </div>
   <div class="col-xs-1 ml-3">
-    <button class="btn btn-dark" (click)="openDialog()">
+    <button class="btn btn-dark mt-3" (click)="openDialog()">
       Search
       <i class="fa fa-search"></i>
     </button>
