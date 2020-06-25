@@ -55,6 +55,13 @@
       </th>
       <td mat-cell *matCellDef="let details" class="text-left">
         {{ details.altPhoneNo }}
+        <mat-icon
+          aria-hidden="false"
+          class="icon-display"
+          aria-label="Example home icon"
+          (click)="openDialog(details.altPhoneNo)"
+          >search
+        </mat-icon>
       </td>
     </ng-container>
     <ng-container matColumnDef="pfid">
