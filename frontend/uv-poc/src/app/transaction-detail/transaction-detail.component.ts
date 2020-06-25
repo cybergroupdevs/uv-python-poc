@@ -34,13 +34,15 @@ export class TransactionDetailComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
-      this.transactionId = this.headerData.customerDetails['transactionId'];
+      this.transactionId = this.headerData.customerDetails['transactionId']
       this.customerId = this.headerData.customerDetails['alternatePhone'];
     });
 
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
-        this.creditCardService.get(this.transactionId).subscribe((res: any) => {
+        this.creditCardService
+        .get(this.transactionId)
+        .subscribe((res: any) => {
           this.cardDetails = res['cardDetails'];
           this.creditCardHeading = Object.keys(res['cardDetails'][0]);
         });
@@ -62,7 +64,9 @@ export class TransactionDetailComponent implements OnInit {
   }
 
   showDiscountDetails() {
-    this.discountService.get(this.transactionId).subscribe((res: any) => {
+    this.discountService
+    .get(this.transactionId)
+    .subscribe((res: any) => {
       this.discountData = [res.discountDetails];
       this.discountHeading = Object.keys(res.discountDetails);
     });
