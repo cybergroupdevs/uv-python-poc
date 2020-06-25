@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { CommissionService } from '../service/commission.service';
 import { MatDialog } from '@angular/material/dialog';
+import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
 
 @Component({
   selector: 'app-customer-details',
@@ -27,6 +28,12 @@ export class CustomerDetailsComponent implements OnInit {
           this.customerKeys = Object.keys(this.customerData[0]);
         });
       }
+    });
+  }
+  openDialog(phoneNo): void {
+    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+      width: '600px',
+      data: { phoneNo: phoneNo },
     });
   }
 }
