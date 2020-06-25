@@ -41,11 +41,11 @@ export class TransactionDetailComponent implements OnInit {
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
         this.creditCardService
-        .get(this.transactionId)
-        .subscribe((res: any) => {
-          this.cardDetails = res['cardDetails'];
-          this.creditCardHeading = Object.keys(res['cardDetails'][0]);
-        });
+         .get(this.transactionId)
+         .subscribe((res: any) => {
+           this.cardDetails = res['cardDetails'];
+           this.creditCardHeading = Object.keys(res['cardDetails'][0]);
+         });
       } else if (data.toString() == 'Refund') {
         this.showRefundDetails();
       } else if (data.toString() == 'Discount') {
@@ -65,11 +65,11 @@ export class TransactionDetailComponent implements OnInit {
 
   showDiscountDetails() {
     this.discountService
-    .get(this.transactionId)
-    .subscribe((res: any) => {
-      this.discountData = [res.discountDetails];
-      this.discountHeading = Object.keys(res.discountDetails);
-    });
+     .get(this.transactionId)
+     .subscribe((res: any) => {
+       this.discountData = [res.discountDetails];
+       this.discountHeading = Object.keys(res.discountDetails);
+     });
   }
 
   onChangeTab(event) {
