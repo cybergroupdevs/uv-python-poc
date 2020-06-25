@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class CustomerDetailsComponent implements OnInit {
   customerId: string;
-  customerData: any;
+  customerData : any;
   customerKeys: any;
   constructor(
     private _customerService: CustomerService,
