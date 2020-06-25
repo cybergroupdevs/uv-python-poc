@@ -4,6 +4,7 @@ import { CreditCardService } from '../service/credit-card.service';
 import { DiscountService } from '../service/discount.service';
 import { RefundService } from '../service/refund.service';
 import { CommissionService } from '../service/commission.service';
+import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -82,5 +83,11 @@ export class TransactionDetailComponent implements OnInit {
 
   onChangeTab(event) {
     this.commissionService.changeActiveTab(event['tab']['textLabel']);
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+      width: '600px',
+      data: { phoneNo: this.headerData.customerDetails['phoneNo'] },
+    });
   }
 }

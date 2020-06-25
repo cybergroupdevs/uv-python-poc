@@ -4,164 +4,44 @@
   class="mat-elevation-z8 z-depth-5 w-100"
 >
   <ng-container matColumnDef="orderNo" >
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-right justify-content-center"
-    >
-      Order No.
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-right justify-content-center"
-    >
-      {{ orderData.orderNo }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-right">Order No.</th>
+    <td mat-cell *matCellDef="let orderData" class="text-right">{{ orderData.orderNo }}</td>
   </ng-container>
   <ng-container matColumnDef="method">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Method
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.method }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Method</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.method }}</td>
   </ng-container>
   <ng-container matColumnDef="carrier">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Carrier
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.carrier }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Carrier</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.carrier }}</td>
   </ng-container>
   <ng-container matColumnDef="traceNo">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Trace No.
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.traceNo }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Trace No.</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.traceNo }}</td>
   </ng-container>
   <ng-container matColumnDef="email">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Email
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.email }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Email</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.email }}</td>
   </ng-container>
   <ng-container matColumnDef="shipDate">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-center justify-content-center"
-    >
-      Ship Date
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-center justify-content-center"
-    >
-      {{ orderData.shipDate }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-center">Ship Date</th>
+    <td mat-cell *matCellDef="let orderData" class="text-center">{{ orderData.shipDate }}</td>
   </ng-container>
   <ng-container matColumnDef="csz">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      CSZ
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.csz }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">CSZ</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.csz }}</td>
   </ng-container>
   <ng-container matColumnDef="commentLabel">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-right pr-4 justify-content-center"
-    >
-      Comment Label
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-right pr-4 justify-content-center"
-    >
-      {{ orderData.commentLabel }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-right pr-4">Comment Label</th>
+    <td mat-cell *matCellDef="let orderData" class="text-right pr-4">{{ orderData.commentLabel }}</td>
   </ng-container>
   <ng-container matColumnDef="shipTo">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Ship To
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.shipTo | titlecase }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Ship To</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.shipTo | titlecase }}</td>
   </ng-container>
   <ng-container matColumnDef="returnIds">
-    <th
-      mat-header-cell
-      *matHeaderCellDef
-      class="text-left justify-content-center"
-    >
-      Shipping Address
-    </th>
-    <td
-      mat-cell
-      *matCellDef="let orderData"
-      class="text-left justify-content-center"
-    >
-      {{ orderData.returnIds }}
-    </td>
+    <th mat-header-cell *matHeaderCellDef class="text-left">Shipping Address</th>
+    <td mat-cell *matCellDef="let orderData" class="text-left">{{ orderData.returnIds }}</td>
   </ng-container>
   <tr mat-header-row *matHeaderRowDef="orderHeading"></tr>
   <tr mat-row *matRowDef="let row; columns: orderHeading"></tr>
