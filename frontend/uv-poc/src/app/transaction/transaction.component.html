@@ -16,9 +16,9 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="mkdn">
-    <th mat-header-cell *matHeaderCellDef class="text-right pr-4">Markdown</th>
-    <td mat-cell *matCellDef="let transactionData" class="text-right pr-4">
-      {{ transactionData.mkdn }}
+    <th mat-header-cell *matHeaderCellDef class="text-center">Markdown</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-center">
+      $ {{ transactionData.mkdn }}
     </td>
   </ng-container>
   <ng-container matColumnDef="desc">
@@ -28,8 +28,8 @@
     </td>
   </ng-container>
   <ng-container matColumnDef="rental">
-    <th mat-header-cell *matHeaderCellDef>Rental</th>
-    <td mat-cell *matCellDef="let transactionData">
+    <th mat-header-cell *matHeaderCellDef class="text-left">Rental</th>
+    <td mat-cell *matCellDef="let transactionData" class="text-left">
       {{ transactionData.rental }}
     </td>
   </ng-container>

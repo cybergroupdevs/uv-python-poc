@@ -15,6 +15,7 @@ export class OrderComponent implements OnInit {
   transactionId;
   errorMessage;
   orderData;
+  orderHeading;
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       let transactionHeaderDetails = JSON.parse(params['transactionData']);
@@ -24,7 +25,8 @@ export class OrderComponent implements OnInit {
 
     this.orderDetailService.get(this.transactionId).subscribe(
       (res: any) => {
-        this.orderData = res['orderDetail'];
+        this.orderData = [res.orderDetail];
+        this.orderHeading = Object.keys(res.orderDetail);
       },
       (error) => {
         this.errorMessage = error.error['error'];

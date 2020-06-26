@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TransactionDetailService } from '../service/transaction-detail.service';
 import { Router, NavigationExtras } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +14,8 @@ import { Router, NavigationExtras } from '@angular/router';
 export class HomeComponent implements OnInit {
   constructor(
     private router: Router,
-    private transactionDetailService: TransactionDetailService
+    private transactionDetailService: TransactionDetailService,
+    public dialog: MatDialog
   ) {}
   transactionForm = new FormGroup({
     transactionId: new FormControl('', [Validators.required]),
@@ -34,5 +37,10 @@ export class HomeComponent implements OnInit {
         this.errorMessage = error.error['error'];
       }
     );
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(CustomerHistoryComponent, {
+      width: '800px',
+    });
   }
 }
