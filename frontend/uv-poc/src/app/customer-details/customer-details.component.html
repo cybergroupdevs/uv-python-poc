@@ -5,11 +5,11 @@
       <td mat-cell *matCellDef="let details" class="text-right">
         {{ details.phoneNo }}
         <mat-icon 
-          aria-label="false"
+          aria-hidden="false"
           class="icon-display"
           aria-label="Customer details search icon"
-         (click)="openDialog(details.phoneNo)">
-         search
+          (click)="openDialog(details.phoneNo)"
+          >search
         </mat-icon>
       </td>
     </ng-container>
@@ -55,8 +55,8 @@
           aria-hidden="false" 
           class="icon-display" 
           aria-label="Customer details search icon"
-          (click)="openDialog(details.altPhoneNo)">
-          search
+          (click)="openDialog(details.altPhoneNo)"
+          >search
         </mat-icon>
       </td>
     </ng-container>
