@@ -1,7 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand"
-    >Details for transaction id:
-    {{ headerData.customerDetails['transactionId'] }}</a
+    >Transaction {{ headerData.customerDetails['transactionId'] }}</a
   >
 </nav>
 <div class="container">
@@ -96,24 +95,31 @@
     </div>
   </div>
   <div class="pt-2">
-    <mat-tab-group mat-align-tabs="center" (selectedTabChange)="onChangeTab($event)">
+    <mat-tab-group
+      mat-align-tabs="center"
+      (selectedTabChange)="onChangeTab($event)"
+    >
       <mat-tab label="Transaction">
         <app-transaction></app-transaction>
       </mat-tab>
       <mat-tab label="Commission">
-        <app-commission-details [transactionId]="transactionId"></app-commission-details>
+        <app-commission-details
+          [transactionId]="transactionId"
+        ></app-commission-details>
       </mat-tab>
       <mat-tab label="Customer">
         <app-customer-details [customerId]="customerId"></app-customer-details>
       </mat-tab>
       <mat-tab label="Consultant">
-        <app-consultant-details [transactionId]="transactionId"></app-consultant-details>
+        <app-consultant-details
+          [transactionId]="transactionId"
+        ></app-consultant-details>
       </mat-tab>
 
       <mat-tab label="Order">
         <app-order></app-order>
       </mat-tab>
-      <mat-tab label="Credit card" style="margin-bottom: 0; overflow: hidden;">
+      <mat-tab label="Credit Card" style="margin-bottom: 0; overflow: hidden;">
         <div class="credit-card-container">
           <table
             mat-table
@@ -127,7 +133,9 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="rcvd">
-              <th mat-header-cell *matHeaderCellDef class="text-left">Received</th>
+              <th mat-header-cell *matHeaderCellDef class="text-left">
+                Received
+              </th>
               <td mat-cell *matCellDef="let details" class="text-left">
                 {{ details.rcvd }}
               </td>
