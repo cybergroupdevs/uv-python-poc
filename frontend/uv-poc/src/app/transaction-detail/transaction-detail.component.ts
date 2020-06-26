@@ -4,8 +4,8 @@ import { CreditCardService } from '../service/credit-card.service';
 import { DiscountService } from '../service/discount.service';
 import { RefundService } from '../service/refund.service';
 import { CommissionService } from '../service/commission.service';
-import { MatDialog } from '@angular/material/dialog';
 import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'transaction-detail',
@@ -30,6 +30,8 @@ export class TransactionDetailComponent implements OnInit {
   refundHeading: string[];
   discountData: any;
   discountHeading: string[];
+  commissionData: {};
+  showCommissionData: boolean = true;
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
@@ -40,6 +42,7 @@ export class TransactionDetailComponent implements OnInit {
 
     this.commissionService.activeTab.subscribe((data) => {
       if (data.toString() == 'Credit card') {
+        this.showCommissionData = false;
         this.creditCardService
           .get(this.transactionId)
           .subscribe((res: any) => {
@@ -51,7 +54,15 @@ export class TransactionDetailComponent implements OnInit {
       } else if (data.toString() == 'Discount') {
         this.showDiscountDetails();
       }
+      else if(data.toString() != 'Commission'){
+        this.showCommissionData = false;
+      }
     });
+  }
+
+  receiveCommissionData(event){
+    this.showCommissionData = true;
+    this.commissionData = event;
   }
 
   showRefundDetails() {
