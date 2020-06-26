@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TransactionDetailService } from '../service/transaction-detail.service';
 import { Router, NavigationExtras } from '@angular/router';
@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
     phoneNo: new FormControl('', [Validators.required]),
   });
   errorMessage;
+  @ViewChild('phoneNoInput', {static: false}) inputEl: ElementRef;
   ngOnInit(): void {}
   async getTransactionDetails() {
     var transactionId = this.transactionForm.value.transactionId;
@@ -43,7 +44,7 @@ export class HomeComponent implements OnInit {
   }
   openDialog(): void {
     this.check = true;
-    var phoneNo = this.phoneNoForm.value.phoneNo;
+    var phoneNo = this.inputEl.nativeElement.value;
     if (phoneNo != '') {
       const dialogRef = this.dialog.open(CustomerHistoryComponent, {
         width: '600px',
