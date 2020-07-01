@@ -8,13 +8,14 @@ import { CustomerDetailsComponent } from './customer-details/customer-details.co
 import { CustomerHistoryComponent } from './customer-history/customer-history.component';
 import { HomeComponent } from './home/home.component';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { OrderComponent } from './order/order.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { NgModule } from '@angular/core';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
+import { OrderComponent } from './order/order.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TransactionComponent } from './transaction/transaction.component';
 import { TransactionDetailComponent } from './transaction-detail/transaction-detail.component';
@@ -41,6 +42,7 @@ import { TransactionDetailComponent } from './transaction-detail/transaction-det
     MatPaginatorModule,
     MatTableModule,
     MatTabsModule,
+    NgxMaskModule.forRoot(),
     ReactiveFormsModule,
   ],
   providers: [],

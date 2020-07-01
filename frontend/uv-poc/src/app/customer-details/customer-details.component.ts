@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CustomerService } from '../service/customer.service';
 import { CommissionService } from '../service/commission.service';
 import { CustomerHistoryComponent } from '../customer-history/customer-history.component';
@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
   styles: [],
 })
 export class CustomerDetailsComponent implements OnInit {
-  customerId: string;
+  @Input() customerId: string;
   customerData : any;
   customerKeys: any;
   constructor(

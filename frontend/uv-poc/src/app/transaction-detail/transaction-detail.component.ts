@@ -21,6 +21,7 @@ export class TransactionDetailComponent implements OnInit {
     private commissionService: CommissionService,
     public dialog: MatDialog
   ) {}
+  customerId;
   headerData;
   cardDetails: any;
   creditCardHeading = [];
@@ -36,6 +37,7 @@ export class TransactionDetailComponent implements OnInit {
     this.activatedRoute.queryParams.subscribe((params) => {
       this.headerData = JSON.parse(params['transactionData']);
       this.transactionId = this.headerData.customerDetails['transactionId']
+      this.customerId = this.headerData.customerDetails['alternatePhone'];
     });
 
     this.commissionService.activeTab.subscribe((data) => {

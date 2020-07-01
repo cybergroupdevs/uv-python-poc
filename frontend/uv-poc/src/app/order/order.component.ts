@@ -13,7 +13,6 @@ export class OrderComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) {}
   transactionId;
-  errorMessage;
   orderData;
   orderHeading;
   ngOnInit() {
@@ -28,9 +27,6 @@ export class OrderComponent implements OnInit {
         this.orderData = [res.orderDetail];
         this.orderHeading = Object.keys(res.orderDetail);
       },
-      (error) => {
-        this.errorMessage = error.error['error'];
-      }
     );
   }
 }

@@ -18,33 +18,54 @@
   </div>
 </div>
 <div class="container">
-  <div class="col-md-3 mt-4">
-    <h1>Enter transaction id</h1>
-    <form [formGroup]="transactionForm">
-      <div class="col-xs-1">
-        <input
-          class="form-control"
-          type="text"
-          placeholder="Transaction Id"
-          formControlName="transactionId"
-        />
-      </div>
-      <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
-      <button
-        type="button"
-        class="btn btn-dark mt-3"
-        (click)="getTransactionDetails()"
-      >
-        Submit<i class="fa fa-check ml-1"></i>
-      </button>
-    </form>
-    <h3 class="mt-4">Or</h3>
-  </div>
-  <h1 class="ml-3">Search customer history using phone no.</h1>
-  <div class="col-xs-1 ml-3">
-    <button class="btn btn-dark" (click)="openDialog()">
-      Search
-      <i class="fa fa-search"></i>
-    </button>
+  <div class="row">
+    <div class="col-md-4 mt-4">
+      <h1>Enter transaction id</h1>
+      <form [formGroup]="transactionForm">
+        <div class="col-xs-1">
+          <input
+            class="form-control"
+            type="text"
+            placeholder="Transaction Id"
+            formControlName="transactionId"
+          />
+        </div>
+        <div *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</div>
+        <button
+          type="button"
+          class="btn btn-dark mt-3"
+          (click)="getTransactionDetails()"
+        >
+          Lookup Transaction<i class="fa fa-check ml-1"></i>
+        </button>
+      </form>
+    </div>
+    <div class="col-md-3 mt-4 text-center">
+      <h1 class="align-middle">Or</h1>
+    </div>
+    <div class="col-md-5 mt-4">
+      <h1>Enter phone no.</h1>
+      <form [formGroup]="phoneNoForm">
+        <div class="col-xs-1">
+          <input
+            #phoneNoInput
+            class="form-control"
+            type="text"
+            placeholder="Phone No"
+            formControlName="phoneNo"
+            mask="000-000-0000"
+          />
+          <span
+            class="badge badge-danger"
+            *ngIf="phoneNoForm.controls['phoneNo'].invalid && check"
+            >Invalid</span
+          >
+        </div>
+        <button class="btn btn-dark mt-3" (click)="openDialog()">
+          Lookup customer
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+    </div>
   </div>
 </div>
